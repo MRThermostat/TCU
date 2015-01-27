@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/27/2015 4:50:34 PM
+Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/27/2015 5:32:21 PM
 
 BeginCmp
 TimeStamp = /54B4B7D3;
@@ -81,56 +81,56 @@ BeginCmp
 TimeStamp = /54B6EF7F;
 Reference = D1;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B6F038;
 Reference = D2;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B6F37B;
 Reference = D3;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B73570;
 Reference = D4;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B738A6;
 Reference = D5;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B736BC;
 Reference = D6;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B6F569;
 Reference = D7;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B69420;
 Reference = D8;
 ValeurCmp = 1N5822;
-IdModule  = ;
+IdModule  = SMD_Packages:DO-214-AA_SMB;
 EndCmp
 
 BeginCmp
@@ -333,14 +333,14 @@ BeginCmp
 TimeStamp = /54B973A1;
 Reference = T1;
 ValeurCmp = LM335;
-IdModule  = ;
+IdModule  = Housings_TO-92:TO-92-Free-molded-wide;
 EndCmp
 
 BeginCmp
 TimeStamp = /54B8B303;
 Reference = U1;
 ValeurCmp = LM358;
-IdModule  = ;
+IdModule  = SMD_Packages:SOIC-8-W;
 EndCmp
 
 BeginCmp
