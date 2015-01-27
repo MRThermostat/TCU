@@ -1,7 +1,0 @@
-(fp_lib_table
-  (lib (name "Bridge Rectifiers")(type KiCad)(uri ${KIPRJMOD}/bridge_rectifier.pretty)(options "")(descr ""))
-  (lib (name "Capacitor Polarized")(type KiCad)(uri ${KIPRJMOD}/cap_pol.pretty)(options "")(descr ""))
-  (lib (name Relay)(type KiCad)(uri ${KIPRJMOD}/relay.pretty)(options "")(descr ""))
-  (lib (name "Terminal Blocks")(type KiCad)(uri ${KIPRJMOD}/terminals.pretty)(options "")(descr ""))
-  (lib (name "Wireless modules")(type KiCad)(uri ${KIPRJMOD}/wireless_modules.pretty)(options "")(descr ""))
-)
