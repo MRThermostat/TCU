@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/24/2015 4:09:00 PM
+Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/27/2015 4:50:34 PM
 
 BeginCmp
 TimeStamp = /54B4B7D3;
@@ -193,7 +193,7 @@ BeginCmp
 TimeStamp = /54A366D3;
 Reference = P2;
 ValeurCmp = CONN_02X03;
-IdModule  = ;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x03;
 EndCmp
 
 BeginCmp
@@ -207,7 +207,7 @@ BeginCmp
 TimeStamp = /54B50F87;
 Reference = P4;
 ValeurCmp = ESP8266;
-IdModule  = ;
+IdModule  = Wireless modules:ESP8266;
 EndCmp
 
 BeginCmp
@@ -354,7 +354,7 @@ BeginCmp
 TimeStamp = /54B6871B;
 Reference = VR1;
 ValeurCmp = AP3003-3.3V;
-IdModule  = Crystals:Crystal_HC49-U_Vertical;
+IdModule  = SMD_Packages:TO-263-5_HandSoldering;
 EndCmp
 
 BeginCmp
