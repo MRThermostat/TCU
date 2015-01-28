@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/27/2015 5:32:21 PM
+Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/28/2015 1:14:41 PM
 
 BeginCmp
 TimeStamp = /54B4B7D3;
@@ -144,7 +144,7 @@ BeginCmp
 TimeStamp = /54B81ABA;
 Reference = D10;
 ValeurCmp = MI0283QT-11;
-IdModule  = ;
+IdModule  = FPC Connector:FPC CONNECTOR;
 EndCmp
 
 BeginCmp
@@ -330,7 +330,7 @@ IdModule  = Resistors_SMD:R_0603_HandSoldering;
 EndCmp
 
 BeginCmp
-TimeStamp = /54B973A1;
+TimeStamp = /54C8167B;
 Reference = T1;
 ValeurCmp = LM335;
 IdModule  = Housings_TO-92:TO-92-Free-molded-wide;
