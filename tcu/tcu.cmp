@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/28/2015 1:14:41 PM
+Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 1/28/2015 2:34:01 PM
 
 BeginCmp
 TimeStamp = /54B4B7D3;
@@ -151,7 +151,7 @@ BeginCmp
 TimeStamp = /54C03172;
 Reference = F1;
 ValeurCmp = 500mA;
-IdModule  = ;
+IdModule  = SMD_Packages:SMD-0603;
 EndCmp
 
 BeginCmp
@@ -179,7 +179,7 @@ BeginCmp
 TimeStamp = /54B69493;
 Reference = L1;
 ValeurCmp = 22uH;
-IdModule  = ;
+IdModule  = Inductor:SMD_Inductor;
 EndCmp
 
 BeginCmp
@@ -214,28 +214,28 @@ BeginCmp
 TimeStamp = /54C00FB3;
 Reference = Q1;
 ValeurCmp = E_NMOS;
-IdModule  = ;
+IdModule  = SMD_Packages:SOT-23-GDS;
 EndCmp
 
 BeginCmp
 TimeStamp = /54C0157D;
 Reference = Q2;
 ValeurCmp = E_NMOS;
-IdModule  = ;
+IdModule  = SMD_Packages:SOT-23-GDS;
 EndCmp
 
 BeginCmp
 TimeStamp = /54C00E59;
 Reference = Q3;
 ValeurCmp = E_NMOS;
-IdModule  = ;
+IdModule  = SMD_Packages:SOT-23-GDS;
 EndCmp
 
 BeginCmp
 TimeStamp = /54C0246C;
 Reference = Q4;
 ValeurCmp = E_NMOS;
-IdModule  = ;
+IdModule  = SMD_Packages:SOT-23-GDS;
 EndCmp
 
 BeginCmp
