@@ -5,4 +5,5 @@
   (lib (name "Terminal Blocks")(type KiCad)(uri ${KIPRJMOD}/terminals.pretty)(options "")(descr ""))
   (lib (name "Wireless modules")(type KiCad)(uri ${KIPRJMOD}/wireless_modules.pretty)(options "")(descr ""))
   (lib (name "FPC Connector")(type KiCad)(uri ${KIPRJMOD}/fpc.pretty)(options "")(descr ""))
+  (lib (name Inductor)(type KiCad)(uri ${KIPRJMOD}/inductor.pretty)(options "")(descr ""))
 )
