@@ -1,0 +1,359 @@
+Reading netlist file "C:\Users\Admin\Google Drive\SCHOOL FILES\super-senior\Senior Design Project\TCU\tcu\tcu.net".
+Using component footprint link file "C:\Users\Admin\Google Drive\SCHOOL FILES\super-senior\Senior Design Project\TCU\tcu\tcu.cmp".
+Checking netlist component footprint "BR1:/54B4B7D3:Bridge Rectifiers:GBU4".
+Adding new component "BR1:/54B4B7D3" footprint "Bridge Rectifiers:GBU4".
+Changing component "BR1:/54B4B7D3" pin "1" net name from "" to "Net-(BR1-Pad1)".
+Changing component "BR1:/54B4B7D3" pin "2" net name from "" to "Net-(BR1-Pad2)".
+Changing component "BR1:/54B4B7D3" pin "3" net name from "" to "Net-(BR1-Pad3)".
+Changing component "BR1:/54B4B7D3" pin "4" net name from "" to "GND".
+Checking netlist component footprint "BR2:/54B4B836:Bridge Rectifiers:GBU4".
+Adding new component "BR2:/54B4B836" footprint "Bridge Rectifiers:GBU4".
+Changing component "BR2:/54B4B836" pin "1" net name from "" to "Net-(BR2-Pad1)".
+Changing component "BR2:/54B4B836" pin "2" net name from "" to "Net-(BR2-Pad2)".
+Changing component "BR2:/54B4B836" pin "3" net name from "" to "Net-(BR2-Pad3)".
+Changing component "BR2:/54B4B836" pin "4" net name from "" to "GND".
+Checking netlist component footprint "BR3:/54B4B796:Bridge Rectifiers:GBU4".
+Adding new component "BR3:/54B4B796" footprint "Bridge Rectifiers:GBU4".
+Changing component "BR3:/54B4B796" pin "1" net name from "" to "Net-(BR3-Pad1)".
+Changing component "BR3:/54B4B796" pin "2" net name from "" to "Net-(BR3-Pad2)".
+Changing component "BR3:/54B4B796" pin "3" net name from "" to "Net-(BR3-Pad3)".
+Changing component "BR3:/54B4B796" pin "4" net name from "" to "GND".
+Checking netlist component footprint "C1:/54B684EE:Capacitor Polarized:CAP_POL_10".
+Adding new component "C1:/54B684EE" footprint "Capacitor Polarized:CAP_POL_10".
+Changing component "C1:/54B684EE" pin "2" net name from "" to "GND".
+Changing component "C1:/54B684EE" pin "1" net name from "" to "Net-(C1-Pad1)".
+Checking netlist component footprint "C2:/54B48F35:Capacitors_SMD:C_0603_HandSoldering".
+Adding new component "C2:/54B48F35" footprint "Capacitors_SMD:C_0603_HandSoldering".
+Changing component "C2:/54B48F35" pin "1" net name from "" to "Net-(C2-Pad1)".
+Changing component "C2:/54B48F35" pin "2" net name from "" to "GND".
+Checking netlist component footprint "C3:/54B491E0:Capacitors_SMD:C_0603_HandSoldering".
+Adding new component "C3:/54B491E0" footprint "Capacitors_SMD:C_0603_HandSoldering".
+Changing component "C3:/54B491E0" pin "1" net name from "" to "GND".
+Changing component "C3:/54B491E0" pin "2" net name from "" to "/UVCC".
+Checking netlist component footprint "C4:/54B48AAB:Capacitors_SMD:C_0603_HandSoldering".
+Adding new component "C4:/54B48AAB" footprint "Capacitors_SMD:C_0603_HandSoldering".
+Changing component "C4:/54B48AAB" pin "1" net name from "" to "Net-(C4-Pad1)".
+Changing component "C4:/54B48AAB" pin "2" net name from "" to "GND".
+Checking netlist component footprint "C5:/54B48B0C:Capacitors_SMD:C_0603_HandSoldering".
+Adding new component "C5:/54B48B0C" footprint "Capacitors_SMD:C_0603_HandSoldering".
+Changing component "C5:/54B48B0C" pin "1" net name from "" to "Net-(C5-Pad1)".
+Changing component "C5:/54B48B0C" pin "2" net name from "" to "GND".
+Checking netlist component footprint "C6:/54B494D1:Capacitors_SMD:C_0603_HandSoldering".
+Adding new component "C6:/54B494D1" footprint "Capacitors_SMD:C_0603_HandSoldering".
+Changing component "C6:/54B494D1" pin "1" net name from "" to "GND".
+Changing component "C6:/54B494D1" pin "2" net name from "" to "Net-(C6-Pad2)".
+Checking netlist component footprint "C7:/54B685AF:Capacitor Polarized:CAP_POL_6.3".
+Adding new component "C7:/54B685AF" footprint "Capacitor Polarized:CAP_POL_6.3".
+Changing component "C7:/54B685AF" pin "2" net name from "" to "GND".
+Changing component "C7:/54B685AF" pin "1" net name from "" to "VCC".
+Checking netlist component footprint "CON1:/54B6D664:Connect:USB_Micro-B".
+Adding new component "CON1:/54B6D664" footprint "Connect:USB_Micro-B".
+Changing component "CON1:/54B6D664" pin "1" net name from "" to "/UVCC".
+Changing component "CON1:/54B6D664" pin "2" net name from "" to "Net-(CON1-Pad2)".
+Changing component "CON1:/54B6D664" pin "3" net name from "" to "Net-(CON1-Pad3)".
+Changing component "CON1:/54B6D664" pin "4" net name from "" to "Net-(CON1-Pad4)".
+Changing component "CON1:/54B6D664" pin "5" net name from "" to "GND".
+Changing component "CON1:/54B6D664" pin "6" net name from "" to "GND".
+Changing component "CON1:/54B6D664" pin "7" net name from "" to "GND".
+Changing component "CON1:/54B6D664" pin "8" net name from "" to "GND".
+Changing component "CON1:/54B6D664" pin "9" net name from "" to "GND".
+Checking netlist component footprint "D1:/54B6EF7F:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D1:/54B6EF7F" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D1:/54B6EF7F" pin "1" net name from "" to "Net-(BR3-Pad3)".
+Changing component "D1:/54B6EF7F" pin "2" net name from "" to "Net-(C1-Pad1)".
+Checking netlist component footprint "D2:/54B6F038:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D2:/54B6F038" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D2:/54B6F038" pin "1" net name from "" to "Net-(BR1-Pad3)".
+Changing component "D2:/54B6F038" pin "2" net name from "" to "Net-(C1-Pad1)".
+Checking netlist component footprint "D3:/54B6F37B:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D3:/54B6F37B" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D3:/54B6F37B" pin "1" net name from "" to "Net-(BR2-Pad3)".
+Changing component "D3:/54B6F37B" pin "2" net name from "" to "Net-(C1-Pad1)".
+Checking netlist component footprint "D4:/54B73570:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D4:/54B73570" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D4:/54B73570" pin "1" net name from "" to "GND".
+Changing component "D4:/54B73570" pin "2" net name from "" to "Net-(D4-Pad2)".
+Checking netlist component footprint "D5:/54B738A6:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D5:/54B738A6" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D5:/54B738A6" pin "1" net name from "" to "GND".
+Changing component "D5:/54B738A6" pin "2" net name from "" to "Net-(D5-Pad2)".
+Checking netlist component footprint "D6:/54B736BC:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D6:/54B736BC" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D6:/54B736BC" pin "1" net name from "" to "GND".
+Changing component "D6:/54B736BC" pin "2" net name from "" to "Net-(D6-Pad2)".
+Checking netlist component footprint "D7:/54B6F569:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D7:/54B6F569" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D7:/54B6F569" pin "1" net name from "" to "Net-(D7-Pad1)".
+Changing component "D7:/54B6F569" pin "2" net name from "" to "Net-(C1-Pad1)".
+Checking netlist component footprint "D8:/54B69420:SMD_Packages:DO-214-AA_SMB".
+Adding new component "D8:/54B69420" footprint "SMD_Packages:DO-214-AA_SMB".
+Changing component "D8:/54B69420" pin "1" net name from "" to "GND".
+Changing component "D8:/54B69420" pin "2" net name from "" to "Net-(D8-Pad2)".
+Checking netlist component footprint "D9:/54B6B732:LEDs:LED-0603".
+Adding new component "D9:/54B6B732" footprint "LEDs:LED-0603".
+Changing component "D9:/54B6B732" pin "1" net name from "" to "VCC".
+Changing component "D9:/54B6B732" pin "2" net name from "" to "Net-(D9-Pad2)".
+Checking netlist component footprint "D10:/54B81ABA:FPC Connector:FPC CONNECTOR".
+Adding new component "D10:/54B81ABA" footprint "FPC Connector:FPC CONNECTOR".
+Changing component "D10:/54B81ABA" pin "1" net name from "" to "Net-(D10-Pad1)".
+Changing component "D10:/54B81ABA" pin "2" net name from "" to "Net-(D10-Pad2)".
+Changing component "D10:/54B81ABA" pin "3" net name from "" to "Net-(D10-Pad2)".
+Changing component "D10:/54B81ABA" pin "4" net name from "" to "Net-(D10-Pad2)".
+Changing component "D10:/54B81ABA" pin "5" net name from "" to "Net-(D10-Pad2)".
+Changing component "D10:/54B81ABA" pin "6" net name from "" to "GND".
+Changing component "D10:/54B81ABA" pin "7" net name from "" to "VCC".
+Changing component "D10:/54B81ABA" pin "8" net name from "" to "VCC".
+Changing component "D10:/54B81ABA" pin "9" net name from "" to "VCC".
+Changing component "D10:/54B81ABA" pin "10" net name from "" to "/LCD_RESET".
+Changing component "D10:/54B81ABA" pin "11" net name from "" to "Net-(D10-Pad11)".
+Changing component "D10:/54B81ABA" pin "12" net name from "" to "Net-(D10-Pad12)".
+Changing component "D10:/54B81ABA" pin "13" net name from "" to "Net-(D10-Pad13)".
+Changing component "D10:/54B81ABA" pin "14" net name from "" to "Net-(D10-Pad14)".
+Changing component "D10:/54B81ABA" pin "15" net name from "" to "Net-(D10-Pad15)".
+Changing component "D10:/54B81ABA" pin "16" net name from "" to "Net-(D10-Pad16)".
+Changing component "D10:/54B81ABA" pin "17" net name from "" to "Net-(D10-Pad17)".
+Changing component "D10:/54B81ABA" pin "18" net name from "" to "Net-(D10-Pad18)".
+Changing component "D10:/54B81ABA" pin "19" net name from "" to "Net-(D10-Pad19)".
+Changing component "D10:/54B81ABA" pin "20" net name from "" to "Net-(D10-Pad20)".
+Changing component "D10:/54B81ABA" pin "21" net name from "" to "Net-(D10-Pad21)".
+Changing component "D10:/54B81ABA" pin "22" net name from "" to "Net-(D10-Pad22)".
+Changing component "D10:/54B81ABA" pin "23" net name from "" to "Net-(D10-Pad23)".
+Changing component "D10:/54B81ABA" pin "24" net name from "" to "Net-(D10-Pad24)".
+Changing component "D10:/54B81ABA" pin "25" net name from "" to "Net-(D10-Pad25)".
+Changing component "D10:/54B81ABA" pin "26" net name from "" to "Net-(D10-Pad26)".
+Changing component "D10:/54B81ABA" pin "27" net name from "" to "Net-(D10-Pad27)".
+Changing component "D10:/54B81ABA" pin "28" net name from "" to "Net-(D10-Pad28)".
+Changing component "D10:/54B81ABA" pin "29" net name from "" to "Net-(D10-Pad29)".
+Changing component "D10:/54B81ABA" pin "30" net name from "" to "Net-(D10-Pad30)".
+Changing component "D10:/54B81ABA" pin "31" net name from "" to "Net-(D10-Pad31)".
+Changing component "D10:/54B81ABA" pin "32" net name from "" to "Net-(D10-Pad32)".
+Changing component "D10:/54B81ABA" pin "33" net name from "" to "/MISO".
+Changing component "D10:/54B81ABA" pin "34" net name from "" to "/MOSI".
+Changing component "D10:/54B81ABA" pin "35" net name from "" to "Net-(D10-Pad35)".
+Changing component "D10:/54B81ABA" pin "36" net name from "" to "/D/C".
+Changing component "D10:/54B81ABA" pin "37" net name from "" to "/SCK".
+Changing component "D10:/54B81ABA" pin "38" net name from "" to "/LCD_CS".
+Changing component "D10:/54B81ABA" pin "39" net name from "" to "Net-(D10-Pad39)".
+Changing component "D10:/54B81ABA" pin "40" net name from "" to "VCC".
+Changing component "D10:/54B81ABA" pin "41" net name from "" to "VCC".
+Changing component "D10:/54B81ABA" pin "42" net name from "" to "VCC".
+Changing component "D10:/54B81ABA" pin "43" net name from "" to "GND".
+Changing component "D10:/54B81ABA" pin "44" net name from "" to "/X+".
+Changing component "D10:/54B81ABA" pin "45" net name from "" to "/Y+".
+Changing component "D10:/54B81ABA" pin "46" net name from "" to "/X-".
+Changing component "D10:/54B81ABA" pin "47" net name from "" to "/Y-".
+Changing component "D10:/54B81ABA" pin "48" net name from "" to "GND".
+Changing component "D10:/54B81ABA" pin "49" net name from "" to "GND".
+Changing component "D10:/54B81ABA" pin "50" net name from "" to "GND".
+Checking netlist component footprint "F1:/54C03172:SMD_Packages:SMD-0603".
+Adding new component "F1:/54C03172" footprint "SMD_Packages:SMD-0603".
+Changing component "F1:/54C03172" pin "1" net name from "" to "Net-(D7-Pad1)".
+Changing component "F1:/54C03172" pin "2" net name from "" to "/UVCC".
+Checking netlist component footprint "K1:/54B4AB02:Relay:G5LE".
+Adding new component "K1:/54B4AB02" footprint "Relay:G5LE".
+Changing component "K1:/54B4AB02" pin "5" net name from "" to "Net-(K1-Pad5)".
+Changing component "K1:/54B4AB02" pin "2" net name from "" to "VCC".
+Changing component "K1:/54B4AB02" pin "3" net name from "" to "Net-(BR1-Pad1)".
+Changing component "K1:/54B4AB02" pin "4" net name from "" to "Net-(K1-Pad4)".
+Changing component "K1:/54B4AB02" pin "1" net name from "" to "Net-(BR1-Pad2)".
+Checking netlist component footprint "K2:/54B4AB3C:Relay:G5LE".
+Adding new component "K2:/54B4AB3C" footprint "Relay:G5LE".
+Changing component "K2:/54B4AB3C" pin "5" net name from "" to "Net-(K2-Pad5)".
+Changing component "K2:/54B4AB3C" pin "2" net name from "" to "VCC".
+Changing component "K2:/54B4AB3C" pin "3" net name from "" to "Net-(BR2-Pad1)".
+Changing component "K2:/54B4AB3C" pin "4" net name from "" to "Net-(K2-Pad4)".
+Changing component "K2:/54B4AB3C" pin "1" net name from "" to "Net-(BR2-Pad2)".
+Checking netlist component footprint "K3:/54B4AB78:Relay:G5LE".
+Adding new component "K3:/54B4AB78" footprint "Relay:G5LE".
+Changing component "K3:/54B4AB78" pin "5" net name from "" to "Net-(K3-Pad5)".
+Changing component "K3:/54B4AB78" pin "2" net name from "" to "VCC".
+Changing component "K3:/54B4AB78" pin "3" net name from "" to "Net-(BR3-Pad1)".
+Changing component "K3:/54B4AB78" pin "4" net name from "" to "Net-(K3-Pad4)".
+Changing component "K3:/54B4AB78" pin "1" net name from "" to "Net-(BR3-Pad2)".
+Checking netlist component footprint "L1:/54B69493:Inductor:SMD_Inductor".
+Adding new component "L1:/54B69493" footprint "Inductor:SMD_Inductor".
+Changing component "L1:/54B69493" pin "1" net name from "" to "Net-(D8-Pad2)".
+Changing component "L1:/54B69493" pin "2" net name from "" to "VCC".
+Checking netlist component footprint "P1:/54B4A695:Terminal Blocks:796638-8".
+Adding new component "P1:/54B4A695" footprint "Terminal Blocks:796638-8".
+Changing component "P1:/54B4A695" pin "4" net name from "" to "Net-(BR2-Pad1)".
+Changing component "P1:/54B4A695" pin "5" net name from "" to "Net-(BR1-Pad1)".
+Changing component "P1:/54B4A695" pin "3" net name from "" to "Net-(BR3-Pad2)".
+Changing component "P1:/54B4A695" pin "6" net name from "" to "Net-(BR3-Pad1)".
+Changing component "P1:/54B4A695" pin "2" net name from "" to "Net-(BR1-Pad2)".
+Changing component "P1:/54B4A695" pin "1" net name from "" to "Net-(BR2-Pad2)".
+Changing component "P1:/54B4A695" pin "7" net name from "" to "Net-(P1-Pad7)".
+Changing component "P1:/54B4A695" pin "8" net name from "" to "Net-(P1-Pad8)".
+Checking netlist component footprint "P2:/54A366D3:Pin_Headers:Pin_Header_Straight_2x03".
+Adding new component "P2:/54A366D3" footprint "Pin_Headers:Pin_Header_Straight_2x03".
+Changing component "P2:/54A366D3" pin "1" net name from "" to "/MISO".
+Changing component "P2:/54A366D3" pin "2" net name from "" to "VCC".
+Changing component "P2:/54A366D3" pin "3" net name from "" to "/SCK".
+Changing component "P2:/54A366D3" pin "4" net name from "" to "/MOSI".
+Changing component "P2:/54A366D3" pin "5" net name from "" to "/RESET".
+Changing component "P2:/54A366D3" pin "6" net name from "" to "GND".
+Checking netlist component footprint "P3:/54B50F30:Wireless modules:NRF24L01+".
+Adding new component "P3:/54B50F30" footprint "Wireless modules:NRF24L01+".
+Changing component "P3:/54B50F30" pin "2" net name from "" to "VCC".
+Changing component "P3:/54B50F30" pin "4" net name from "" to "/CSN".
+Changing component "P3:/54B50F30" pin "6" net name from "" to "/MOSI".
+Changing component "P3:/54B50F30" pin "8" net name from "" to "Net-(P3-Pad8)".
+Changing component "P3:/54B50F30" pin "1" net name from "" to "GND".
+Changing component "P3:/54B50F30" pin "3" net name from "" to "/CE".
+Changing component "P3:/54B50F30" pin "5" net name from "" to "/SCK".
+Changing component "P3:/54B50F30" pin "7" net name from "" to "/MISO".
+Checking netlist component footprint "P4:/54B50F87:Wireless modules:ESP8266".
+Adding new component "P4:/54B50F87" footprint "Wireless modules:ESP8266".
+Changing component "P4:/54B50F87" pin "1" net name from "" to "/TXD".
+Changing component "P4:/54B50F87" pin "2" net name from "" to "GND".
+Changing component "P4:/54B50F87" pin "3" net name from "" to "/CH_PD".
+Changing component "P4:/54B50F87" pin "4" net name from "" to "/GPIO2".
+Changing component "P4:/54B50F87" pin "5" net name from "" to "/ESP_RESET".
+Changing component "P4:/54B50F87" pin "6" net name from "" to "/GPIO0".
+Changing component "P4:/54B50F87" pin "7" net name from "" to "VCC".
+Changing component "P4:/54B50F87" pin "8" net name from "" to "/RXD".
+Checking netlist component footprint "Q1:/54C00FB3:SMD_Packages:SOT-23-GDS".
+Adding new component "Q1:/54C00FB3" footprint "SMD_Packages:SOT-23-GDS".
+Changing component "Q1:/54C00FB3" pin "S" net name from "" to "GND".
+Changing component "Q1:/54C00FB3" pin "G" net name from "" to "/RELAY2".
+Changing component "Q1:/54C00FB3" pin "D" net name from "" to "Net-(D4-Pad2)".
+Checking netlist component footprint "Q2:/54C0157D:SMD_Packages:SOT-23-GDS".
+Adding new component "Q2:/54C0157D" footprint "SMD_Packages:SOT-23-GDS".
+Changing component "Q2:/54C0157D" pin "S" net name from "" to "GND".
+Changing component "Q2:/54C0157D" pin "G" net name from "" to "/RELAY1".
+Changing component "Q2:/54C0157D" pin "D" net name from "" to "Net-(D5-Pad2)".
+Checking netlist component footprint "Q3:/54C00E59:SMD_Packages:SOT-23-GDS".
+Adding new component "Q3:/54C00E59" footprint "SMD_Packages:SOT-23-GDS".
+Changing component "Q3:/54C00E59" pin "S" net name from "" to "GND".
+Changing component "Q3:/54C00E59" pin "G" net name from "" to "/RELAY3".
+Changing component "Q3:/54C00E59" pin "D" net name from "" to "Net-(D6-Pad2)".
+Checking netlist component footprint "Q4:/54C0246C:SMD_Packages:SOT-23-GDS".
+Adding new component "Q4:/54C0246C" footprint "SMD_Packages:SOT-23-GDS".
+Changing component "Q4:/54C0246C" pin "S" net name from "" to "GND".
+Changing component "Q4:/54C0246C" pin "G" net name from "" to "/BACKLIGHT".
+Changing component "Q4:/54C0246C" pin "D" net name from "" to "Net-(D10-Pad1)".
+Checking netlist component footprint "R1:/54B6FC9F:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R1:/54B6FC9F" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R1:/54B6FC9F" pin "1" net name from "" to "Net-(CON1-Pad2)".
+Changing component "R1:/54B6FC9F" pin "2" net name from "" to "/D-".
+Checking netlist component footprint "R2:/54B6FE8F:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R2:/54B6FE8F" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R2:/54B6FE8F" pin "1" net name from "" to "Net-(CON1-Pad3)".
+Changing component "R2:/54B6FE8F" pin "2" net name from "" to "/D+".
+Checking netlist component footprint "R3:/54B7566F:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R3:/54B7566F" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R3:/54B7566F" pin "1" net name from "" to "Net-(K1-Pad5)".
+Changing component "R3:/54B7566F" pin "2" net name from "" to "Net-(D4-Pad2)".
+Checking netlist component footprint "R4:/54B777CD:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R4:/54B777CD" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R4:/54B777CD" pin "1" net name from "" to "Net-(K2-Pad5)".
+Changing component "R4:/54B777CD" pin "2" net name from "" to "Net-(D5-Pad2)".
+Checking netlist component footprint "R5:/54B781D3:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R5:/54B781D3" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R5:/54B781D3" pin "1" net name from "" to "Net-(K3-Pad5)".
+Changing component "R5:/54B781D3" pin "2" net name from "" to "Net-(D6-Pad2)".
+Checking netlist component footprint "R6:/54B8C36D:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R6:/54B8C36D" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R6:/54B8C36D" pin "1" net name from "" to "Net-(R6-Pad1)".
+Changing component "R6:/54B8C36D" pin "2" net name from "" to "VCC".
+Checking netlist component footprint "R7:/54B8C4B6:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R7:/54B8C4B6" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R7:/54B8C4B6" pin "1" net name from "" to "GND".
+Changing component "R7:/54B8C4B6" pin "2" net name from "" to "Net-(R6-Pad1)".
+Checking netlist component footprint "R8:/54B8CB30:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R8:/54B8CB30" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R8:/54B8CB30" pin "1" net name from "" to "Net-(R8-Pad1)".
+Changing component "R8:/54B8CB30" pin "2" net name from "" to "VCC".
+Checking netlist component footprint "R9:/54B8D79F:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R9:/54B8D79F" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R9:/54B8D79F" pin "1" net name from "" to "Net-(R9-Pad1)".
+Changing component "R9:/54B8D79F" pin "2" net name from "" to "Net-(R11-Pad1)".
+Checking netlist component footprint "R10:/54B498BE:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R10:/54B498BE" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R10:/54B498BE" pin "1" net name from "" to "/RESET".
+Changing component "R10:/54B498BE" pin "2" net name from "" to "VCC".
+Checking netlist component footprint "R11:/54B8DE57:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R11:/54B8DE57" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R11:/54B8DE57" pin "1" net name from "" to "Net-(R11-Pad1)".
+Changing component "R11:/54B8DE57" pin "2" net name from "" to "/TEMPERATURE".
+Checking netlist component footprint "R12:/54B6B7E7:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R12:/54B6B7E7" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R12:/54B6B7E7" pin "1" net name from "" to "GND".
+Changing component "R12:/54B6B7E7" pin "2" net name from "" to "Net-(D9-Pad2)".
+Checking netlist component footprint "R13:/54B78BC1:Resistors_SMD:R_0603_HandSoldering".
+Adding new component "R13:/54B78BC1" footprint "Resistors_SMD:R_0603_HandSoldering".
+Changing component "R13:/54B78BC1" pin "1" net name from "" to "VCC".
+Changing component "R13:/54B78BC1" pin "2" net name from "" to "Net-(D10-Pad2)".
+Checking netlist component footprint "T1:/54C8167B:Housings_TO-92:TO-92-Free-molded-wide".
+Adding new component "T1:/54C8167B" footprint "Housings_TO-92:TO-92-Free-molded-wide".
+Changing component "T1:/54C8167B" pin "2" net name from "" to "Net-(R8-Pad1)".
+Changing component "T1:/54C8167B" pin "3" net name from "" to "Net-(T1-Pad3)".
+Changing component "T1:/54C8167B" pin "1" net name from "" to "GND".
+Checking netlist component footprint "U1:/54B8B303:SMD_Packages:SOIC-8-W".
+Adding new component "U1:/54B8B303" footprint "SMD_Packages:SOIC-8-W".
+Changing component "U1:/54B8B303" pin "8" net name from "" to "GND".
+Changing component "U1:/54B8B303" pin "1" net name from "" to "Net-(R9-Pad1)".
+Changing component "U1:/54B8B303" pin "7" net name from "" to "/TEMPERATURE".
+Changing component "U1:/54B8B303" pin "6" net name from "" to "Net-(R11-Pad1)".
+Changing component "U1:/54B8B303" pin "5" net name from "" to "Net-(R8-Pad1)".
+Changing component "U1:/54B8B303" pin "2" net name from "" to "Net-(R9-Pad1)".
+Changing component "U1:/54B8B303" pin "3" net name from "" to "Net-(R6-Pad1)".
+Changing component "U1:/54B8B303" pin "4" net name from "" to "VCC".
+Checking netlist component footprint "U2:/54A36652:Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm".
+Adding new component "U2:/54A36652" footprint "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm".
+Changing component "U2:/54A36652" pin "1" net name from "" to "/RELAY2".
+Changing component "U2:/54A36652" pin "2" net name from "" to "/UVCC".
+Changing component "U2:/54A36652" pin "3" net name from "" to "/D-".
+Changing component "U2:/54A36652" pin "4" net name from "" to "/D+".
+Changing component "U2:/54A36652" pin "5" net name from "" to "GND".
+Changing component "U2:/54A36652" pin "6" net name from "" to "Net-(C2-Pad1)".
+Changing component "U2:/54A36652" pin "7" net name from "" to "/UVCC".
+Changing component "U2:/54A36652" pin "8" net name from "" to "/CH_PD".
+Changing component "U2:/54A36652" pin "9" net name from "" to "/SCK".
+Changing component "U2:/54A36652" pin "10" net name from "" to "/MOSI".
+Changing component "U2:/54A36652" pin "11" net name from "" to "/MISO".
+Changing component "U2:/54A36652" pin "12" net name from "" to "/BACKLIGHT".
+Changing component "U2:/54A36652" pin "13" net name from "" to "/RESET".
+Changing component "U2:/54A36652" pin "14" net name from "" to "VCC".
+Changing component "U2:/54A36652" pin "15" net name from "" to "GND".
+Changing component "U2:/54A36652" pin "16" net name from "" to "Net-(C5-Pad1)".
+Changing component "U2:/54A36652" pin "17" net name from "" to "Net-(C4-Pad1)".
+Changing component "U2:/54A36652" pin "18" net name from "" to "/D/C".
+Changing component "U2:/54A36652" pin "19" net name from "" to "/LCD_CS".
+Changing component "U2:/54A36652" pin "20" net name from "" to "/TXD".
+Changing component "U2:/54A36652" pin "21" net name from "" to "/RXD".
+Changing component "U2:/54A36652" pin "22" net name from "" to "Net-(U2-Pad22)".
+Changing component "U2:/54A36652" pin "23" net name from "" to "GND".
+Changing component "U2:/54A36652" pin "24" net name from "" to "VCC".
+Changing component "U2:/54A36652" pin "25" net name from "" to "/Y-".
+Changing component "U2:/54A36652" pin "26" net name from "" to "/GPIO0".
+Changing component "U2:/54A36652" pin "27" net name from "" to "/RELAY1".
+Changing component "U2:/54A36652" pin "28" net name from "" to "/RELAY3".
+Changing component "U2:/54A36652" pin "29" net name from "" to "/LCD_RESET".
+Changing component "U2:/54A36652" pin "30" net name from "" to "Net-(U2-Pad30)".
+Changing component "U2:/54A36652" pin "31" net name from "" to "/X+".
+Changing component "U2:/54A36652" pin "32" net name from "" to "/GPIO2".
+Changing component "U2:/54A36652" pin "33" net name from "" to "GND".
+Changing component "U2:/54A36652" pin "34" net name from "" to "VCC".
+Changing component "U2:/54A36652" pin "35" net name from "" to "GND".
+Changing component "U2:/54A36652" pin "36" net name from "" to "/TEMPERATURE".
+Changing component "U2:/54A36652" pin "37" net name from "" to "/Y+".
+Changing component "U2:/54A36652" pin "38" net name from "" to "/X-".
+Changing component "U2:/54A36652" pin "39" net name from "" to "/ESP_RESET".
+Changing component "U2:/54A36652" pin "40" net name from "" to "/CE".
+Changing component "U2:/54A36652" pin "41" net name from "" to "/CSN".
+Changing component "U2:/54A36652" pin "42" net name from "" to "Net-(C6-Pad2)".
+Changing component "U2:/54A36652" pin "43" net name from "" to "GND".
+Changing component "U2:/54A36652" pin "44" net name from "" to "VCC".
+Checking netlist component footprint "VR1:/54B6871B:SMD_Packages:TO-263-5_HandSoldering".
+Adding new component "VR1:/54B6871B" footprint "SMD_Packages:TO-263-5_HandSoldering".
+Changing component "VR1:/54B6871B" pin "2" net name from "" to "Net-(D8-Pad2)".
+Changing component "VR1:/54B6871B" pin "3" net name from "" to "GND".
+Changing component "VR1:/54B6871B" pin "4" net name from "" to "VCC".
+Changing component "VR1:/54B6871B" pin "3" net name from "" to "GND".
+Changing component "VR1:/54B6871B" pin "1" net name from "" to "Net-(C1-Pad1)".
+Changing component "VR1:/54B6871B" pin "5" net name from "" to "GND".
+Checking netlist component footprint "X1:/54B48B6A:Crystals:Crystal_HC49-U_Vertical".
+Adding new component "X1:/54B48B6A" footprint "Crystals:Crystal_HC49-U_Vertical".
+Changing component "X1:/54B48B6A" pin "1" net name from "" to "Net-(C4-Pad1)".
+Changing component "X1:/54B48B6A" pin "2" net name from "" to "Net-(C5-Pad1)".
