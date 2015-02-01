@@ -3,7 +3,7 @@
   (general
     (links 159)
     (no_connects 0)
-    (area 53.239999 17.8972 155.247372 72.3428)
+    (area 66.160629 17.8972 155.247372 72.3428)
     (thickness 1.6)
     (drawings 7)
     (tracks 996)
@@ -2159,7 +2159,7 @@
   (gr_line (start 152.654 71.12) (end 153.162 71.12) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 66.548 71.12) (end 152.654 71.12) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 66.548 20.574) (end 66.548 71.12) (layer Edge.Cuts) (width 0.1))
-  (gr_text "M.R. THERMOSTAT TCU\nTYLER BULES\nJACOB STURM\nCHRIS FASTBINDER" (at 152.146 56.896) (layer B.SilkS)
+  (gr_text "M.R. THERMOSTAT TCU\nTYLER BULES\nJACOB STURM\nCHRIS FASBINDER" (at 152.146 56.896) (layer B.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)) (justify left mirror))
   )
 
