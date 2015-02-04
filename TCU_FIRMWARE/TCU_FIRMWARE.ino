@@ -2,6 +2,7 @@
 #include <SPI.h>
 #include <Adafruit_ILI9341.h>
 #include <Adafruit_GFX.h>
+#include <TouchScreen.h>
 
 void setup(void)
 {
