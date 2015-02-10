@@ -114,6 +114,8 @@ void dateSettings(){
 
 //Profile Settings Screen
 void profileSettings(){
+  TSPoint p;
+  
   tft.setTextColor(ILI9341_BLACK);
   tft.setTextSize(1);
   tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
@@ -126,12 +128,25 @@ void profileSettings(){
   
   tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Active Name
   tft.setCursor(xa, ya);
-  tft.println("Active: " + someName);
+  tft.println("Active: ");
   
   tft.fillRect(xl, yl, wl, hl, ILI9341_WHITE); //Profile List
   tft.setCursor(xl, yl);
-  tft.println(someName);
+  while(list not empty) {  tft.println(someName);  };
   
+  tft.fillRect(xe, ye, we, he, ILI9341_WHITE); //Edit
+  tft.setCursor(xe, ye);
+  tft.println("Edit");
+  do{
+    do{
+      TSPoint p = ts.getPoint();
+      //Check for Android Connection
+    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+  
+    if(p.x < wb && p.y > yt) {  return;  } //Date/Time
+    else if(p.y > yl) {  editRules();  ) //Rules
+    else if(p.y < he) {  editProfile();  } //Edit Profile
+  }while(true);
 }
 
 //Profile Settings Screen
@@ -175,5 +190,13 @@ void defaults(byte action){
   else if(action == 2) { //Read
     
   }
+  
+}
+
+void editProfile(){
+  
+}
+
+void editRules(){
   
 }
