@@ -115,6 +115,7 @@ void dateSettings(){
 //Profile Settings Screen
 void profileSettings(){
   TSPoint p;
+  tft.fillScreen(ILI9341_BLACK);
   
   tft.setTextColor(ILI9341_BLACK);
   tft.setTextSize(1);
@@ -143,43 +144,48 @@ void profileSettings(){
       //Check for Android Connection
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
   
-    if(p.x < wb && p.y < ht) {  return;  } //Back
-    else if(p.y > yl) {  editRules();  ) //Rules
-    else if(p.y > ye) {  editProfile();  } //Edit Profile
+    if(p.y > ye) {  editProfile();  } //Edit Profile
+    else if(p.y > yl) {  changeActive();  } //Rules
+    else if(p.x < wb && p.y < hb) {  return;  } //Back
   }while(true);
 }
 
-//Profile Settings Screen
+//Sensor Settings Screen
 void sensorSettings(){
   
 }
 
-//Profile Settings Screen
+//Obtain newest Weather info
 void updateWeather(){
   //grab latest weather info
 }
 
-//Profile Settings Screen
+//Change Desired Temperature Screen
 void changeTemp(){
   
 }
 
-//Profile Settings Screen
+//HVAC Settings Screen
 void hvacSettingChange(){
   
 }
 
-//Profile Settings Screen
+//Rotates Sensor List
 void cycleSensorList(boolean directions){
-  
+  if(action == 0) { //Left
+    
+  }
+  else if(action == 1) { //Right
+    
+  }
 }
 
-//Profile Settings Screen
+//Settings Screen
 void settings(){
   
 }
 
-//Profile Settings Screen
+// Default actions
 void defaults(byte action){
   if(action == 0) { //Default
     
@@ -193,10 +199,74 @@ void defaults(byte action){
   
 }
 
+//Profile Edit Screen
 void editProfile(){
+  byte i = 0;
+  TSPoint p;
+  tft.fillScreen(ILI9341_BLACK);
   
+  tft.setTextColor(ILI9341_BLACK);
+  tft.setTextSize(1);
+  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
+  tft.setCursor(xb, yb);
+  tft.println("Back");
+  
+  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
+  tft.setCursor(xt, yt);
+  tft.println("Profile Settings");
+  
+  //Might add scroll button
+  
+  while(list not empty && yl + i < TS_MAXY) { //Profile List
+    tft.fillRect(xl, yl + i, wl, hl, ILI9341_WHITE);
+    tft.setCursor(xl, yl + i);
+    tft.println(profileName + i);
+    i++;
+  }
+  
+  do{
+    do{
+      TSPoint p = ts.getPoint();
+      //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+  
+    if(p.x < wb && p.y < ht) {  return;  } //Back
+    //more work here
+  }while(true);
 }
 
+//Rules Edit Screen
 void editRules(){
+  byte i = 0;
+  TSPoint p;
+  tft.fillScreen(ILI9341_BLACK);
+  
+  tft.setTextColor(ILI9341_BLACK);
+  tft.setTextSize(1);
+  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
+  tft.setCursor(xb, yb);
+  tft.println("Back");
+  
+  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
+  tft.setCursor(xt, yt);
+  tft.println("Profile Settings");
+  
+  tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Active Name
+  tft.setCursor(xa, ya);
+  tft.println("Name: ");
+  
+  tft.setCursor(xr, yr);
+  tft.println("Rules:");
+  
+  while(list not empty && yl + i < TS_MAXY) { //Profile List
+    tft.fillRect(xl, yl + i, wl, hl, ILI9341_WHITE);
+    tft.setCursor(xl, yl + i);
+    tft.println(profileRules + i);
+    i++;
+  }  
+}
+
+//Change Active Profile Screen
+void changeActive(){
   
 }
