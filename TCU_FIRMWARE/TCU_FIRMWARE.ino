@@ -36,16 +36,16 @@ void loop(void) {
   //Check for Android Connection
   }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
   
-  if(p.x < wt && p.y > yt) {  dateSettings();  } //Date/Time
-  else if(p.x > xp && p.y > yp) {  profileSettings();  } //Active Profile
-  else if(p.x > xc && p.y > yc) {  sensorSettings();  } //Current Temp
-  else if(p.x < ww && p.y > yw) {  updateWeather();  } //Weather
-  else if(p.x > xd && p.y > yd) {  changeTemp();  } //Desired Temp
+  if(p.x > xs && p.y > ys) {  settings();  } //Settings
+  else if(p.x > rx && p.y > yl) {  cycleSensorList(1);  } //Right arrow for Sensor List
+  else if(p.x > xl && p.y > yl) {  sensorSettings();  } //Sensor List
+  else if(p.x < xl && p.y > yl) {  cycleSensorList(0);  } //Left arrow for Sensor List
   else if(p.y > yh) {  hvacSettingChange();  } //HVAC System (needs work)
-  else if(p.x < xd) {  cycleSensorList(0);  } //Left arrow for Sensor List
-  else if(p.x < xl + wl) {  sensorSettings();  } //Sensor List
-  else if(p.x < xd + i) {  cycleSensorList(1);  } //Right arrow for Sensor List
-  else if(p.x > xs) {  settings();  } //Settings
+  else if(p.x > xd && p.y > yd) {  changeTemp();  } //Desired Temp
+  else if(p.x < ww && p.y > yw) {  updateWeather();  } //Weather
+  else if(p.x > xc && p.y > yc) {  sensorSettings();  } //Current Temp
+  else if(p.x > xp && p.y > yp) {  profileSettings();  } //Active Profile
+  else if(p.x < wt) {  dateSettings();  } //Date/Time
   
   return;
 }
@@ -143,9 +143,9 @@ void profileSettings(){
       //Check for Android Connection
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
   
-    if(p.x < wb && p.y > yt) {  return;  } //Date/Time
+    if(p.x < wb && p.y < ht) {  return;  } //Back
     else if(p.y > yl) {  editRules();  ) //Rules
-    else if(p.y < he) {  editProfile();  } //Edit Profile
+    else if(p.y > ye) {  editProfile();  } //Edit Profile
   }while(true);
 }
 
