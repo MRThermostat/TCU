@@ -133,7 +133,7 @@ void profileSettings(){
   
   tft.fillRect(xl, yl, wl, hl, ILI9341_WHITE); //Profile List
   tft.setCursor(xl, yl);
-  while(list not empty) {  tft.println(someName);  };
+  while(listnotempty) {  tft.println(someName);  }
   
   tft.fillRect(xe, ye, we, he, ILI9341_WHITE); //Edit
   tft.setCursor(xe, ye);
@@ -152,6 +152,93 @@ void profileSettings(){
 
 //Sensor Settings Screen
 void sensorSettings(){
+  TSPoint p;
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_BLACK);
+  tft.setTextSize(1);
+  
+  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
+  tft.setCursor(xb, yb);
+  tft.println("Back");
+  
+  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
+  tft.setCursor(xt, yt);
+  tft.println("Sensor Settings");
+  
+  tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Active List
+  tft.setCursor(xa, ya);
+  tft.println("Active");
+  
+  tft.fillRect(xs, ys, ws, hs, ILI9341_WHITE); //Sensor List
+  tft.setCursor(xa, ya);
+  tft.println("Sensors");
+  
+  tft.fillRect(xe, ye, we, he, ILI9341_WHITE); //Edit
+  tft.setCursor(xe, ye);
+  tft.println("Edit");
+  
+  do{
+    do{
+      TSPoint p = ts.getPoint();
+      //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+  
+    if(p.x < wb && p.y < ht) {  return;  } //Back
+    else if(p.x < wa) {  activeList();  } //Active List
+    else if(p.x > xe) {  sensorEdit();  } //Edit    
+  }while(true);
+}
+
+void activeList(){
+  TSPoint p;
+  byte tmp;
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_BLACK);
+  tft.setTextSize(1);
+  
+  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
+  tft.setCursor(xb, yb);
+  tft.println("Back");
+  
+  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
+  tft.setCursor(xt, yt);
+  tft.println("Sensor Settings");
+  
+  tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Title
+  tft.setCursor(xa, ya);
+  tft.println("Set Active Sensors");
+  
+  while(listnotempty && yl + i < TS_MAXY) { //Sensor List
+    tft.setCursor(xl, yl + i);
+    if(sensorNameisactive) {  tft.setTextColor(ILI9341_RED);  }
+    else {  tft.setTextColor(ILI9341_BLACK);  }
+    tft.println(sensorName + i);
+    i++;
+  }
+  
+  do{
+    do{
+      TSPoint p = ts.getPoint();
+      //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+  
+    if(p.x < wb && p.y < ht) {  return;  } //Back
+    else if(p.y > yl){
+      tmp = (p.y - yl)/i; //Finds Which sensor was pressed
+      //go to sensor list and change active value using sensorActive ^ 1;
+      tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Update List
+      while(listnotempty && yl + i < TS_MAXY) {
+        tft.setCursor(xl, yl + i);
+        if(sensorNameisactive) {  tft.setTextColor(ILI9341_RED);  }
+        else {  tft.setTextColor(ILI9341_BLACK);  }
+        tft.println(sensorName + i);
+        i++;
+      }
+    }
+  }while(true);
+}
+
+void sensorEdit(){
   
 }
 
@@ -217,7 +304,7 @@ void editProfile(){
   
   //Might add scroll button
   
-  while(list not empty && yl + i < TS_MAXY) { //Profile List
+  while(listnotempty && yl + i < TS_MAXY) { //Profile List
     tft.fillRect(xl, yl + i, wl, hl, ILI9341_WHITE);
     tft.setCursor(xl, yl + i);
     tft.println(profileName + i);
@@ -258,7 +345,7 @@ void editRules(){
   tft.setCursor(xr, yr);
   tft.println("Rules:");
   
-  while(list not empty && yl + i < TS_MAXY) { //Profile List
+  while(listnotempty && yl + i < TS_MAXY) { //Profile List
     tft.fillRect(xl, yl + i, wl, hl, ILI9341_WHITE);
     tft.setCursor(xl, yl + i);
     tft.println(profileRules + i);
