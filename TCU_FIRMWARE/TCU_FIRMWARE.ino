@@ -168,6 +168,11 @@ void sensorSettings(){
   tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Active List
   tft.setCursor(xa, ya);
   tft.println("Active");
+  while(listnotempty && yl + i < TS_MAXY) {
+    tft.setCursor(xl, yl + i);
+    if(sensorNameisactive) {  tft.println(sensorName + i);  }
+    i++;
+  }
   
   tft.fillRect(xs, ys, ws, hs, ILI9341_WHITE); //Sensor List
   tft.setCursor(xa, ya);
