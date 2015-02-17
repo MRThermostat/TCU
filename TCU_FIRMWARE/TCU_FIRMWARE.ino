@@ -172,6 +172,11 @@ void sensorSettings(){
   tft.fillRect(xs, ys, ws, hs, ILI9341_WHITE); //Sensor List
   tft.setCursor(xa, ya);
   tft.println("Sensors");
+  while(listnotempty && yl + i < TS_MAXY) {
+    tft.setCursor(xl, yl + i);
+    tft.println(sensorName + i);
+    i++;
+  }
   
   tft.fillRect(xe, ye, we, he, ILI9341_WHITE); //Edit
   tft.setCursor(xe, ye);
@@ -181,11 +186,14 @@ void sensorSettings(){
     do{
       TSPoint p = ts.getPoint();
       //Check for Android Connection
-      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
   
     if(p.x < wb && p.y < ht) {  return;  } //Back
     else if(p.x < wa) {  activeList();  } //Active List
-    else if(p.x > xe) {  sensorEdit();  } //Edit    
+    else if(p.y > ye) {
+      tmp = (p.y - ye)/i; //Finds Which sensor was pressed(i is size of touch box)
+      sensorSettings(tmp);
+    }
   }while(true);
 }
 
@@ -238,8 +246,75 @@ void activeList(){
   }while(true);
 }
 
-void sensorEdit(){
+void sensorEdit(byte sensorNumber){
+  //Find correct sensor
+  TSPoint p;
+  byte tmp;
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_BLACK);
+  tft.setTextSize(1);
   
+  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
+  tft.setCursor(xb, yb);
+  tft.println("Back");
+  
+  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
+  tft.setCursor(xt, yt);
+  tft.println("Sensor Settings");
+  
+  tft.fillRect(xi, yi, wi, hi, ILI9341_WHITE); //Info Box
+  
+  tft.setCursor(xn, yn);
+  tft.println("Name: " + sensorName);
+  
+  tft.setCursor(xl, yl);
+  tft.println("Latest Temperature: " + sensorTemp);
+  
+  tft.setCursor(xa, ya);
+  tft.println("Active:");
+  
+  if(sensorActive) {
+    tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
+    tft.fillRect(x, y, w, h, ILI9341_WHITE);
+  } else {
+    tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around No
+    tft.fillRect(x, y, w, h, ILI9341_WHITE);
+  }
+
+  tft.setCursor(xy, yy);
+  tft.println("Yes");
+  tft.setCursor(xo, yo);
+  tft.println("No");
+  
+  tft.setCursor(xs, ys);
+  tft.println("Sensor ID: " + sensorID);
+  
+  tft.setCursor(xb, yb);
+  tft.println("Battery Stats: " + sensorBattery);
+  
+  do{
+    do{
+      TSPoint p = ts.getPoint();
+      //Check for Android Connection
+    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+  
+    if(p.x < wb && p.y < ht) {  return;  } //Back
+    else if(p.y > ht && p.y < yl) {  changeName();  } //Active List
+    else if(p.y > ya && p.y < ys) {
+      //go to sensor list and change active value using sensorActive ^ 1
+      if(sensorActive) {
+        tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
+        tft.fillRect(x, y, w, h, ILI9341_WHITE);
+      } else {
+        tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around No
+        tft.fillRect(x, y, w, h, ILI9341_WHITE);
+      }
+      
+      tft.setCursor(xy, yy);
+      tft.println("Yes");
+      tft.setCursor(xo, yo);
+      tft.println("No"); 
+  }while(true);
 }
 
 //Obtain newest Weather info

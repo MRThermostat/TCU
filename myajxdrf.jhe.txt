@@ -1,0 +1,16 @@
+﻿activeList and sensorSetting GUI created
+
+Added some missing ;
+Added GUI for setting a sensor to active/not active
+Added GUI for sensor settings
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch TCU_GUI
+# Your branch is ahead of 'origin/TCU_GUI' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   TCU_FIRMWARE/TCU_FIRMWARE.ino
+#
+
