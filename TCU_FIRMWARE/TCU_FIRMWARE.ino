@@ -279,11 +279,9 @@ void sensorEdit(byte sensorNumber){
   tft.println("Active:");
   
   if(sensorActive) {
-    tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
-    tft.fillRect(x, y, w, h, ILI9341_WHITE);
+    tft.drawRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
   } else {
-    tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around No
-    tft.fillRect(x, y, w, h, ILI9341_WHITE);
+    tft.drawRect(x, y, w, h, ILI9341_BLACK); //Box around No
   }
 
   tft.setCursor(xy, yy);
@@ -304,22 +302,25 @@ void sensorEdit(byte sensorNumber){
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
   
     if(p.x < wb && p.y < ht) {  return;  } //Back
-    else if(p.y > ht && p.y < yl) {  changeName();  } //Active List
+    else if(p.y > ht && p.y < yl) {  changeName(0, sensorNumber);  }
     else if(p.y > ya && p.y < ys) {
       //go to sensor list and change active value using sensorActive ^ 1
       if(sensorActive) {
-        tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
-        tft.fillRect(x, y, w, h, ILI9341_WHITE);
+        tft.drawRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
+        tft.drawRect(x, y, w, h, ILI9341_WHITE); //Clear Box around No
       } else {
-        tft.fillRect(x, y, w, h, ILI9341_BLACK); //Box around No
-        tft.fillRect(x, y, w, h, ILI9341_WHITE);
+        tft.drawRect(x, y, w, h, ILI9341_BLACK); //Box around No
+        tft.drawRect(x, y, w, h, ILI9341_WHITE); //Clear Box around Yes
       }
-      
-      tft.setCursor(xy, yy);
-      tft.println("Yes");
-      tft.setCursor(xo, yo);
-      tft.println("No"); 
+    }
   }while(true);
+}
+
+//Change Sensor Name
+void changeName(bit sensorProfile,byte number){
+  keyboard();
+ 
+  
 }
 
 //Obtain newest Weather info
@@ -436,4 +437,277 @@ void editRules(){
 //Change Active Profile Screen
 void changeActive(){
   
+}
+
+//Touch Keyboard
+void keyboard(){
+  TSPoint p;
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_BLACK);
+  tft.setTextSize(1);
+  
+  tft.fillRect(xtb, ytb, wtb, htb, ILI9341_WHITE); //Text Box Area
+  tft.setCursor(xback, yback); // Back
+  tft.println("Back");
+  drawFastVLine(xbackline, 0, htb, ILI9341_BLACK);
+  tft.setCursor(x, y);
+  tft.println("Max 20 Characters");
+  tft.fillRect(xka, yka, wka, hka, ILI9341_BLACK); //Keyboard Area
+
+  drawFastHLine(0, yl1, wscreen, ILI9341_WHITE);
+  drawFastHLine(0, yl2, wscreen, ILI9341_WHITE);
+  drawFastHLine(0, yl3, wscreen, ILI9341_WHITE);
+  drawFastHLine(0, yl4, wscreen, ILI9341_WHITE);
+  drawFastVLine(xl1, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  drawFastVLine(xl2, yka, hscreen - htb, ILI9341_WHITE);
+  drawFastVLine(xl3, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  drawFastVLine(xl4, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  drawFastVLine(xl5, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  drawFastVLine(xl6, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  drawFastVLine(xl7, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  drawFastVLine(xl8, yka, hscreen - htb, ILI9341_WHITE);
+  drawFastVLine(xl9, yka, hscreen - htb-rowheight, ILI9341_WHITE);
+  
+  //Row 1
+  tft.setCursor(x1, y1); //1
+  tft.println("1");
+  tft.setCursor(x2, y2); //2
+  tft.println("2");
+  tft.setCursor(x3, y3); //3
+  tft.println("3");
+  tft.setCursor(x4, y4); //4
+  tft.println("4");
+  tft.setCursor(x5, y5); //5
+  tft.println("5");
+  tft.setCursor(x6, y6); //6
+  tft.println("6");
+  tft.setCursor(x7, y7); //7
+  tft.println("7");
+  tft.setCursor(x8, y8); //8
+  tft.println("8");
+  tft.setCursor(x9, y9); //9
+  tft.println("9");
+  tft.setCursor(x0, y0); //0
+  tft.println("0");
+  
+  //Row 2
+  tft.setCursor(xq, yq); //q
+  tft.println("q");
+  tft.setCursor(xw, yw); //w
+  tft.println("w");
+  tft.setCursor(xe, ye); //e
+  tft.println("e");
+  tft.setCursor(xr, yr); //r
+  tft.println("r");
+  tft.setCursor(xt, yt); //t
+  tft.println("t");
+  tft.setCursor(xy, yy); //y
+  tft.println("y");
+  tft.setCursor(xu, yu); //u
+  tft.println("u");
+  tft.setCursor(xi, yi); //i
+  tft.println("i");
+  tft.setCursor(xo, yo); //o
+  tft.println("o");
+  tft.setCursor(xp, yp); //p
+  tft.println("p");
+  
+  //Row 3
+  tft.setCursor(xa, ya); //a
+  tft.println("a");
+  tft.setCursor(xs, ys); //s
+  tft.println("s");
+  tft.setCursor(xd, yd); //d
+  tft.println("d");
+  tft.setCursor(xf, yf); //f
+  tft.println("f");
+  tft.setCursor(xg, yg); //g
+  tft.println("g");
+  tft.setCursor(xh, yh); //h
+  tft.println("h");
+  tft.setCursor(xj, yj); //j
+  tft.println("j");
+  tft.setCursor(xk, yk); //k
+  tft.println("k");
+  tft.setCursor(xl, yl); //l
+  tft.println("l");
+  tft.setCursor(xap, yap); //'
+  tft.println("'");
+  
+  //Row 4
+  tft.setCursor(xz, yz); //z
+  tft.println("z");
+  tft.setCursor(xx, yx); //x
+  tft.println("x");
+  tft.setCursor(xc, yc); //c
+  tft.println("c");
+  tft.setCursor(xv, yv); //v
+  tft.println("v");
+  tft.setCursor(xb, yb); //b
+  tft.println("b");
+  tft.setCursor(xn, yn); //n
+  tft.println("n");
+  tft.setCursor(xm, ym); //m
+  tft.println("m");
+  tft.setCursor(xcomma, ycomma); //,
+  tft.println(",");
+  tft.setCursor(xperiod, yperiod); //.
+  tft.println(".");
+  tft.setCursor(xslash, yslash); ///
+  tft.println("/");
+  
+  //Row 5
+  tft.setCursor(xspace, yspace); // space
+  tft.println("SPACE");
+  tft.setCursor(xenter, yenter); // enter
+  tft.println("ENTER");
+  tft.setCursor(xbspace, ybspace); // backspace
+  tft.println("BACKSPACE");
+  
+  do{
+    do{
+      TSPoint p = ts.getPoint();
+      //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    if(p.y < yka && p.x < xbackline) {  return;  } //Back
+    else if(p.y > yka && p.y < yl1) { //Row 1
+      if(p.x < xl1) { //Column 1
+        
+      }
+      else if(p.x < xl2) { //Column 2
+        
+      }
+      else if(p.x < xl3) { //Column 3
+        
+      }
+      else if(p.x < xl4) { //Column 4
+        
+      }
+      else if(p.x < xl5) { //Column 5
+        
+      }
+      else if(p.x < xl6) { //Column 6
+        
+      }
+      else if(p.x < xl7) { //Column 7
+        
+      }
+      else if(p.x < xl8) { //Column 8
+        
+      }
+      else if(p.x < xl9) { //Column 9
+        
+      }
+      else if(p.x > xl9) { //Column 10
+        
+      }
+    }
+    else if(p.y < yl2) { //Row 2
+      if(p.x < xl1) { //Column 1
+        
+      }
+      else if(p.x < xl2) { //Column 2
+        
+      }
+      else if(p.x < xl3) { //Column 3
+        
+      }
+      else if(p.x < xl4) { //Column 4
+        
+      }
+      else if(p.x < xl5) { //Column 5
+        
+      }
+      else if(p.x < xl6) { //Column 6
+        
+      }
+      else if(p.x < xl7) { //Column 7
+        
+      }
+      else if(p.x < xl8) { //Column 8
+        
+      }
+      else if(p.x < xl9) { //Column 9
+        
+      }
+      else if(p.x > xl9) { //Column 10
+        
+      }
+    }
+    else if(p.y < yl3) { //Row 3
+      if(p.x < xl1) { //Column 1
+        
+      }
+      else if(p.x < xl2) { //Column 2
+        
+      }
+      else if(p.x < xl3) { //Column 3
+        
+      }
+      else if(p.x < xl4) { //Column 4
+        
+      }
+      else if(p.x < xl5) { //Column 5
+        
+      }
+      else if(p.x < xl6) { //Column 6
+        
+      }
+      else if(p.x < xl7) { //Column 7
+        
+      }
+      else if(p.x < xl8) { //Column 8
+        
+      }
+      else if(p.x < xl9) { //Column 9
+        
+      }
+      else if(p.x > xl9) { //Column 10
+        
+      }
+    }
+    else if(p.y < y14) { //Row 4
+      if(p.x < xl1) { //Column 1
+        
+      }
+      else if(p.x < xl2) { //Column 2
+        
+      }
+      else if(p.x < xl3) { //Column 3
+        
+      }
+      else if(p.x < xl4) { //Column 4
+        
+      }
+      else if(p.x < xl5) { //Column 5
+        
+      }
+      else if(p.x < xl6) { //Column 6
+        
+      }
+      else if(p.x < xl7) { //Column 7
+        
+      }
+      else if(p.x < xl8) { //Column 8
+        
+      }
+      else if(p.x < xl9) { //Column 9
+        
+      }
+      else if(p.x > xl9) { //Column 10
+        
+      }
+    }
+    else if(p.y > yl4) { //Row 5
+      if(p.x < xl2) { //Column 1
+        
+      }
+      else if(p.x < xl8) { //Column 2
+        
+      }
+      else if(p.x > xl8) { //Column 3
+        
+      }
+    }
+  }while(true);
 }
