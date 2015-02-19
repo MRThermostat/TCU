@@ -1,29 +1,29 @@
 //touchscreen pins
-#DEFINE YP A1
-#DEFINE XM A2
-#DEFINE YM 4
-#DEFINE XP 5
+#define YP A1
+#define XM A2
+#define YM 4
+#define XP 5
 
 //lcd control pins
-#DEFINE TFT_CS 2
-#DEFINE TFT_DC 3
-#DEFINE TFT_RESET 9
-#DEFINE TFT_BACKLIGHT 11
+#define TFT_CS 2
+#define TFT_DC 3
+#define TFT_RESET 9
+#define TFT_BACKLIGHT 11
 
 //nrf24l01 control pins
-#DEFINE NRF_CE A4
-#DEFINE NRF_CSN A5
+#define NRF_CE A4
+#define NRF_CSN A5
 
 //esp8266 control pins
-#DEFINE ESP_GPIO0 12
-#DEFINE ESP_GPIO2 13
-#DEFINE ESP_RESET A3
-#DEFINE ESP_CH_PD 14
+#define ESP_GPIO0 12
+#define ESP_GPIO2 13
+#define ESP_RESET A3
+#define ESP_CH_PD 14
 
 //temperature reading
-#DEFINE TEMP_PIN A0
+#define TEMP_PIN A0
 
 //relay control pins
-#DEFINE RELAY1 6
-#DEFINE RELAY2 7
-#DEFINE RELAY3 8
+#define RELAY1 6
+#define RELAY2 7
+#define RELAY3 8
