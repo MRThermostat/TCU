@@ -18,7 +18,7 @@
 #define ESP_GPIO0 12
 #define ESP_GPIO2 13
 #define ESP_RESET A3
-#define ESP_CH_PD 14
+#define ESP_CH_PD 17 //should be 14 according to picmicro schematic, 17 according to arduinio/variants/micro/pins_arduino.h
 
 //temperature reading
 #define TEMP_PIN A0

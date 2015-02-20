@@ -4,18 +4,23 @@
 #define VOLTAGE 3
 #define RAW 4
 #define LM335_COEF 0.01
+#define GAIN 10.0
+#define MIN_VOLTAGE 2.77
 
 float getTemp(int unit = 2){
   int number_samples = 5;
   int adc_count = 0;
-  float voltage;
+  float adc_voltage, voltage;
   
   for(int i = 0;i<number_samples;i++){
     adc_count += analogRead(TEMP_PIN);
   }
   adc_count = adc_count/number_samples;
   
-  voltage = adc_count*(AREF/1024);
+  adc_voltage = adc_count*(AREF/1024.0);
+  //adc_voltage=GAIN(pregain_voltage-TEMPERATURE_VOLTAGE_REFERENCE)
+  voltage = (adc_voltage/GAIN)+MIN_VOLTAGE; 
+  //voltage = MIN_VOLTAGE+(adc_count*(AREF/1024));
   
   switch (unit){
     case KELVIN:
