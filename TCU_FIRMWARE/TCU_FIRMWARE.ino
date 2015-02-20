@@ -442,6 +442,7 @@ void changeActive(){
 //Touch Keyboard
 void keyboard(){
   TSPoint p;
+  byte count;
   tft.fillScreen(ILI9341_BLACK);
   tft.setTextColor(ILI9341_BLACK);
   tft.setTextSize(1);
@@ -563,151 +564,73 @@ void keyboard(){
   tft.println("ENTER");
   tft.setCursor(xbspace, ybspace); // backspace
   tft.println("BACKSPACE");
+  count = 0;
   
+  do{
+    keyboardTouch();
+    count++;
+  }while(count < 20);
+}
+
+char keyboardTouch(){
   do{
     do{
       TSPoint p = ts.getPoint();
       //Check for Android Connection
       }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-    if(p.y < yka && p.x < xbackline) {  return;  } //Back
+    if(p.y < yka && p.x < xbackline) {  return;  } //Back send exit command
     else if(p.y > yka && p.y < yl1) { //Row 1
-      if(p.x < xl1) { //Column 1
-        
-      }
-      else if(p.x < xl2) { //Column 2
-        
-      }
-      else if(p.x < xl3) { //Column 3
-        
-      }
-      else if(p.x < xl4) { //Column 4
-        
-      }
-      else if(p.x < xl5) { //Column 5
-        
-      }
-      else if(p.x < xl6) { //Column 6
-        
-      }
-      else if(p.x < xl7) { //Column 7
-        
-      }
-      else if(p.x < xl8) { //Column 8
-        
-      }
-      else if(p.x < xl9) { //Column 9
-        
-      }
-      else if(p.x > xl9) { //Column 10
-        
-      }
+      if(p.x < xl1) {  return '1';  } //Column 1
+      else if(p.x < xl2) {  return '2';  } //Column 2
+      else if(p.x < xl3) {  return '3';  } //Column 3
+      else if(p.x < xl4) {  return '4';  } //Column 4
+      else if(p.x < xl5) {  return '5';  } //Column 5
+      else if(p.x < xl6) {  return '6';  } //Column 6
+      else if(p.x < xl7) {  return '7';  } //Column 7
+      else if(p.x < xl8) {  return '8';  } //Column 8
+      else if(p.x < xl9) {  return '9';  } //Column 9
+      else if(p.x < xl0) {  return '0';  } //Column 10
     }
     else if(p.y < yl2) { //Row 2
-      if(p.x < xl1) { //Column 1
-        
-      }
-      else if(p.x < xl2) { //Column 2
-        
-      }
-      else if(p.x < xl3) { //Column 3
-        
-      }
-      else if(p.x < xl4) { //Column 4
-        
-      }
-      else if(p.x < xl5) { //Column 5
-        
-      }
-      else if(p.x < xl6) { //Column 6
-        
-      }
-      else if(p.x < xl7) { //Column 7
-        
-      }
-      else if(p.x < xl8) { //Column 8
-        
-      }
-      else if(p.x < xl9) { //Column 9
-        
-      }
-      else if(p.x > xl9) { //Column 10
-        
-      }
+      if(p.x < xl1) {  return 'q';  } //Column 1
+      else if(p.x < xl2) {  return 'w';  } //Column 2
+      else if(p.x < xl3) {  return 'e';  } //Column 3
+      else if(p.x < xl4) {  return 'r';  } //Column 4
+      else if(p.x < xl5) {  return 't';  } //Column 5
+      else if(p.x < xl6) {  return 'y';  } //Column 6
+      else if(p.x < xl7) {  return 'u';  } //Column 7
+      else if(p.x < xl8) {  return 'i';  } //Column 8
+      else if(p.x < xl9) {  return 'o';  } //Column 9
+      else if(p.x < xl0) {  return 'p';  } //Column 10
     }
     else if(p.y < yl3) { //Row 3
-      if(p.x < xl1) { //Column 1
-        
-      }
-      else if(p.x < xl2) { //Column 2
-        
-      }
-      else if(p.x < xl3) { //Column 3
-        
-      }
-      else if(p.x < xl4) { //Column 4
-        
-      }
-      else if(p.x < xl5) { //Column 5
-        
-      }
-      else if(p.x < xl6) { //Column 6
-        
-      }
-      else if(p.x < xl7) { //Column 7
-        
-      }
-      else if(p.x < xl8) { //Column 8
-        
-      }
-      else if(p.x < xl9) { //Column 9
-        
-      }
-      else if(p.x > xl9) { //Column 10
-        
-      }
+      if(p.x < xl1) {  return 'a';  } //Column 1
+      else if(p.x < xl2) {  return 's';  } //Column 2
+      else if(p.x < xl3) {  return 'd';  } //Column 3
+      else if(p.x < xl4) {  return 'f';  } //Column 4
+      else if(p.x < xl5) {  return 'g';  } //Column 5
+      else if(p.x < xl6) {  return 'h';  } //Column 6
+      else if(p.x < xl7) {  return 'j';  } //Column 7
+      else if(p.x < xl8) {  return 'k';  } //Column 8
+      else if(p.x < xl9) {  return 'l';  } //Column 9
+      else if(p.x < xl0) {  return '\'';  } //Column 10
     }
     else if(p.y < y14) { //Row 4
-      if(p.x < xl1) { //Column 1
-        
-      }
-      else if(p.x < xl2) { //Column 2
-        
-      }
-      else if(p.x < xl3) { //Column 3
-        
-      }
-      else if(p.x < xl4) { //Column 4
-        
-      }
-      else if(p.x < xl5) { //Column 5
-        
-      }
-      else if(p.x < xl6) { //Column 6
-        
-      }
-      else if(p.x < xl7) { //Column 7
-        
-      }
-      else if(p.x < xl8) { //Column 8
-        
-      }
-      else if(p.x < xl9) { //Column 9
-        
-      }
-      else if(p.x > xl9) { //Column 10
-        
-      }
+      if(p.x < xl1) {  return 'z';  } //Column 1
+      else if(p.x < xl2) {  return 'x';  } //Column 2
+      else if(p.x < xl3) {  return 'c';  } //Column 3
+      else if(p.x < xl4) {  return 'v';  } //Column 4
+      else if(p.x < xl5) {  return 'b';  } //Column 5
+      else if(p.x < xl6) {  return 'n';  } //Column 6
+      else if(p.x < xl7) {  return 'm';  } //Column 7
+      else if(p.x < xl8) {  return ',';  } //Column 8
+      else if(p.x < xl9) {  return '.';  } //Column 9
+      else if(p.x < xl0) {  return '/';  } //Column 10
     }
     else if(p.y > yl4) { //Row 5
-      if(p.x < xl2) { //Column 1
-        
-      }
-      else if(p.x < xl8) { //Column 2
-        
-      }
-      else if(p.x > xl8) { //Column 3
-        
-      }
+      if(p.x < xl2) {  return '';  } //Column 1 need return command
+      else if(p.x < xl8) {  return ' ';  } //Column 2
+      else if(p.x > xl8) {  return '';  } //Column 3 need enter command
     }
   }while(true);
 }
