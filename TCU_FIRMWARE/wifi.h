@@ -7,6 +7,8 @@
 
 #define ESP_INIT_BAUD 9600
 
+ESP8266 wifi(Serial1);
+
 void setupWifi(){
   pinMode(ESP_GPIO0,OUTPUT);
   pinMode(ESP_GPIO2,OUTPUT);
@@ -15,11 +17,10 @@ void setupWifi(){
   
   digitalWrite(ESP_GPIO0,HIGH);
   digitalWrite(ESP_GPIO2,HIGH);
-  digitalWrite(ESP_RESET,HIGH);
+  digitalWrite(ESP_RESET,LOW);
   digitalWrite(ESP_CH_PD,HIGH);
-    
-  Serial1.begin(ESP_INIT_BAUD);
-  Serial1.setTimeout(1000);
+  
+  wifi.restart();   
 }
 
 int findText(String needle, String haystack) {
@@ -40,21 +41,24 @@ void flushRXBuffer(){
 }
 
 int resetWifi(){
+  digitalWrite(ESP_CH_PD,HIGH);
   digitalWrite(ESP_RESET,LOW);
-  delay(100);
+  delay(10);
   
   //dump data out of arduino RX buffer
   flushRXBuffer();
   
-  char resp[200] = "";
+  char resp[100] = "";
   
   //set reset pin high
   digitalWrite(ESP_RESET,HIGH);
   
-  while(Serial1.available() == 0){
-    //do nothing wait for resp
-  }
-  Serial1.readBytes(resp,200);
+  int timeout = 0;
+  /*while((Serial1.available() == 0) && (timeout < 20)){
+    timeout++;//do nothing wait for resp
+    delay(5);
+  }*/
+  Serial1.readBytes(resp,100);
   
   #ifdef DEBUG
     Serial.print("ESP8266 initialized:");
@@ -72,17 +76,30 @@ int resetWifi(){
 
 }
 
+void setupNetwork()
+{
+}
+
 void sendCommand(String command){
   flushRXBuffer();
-  
-  digitalWrite(ESP_CH_PD,HIGH); //must be written high again after setup exits. setup writes this pin low on exit for some reason.
-  char resp[200] = "";
+  //Serial1.end();
+  //Serial1.begin(9600);
+  //digitalWrite(ESP_CH_PD,HIGH); //must be written high again after setup exits. setup writes this pin low on exit for some reason.
+  char resp[100] = "";
+  digitalWrite(ESP_GPIO0,HIGH);
+  digitalWrite(ESP_GPIO2,HIGH);
+  digitalWrite(ESP_RESET,HIGH);
+  digitalWrite(ESP_CH_PD,HIGH);
   Serial1.println(command);
   
-  while(Serial1.available() == 0){
+  /*while(Serial1.available() == 0){
     //do nothing wait for resp
-  }
-  Serial1.readBytes(resp,200);
+  }*/
+  digitalWrite(ESP_GPIO0,HIGH);
+  digitalWrite(ESP_GPIO2,HIGH);
+  digitalWrite(ESP_RESET,HIGH);
+  digitalWrite(ESP_CH_PD,HIGH);
+  Serial1.readBytes(resp,100);
   Serial.print("response:");
   Serial.println(resp);
 }

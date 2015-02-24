@@ -7,6 +7,13 @@
 #define GAIN 10.0
 #define MIN_VOLTAGE 2.77
 
+void setupTemp(){
+  //setup temperature hardware
+  pinMode(TEMP_PIN,INPUT);
+  digitalWrite(TEMP_PIN,LOW);
+  //analogReference(DEFAULT);
+}
+
 float getTemp(int unit = 2){
   int number_samples = 5;
   int adc_count = 0;
