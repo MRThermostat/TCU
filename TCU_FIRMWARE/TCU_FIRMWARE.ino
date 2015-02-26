@@ -18,7 +18,7 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual res
 
 //from x = 0, can get 26 characters across
 
-void setup() {
+void setup(){
   //open up serial comms
   //be careful with this, as this channel also connects to ESP8266
   Serial.begin(9600);
@@ -30,10 +30,10 @@ void setup() {
   tft.begin();
   tft.setRotation(3);
 
-  //defaults(0); //run the set defaults
+  defaults(0); //run the set defaults
 }
 
-void loop() { //Main Screen
+void loop(){ //Main Screen
   TSPoint p;
   int temp = -10; //temporary for testing
   tft.fillScreen(ILI9341_BLACK);
@@ -139,11 +139,68 @@ void loop() { //Main Screen
     if(p.y < 535) {  /*sensorSettings();*/  } //Sensor Settings
     else {  changeTemp();  } //Change Temperature
   } 
-  //else if(p.x > 223) {  hvacSettingChange();  } //HVAC System (needs work)
+  else if(p.x > 223) {  hvacSettingChange();  } //HVAC System (needs work)
   else if(p.y < 186) {  cycleSensorList(0);  } //Left Arrow for Sensor List
   //else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
   else if(p.y < 824) {  cycleSensorList(1);  } //Right Arrow for Sensor List
-  //else {  settings();  } //Active Profile
+  else {  settings();  } //Settings
+}
+
+//Settings Screen
+void settings(){
+  TSPoint p;
+  
+  do{
+    tft.fillScreen(ILI9341_BLACK);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    
+    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 78, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 131, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 184, 320, ILI9341_WHITE);
+    
+    //Back
+    tft.setCursor(4, 5);
+    tft.println("Back");
+    
+    //Title
+    tft.setCursor(75, 5);
+    tft.println("Device Settings");
+    
+    //Profile
+    tft.setCursor(64, 43);
+    tft.println("Profile Settings");
+    
+    //Sensor
+    tft.setCursor(70, 96);
+    tft.println("Sensor Settings");
+    
+    //WiFi
+    tft.setCursor(82, 149);
+    tft.println("WiFi Settings");
+    
+    //Defaults
+    tft.setCursor(112, 202);
+    tft.println("Defaults");
+    do{
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    
+      if(p.x > 798) {
+        if(p.y < 318) {  return;  } //Back
+      }
+      else {
+        if(p.x > 645) {  profileSettings();  } //Profile Settings
+        else if(p.x > 493) {  /*sensorSettings();*/  } //Sensor Settings
+        else if(p.x > 252) {  wifiSettings();  } //WiFi Settings
+        else {  defaults(2);  } //Default Settings
+      }
+    }while(p.x > 798 && p.y > 318);
+  }while(true);
 }
 
 //Date/Time Setting Screen
@@ -154,50 +211,50 @@ void dateSettings(){
 //Profile Settings Screen
 void profileSettings(){
   TSPoint p;
-  int tmp = 0;
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(2);
-  
-  tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
-  tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
-  tft.drawFastHLine(0, 65, 320, ILI9341_WHITE);
-  tft.drawFastHLine(0, 215, 320, ILI9341_WHITE); 
-  
-  //Back
-  tft.setCursor(4, 5);
-  tft.println("Back");
-  
-  //Title
-  tft.setCursor(75, 5);
-  tft.println("Profile Settings");
-  
-  //Active Name
-  tft.setCursor(62, 30);
-  tft.println("Currently Active");
-  tft.setCursor(4, 46);
-  tft.println("Active Profile123456");
-
-  //Profile List
-  while(tmp < 8) {//while list not empty
-    tft.setCursor(4, 70 + tmp * 18);
-    tft.println("Active Profile123456");
-    tmp++;
-  }
-  
-  //Edit
-  tft.setCursor(124, 220);
-  tft.println("Edit");
+  char nam[21] = "Active Profile123456";
   do{
+    byte tmp = 0;
+    
+    tft.fillScreen(ILI9341_BLACK);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    
+    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 65, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 215, 320, ILI9341_WHITE); 
+    
+    //Back
+    tft.setCursor(4, 5);
+    tft.println("Back");
+    
+    //Title
+    tft.setCursor(75, 5);
+    tft.println("Profile Settings");
+    
+    //Active Name
+    tft.setCursor(62, 28);
+    tft.println("Currently Active");
+    centerText(46, nam);
+    
+    //Profile List
+    while(tmp < 8) {  //while list not empty
+      centerText(70 + tmp * 18, nam);
+      tmp++;
+    }
+    
+    //Edit
+    tft.setCursor(124, 220);
+    tft.println("Edit");
+    
     do{
       p = ts.getPoint();
       //Check for Android Connection
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-/*
-    if(p.x < wb && p.y < hb) {  return;  } //Back  
-    else if(p.y > yl) {  changeActive();  } //Rules
-    else if(p.y > ye) {  editProfile();  } //Edit Profile*/
-    return;
+    
+    if(p.x > 798 && p.y < 318) {  return;  } //Back
+    else if(p.x > 683 && p.x < 798) {  changeActive();  } //Rules
+    else if(p.x < 252) {  editProfile();  } //Edit Profile
   }while(true);
 }
 /*
@@ -380,41 +437,41 @@ void updateWeather(){
 //Change Desired Temperature Screen
 void changeTemp(){
   TSPoint p;
-  byte temp = 99; // Must remove '= 100' before final product
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(2);
-  
-  tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
-  tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
-  tft.drawFastHLine(0, 210, 320, ILI9341_WHITE);
-  tft.fillTriangle(                 // Up Arrow
-                   160, 30,         // peak
-                   100, 60,         // bottom left
-                   220, 60,         // bottom right
-                   ILI9341_WHITE);
-  tft.fillTriangle(                 // DownArrow
-                   160, 200,        // peak
-                   100, 170,        // bottom left
-                   220, 170,        // bottom right
-                   ILI9341_WHITE);
-  
-  //Back
-  tft.setCursor(4, 5);
-  tft.println("Back");
-  //Title
-  tft.setCursor(75, 5);
-  tft.println("Change Temperature");
-  //Accept
-  tft.setCursor(124, 215);
-  tft.println("Accept");
-  //Temperature
-  tft.setTextSize(10);
-  //grab current desired temperature temp = ;
-  tft.setCursor(105, 80);
-  tft.println(temp);
-
   do{
+    byte temp = 99; // Must remove '= 100' before final product
+    tft.fillScreen(ILI9341_BLACK);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    
+    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 210, 320, ILI9341_WHITE);
+    tft.fillTriangle(                 // Up Arrow
+                     160, 30,         // peak
+                     100, 60,         // bottom left
+                     220, 60,         // bottom right
+                     ILI9341_WHITE);
+    tft.fillTriangle(                 // DownArrow
+                     160, 200,        // peak
+                     100, 170,        // bottom left
+                     220, 170,        // bottom right
+                     ILI9341_WHITE);
+    
+    //Back
+    tft.setCursor(4, 5);
+    tft.println("Back");
+    //Title
+    tft.setCursor(75, 5);
+    tft.println("Change Temperature");
+    //Accept
+    tft.setCursor(124, 215);
+    tft.println("Accept");
+    //Temperature
+    tft.setTextSize(10);
+    //grab current desired temperature temp = ;
+    tft.setCursor(105, 80);
+    tft.println(temp);
+
     do{
       p = ts.getPoint();
       //Check for Android Connection
@@ -434,55 +491,98 @@ void changeTemp(){
     tft.println(temp);
   }while(true);
 }
-/*
+
 //HVAC Settings Screen
 void hvacSettingChange(){
   TSPoint p;
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_BLACK);
-  tft.setTextSize(1);
-  
-  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
-  tft.setCursor(xb, yb);
-  tft.println("Back");
-  
-  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
-  tft.setCursor(xt, yt);
-  tft.println("HVAC Settings");
-  
-  tft.fillRect(xf, yf, wf, hf, ILI9341_WHITE); //Fan Area
-  tft.setCursor(xon, yon);
-  tft.println("On");
-  tft.setCursor(xoff, yoff);
-  tft.println("Off");
-  tft.setCursor(xa, ya);
-  tft.println("Auto");
-  if(onActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } //Box around active setting
-  if(offActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } 
-  if(autoActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } 
-  
-  tft.fillRect(xf, yf, wf, hf, ILI9341_WHITE); //System Area
-  tft.setCursor(xh, yh);
-  tft.println("Heat");
-  tft.setCursor(xc, yc);
-  tft.println("Cool");
-  tft.setCursor(xbl, ybl);
-  tft.println("Blower");
-  if(heatActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } //Box around active setting
-  if(coolActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } 
-  if(blowerActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } 
   
   do{
+    tft.fillScreen(ILI9341_BLACK);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    
+    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 107, 320, ILI9341_WHITE);
+    
+    //Back
+    tft.setCursor(4, 5);
+    tft.println("Back");
+    
+    //Title
+    tft.setCursor(75, 5);
+    tft.println("HVAC Settings");
+    
+    //Fan Area
+    tft.setCursor(146, 35);
+    tft.println("Fan");
+    tft.setCursor(61, 70);
+    tft.println("On");
+    tft.setCursor(146, 70);
+    tft.println("Off");
+    tft.setCursor(216, 70);
+    tft.println("Auto");
+    /*if(onActive) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //Box around active setting
+    if(offActive) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  }
+    if(autoActive) {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  }*/
+    
+    //System Area
+    tft.setCursor(124, 117);
+    tft.println("System");
+    tft.setCursor(51, 152);
+    tft.println("Heat");
+    tft.setCursor(136, 152);
+    tft.println("Cool");
+    tft.setCursor(204, 152);
+    tft.println("Blower");
+    /*if(heatActive) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Box around active setting
+    if(coolActive) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  }
+    if(blowerActive) {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  }*/
+  
     do{
-      TSPoint p = ts.getPoint();
+      p = ts.getPoint();
       //Check for Android Connection
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-  
-    if(p.y > ye) {  editProfile();  } //Edit Profile
-    else if(p.y > yl) {  changeActive();  } //Rules
-    else if(p.x < wb && p.y < hb) {  return;  } //Back
+    
+    if(p.x > 562) {
+      if(p.x > 798 && p.y < 318) {  return;  }
+      else if(p.x < 798) {
+        tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);
+        tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);
+        tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);
+        if(p.y < 405) {
+          tft.drawRect(56, 65, 34, 26, ILI9341_WHITE);
+          //Then Change setting
+        }
+        else if(p.y < 660) {
+          tft.drawRect(141, 65, 46, 26, ILI9341_WHITE);
+          //Then Change setting
+        }
+        else {
+          tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);
+          //Then Change setting
+        }
+      }
+    }
+    else {
+      tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);
+      tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);
+      tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);
+      if(p.y < 405) {
+        tft.drawRect(46, 147, 58, 26, ILI9341_WHITE);
+        //Then Change setting
+      }
+      else if(p.y < 660) {
+        tft.drawRect(131, 147, 58, 26, ILI9341_WHITE);
+        //Then Change setting
+      }
+      else {
+        tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);
+        //Then Change setting
+      } 
+    }
   }while(true);
-}*/
+}
 
 //Rotates Sensor List
 void cycleSensorList(boolean directions){
@@ -493,28 +593,26 @@ void cycleSensorList(boolean directions){
     Serial.print("Left\n");
   }
 }
-/*
-//Settings Screen
-void settings(){
-  
-}
 
 // Default actions
 void defaults(byte action){
   if(action == 0) { //Default
+    Serial.print("Restore Defaults\n");
     
   }
   else if(action == 1) { //Write
+    Serial.print("Write Defaults\n");
     
   }
-  else if(action == 2) { //Read
+  else { //Read
+    Serial.print("View Defaults\n");
     
   }
-  
 }
 
 //Profile Edit Screen
 void editProfile(){
+  Serial.println("Edit");}/*
   byte i = 0;
   TSPoint p;
   tft.fillScreen(ILI9341_BLACK);
@@ -579,12 +677,18 @@ void editRules(){
     i++;
   }  
 }
-
+*/
 //Change Active Profile Screen
 void changeActive(){
-  
+  Serial.println("Active");
 }
 
+//WiFi Settings
+void wifiSettings(){
+  Serial.println("WiFi");
+  
+}
+/*
 //Touch Keyboard
 void keyboard(char *nameArray){
   TSPoint p;
@@ -810,4 +914,20 @@ void unitPos(int xCoord, byte yCoord, int temp) {
   }
   else {  tft.setCursor(xCoord + 36, yCoord);  }
   tft.println("F"); //Replace with unit
+}
+
+//Character Array Length
+byte cal(char *array){
+  byte count = 0;
+  while(array[count] != '\0') {  count++;  };
+  return count;
+}
+
+void centerText(byte yCoord, char *array){
+  byte len;
+  len = cal(array);
+  if(len == len / 2 *2) {  len = 160 - 12 * len / 2;  } //Even
+  else {  len = 154 - 12 * len / 2;  } //Odd
+  tft.setCursor(len, yCoord);
+  tft.println(array);
 }
