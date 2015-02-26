@@ -97,15 +97,13 @@ void loop(){ //Main Screen
   tft.println("Fan: On  Off  Auto");
   tft.setCursor(0, 180);
   tft.println("System: Heat  Cool  Blower");
-    //check which setting is active
-    tft.drawRect(55, 145, 34, 26, ILI9341_WHITE); //On
-    tft.drawRect(103, 145, 46, 26, ILI9341_WHITE); //Off
-    tft.drawRect(163, 145, 58, 26, ILI9341_WHITE); //Auto
-
-    //check which setting is active
-    tft.drawRect(91, 175, 58, 26, ILI9341_WHITE); //Heat
-    tft.drawRect(163, 175, 58, 26, ILI9341_WHITE); //Cool
-    tft.drawRect(235, 175, 82, 26, ILI9341_WHITE); //Blower
+  //check which settings are active
+  /*if(onActive) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE); } //On
+  else if(offActive) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off
+  else if(autoActive) {  tft.drawRect(163, 145, 58, 26, ILI9341_WHITE);  } //Auto
+  if(heatActive) {  tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  } //Heat
+  else if(coolActive) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
+  else if(blowerActive) {  tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  } //Blower*/
     
   //Sensor List
   tft.setCursor(20, 219);
@@ -136,12 +134,12 @@ void loop(){ //Main Screen
   }
   else if(p.x > 640) {  profileSettings();  } //Profile Settings
   else if (p.x > 497) {
-    if(p.y < 535) {  /*sensorSettings();*/  } //Sensor Settings
+    if(p.y < 535) {  sensorSettings();  } //Sensor Settings
     else {  changeTemp();  } //Change Temperature
   } 
   else if(p.x > 223) {  hvacSettingChange();  } //HVAC System (needs work)
   else if(p.y < 186) {  cycleSensorList(0);  } //Left Arrow for Sensor List
-  //else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
+  else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
   else if(p.y < 824) {  cycleSensorList(1);  } //Right Arrow for Sensor List
   else {  settings();  } //Settings
 }
@@ -195,7 +193,7 @@ void settings(){
       }
       else {
         if(p.x > 645) {  profileSettings();  } //Profile Settings
-        else if(p.x > 493) {  /*sensorSettings();*/  } //Sensor Settings
+        else if(p.x > 493) {  sensorSettings();  } //Sensor Settings
         else if(p.x > 252) {  wifiSettings();  } //WiFi Settings
         else {  defaults(2);  } //Default Settings
       }
@@ -214,7 +212,6 @@ void profileSettings(){
   char nam[21] = "Active Profile123456";
   do{
     byte tmp = 0;
-    
     tft.fillScreen(ILI9341_BLACK);
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(2);
@@ -235,11 +232,11 @@ void profileSettings(){
     //Active Name
     tft.setCursor(62, 28);
     tft.println("Currently Active");
-    centerText(46, nam);
+    centerText(160, 46, nam);
     
     //Profile List
     while(tmp < 8) {  //while list not empty
-      centerText(70 + tmp * 18, nam);
+      centerText(160, 70 + tmp * 18, nam);
       tmp++;
     }
     
@@ -255,61 +252,66 @@ void profileSettings(){
       if(p.x > 798 && p.y < 318) {  return;  } //Back
       else if(p.x > 683 && p.x < 798) {  changeActive();  } //Rules
       else if(p.x < 252) {  editProfile();  } //Edit Profile
-    }while(p.x > 798 && p.y > 318);
+    }while(p.x > 798);
   }while(true);
 }
-/*
+
 //Sensor Settings Screen
 void sensorSettings(){
   TSPoint p;
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_BLACK);
-  tft.setTextSize(1);
-  
-  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
-  tft.setCursor(xb, yb);
-  tft.println("Back");
-  
-  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
-  tft.setCursor(xt, yt);
-  tft.println("Sensor Settings");
-  
-  tft.fillRect(xa, ya, wa, ha, ILI9341_WHITE); //Active List
-  tft.setCursor(xa, ya);
-  tft.println("Active");
-  while(listnotempty && yl + i < TS_MAXY) {
-    tft.setCursor(xl, yl + i);
-    if(sensorNameisactive) {  tft.println(sensorName + i);  }
-    i++;
-  }
-  
-  tft.fillRect(xs, ys, ws, hs, ILI9341_WHITE); //Sensor List
-  tft.setCursor(xa, ya);
-  tft.println("Sensors");
-  while(listnotempty && yl + i < TS_MAXY) {
-    tft.setCursor(xl, yl + i);
-    tft.println(sensorName + i);
-    i++;
-  }
-  
-  tft.fillRect(xe, ye, we, he, ILI9341_WHITE); //Edit
-  tft.setCursor(xe, ye);
-  tft.println("Edit");
-  
+  char nam[13] = "Sensor Name1";
   do{
-    do{
-      TSPoint p = ts.getPoint();
-      //Check for Android Connection
-    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-  
-    if(p.x < wb && p.y < ht) {  return;  } //Back
-    else if(p.x < wa) {  activeList();  } //Active List
-    else if(p.y > ye) {
-      tmp = (p.y - ye)/i; //Finds Which sensor was pressed(i is size of touch box)
-      sensorSettings(tmp);
+    byte tmp = 0;
+    tft.fillScreen(ILI9341_BLACK);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    
+    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+    tft.drawFastVLine(160, 25, 215, ILI9341_WHITE);
+    
+    //Back
+    tft.setCursor(4, 5);
+    tft.println("Back");
+    
+    //Title
+    tft.setCursor(75, 5);
+    tft.println("Sensor Settings");
+    
+    //Active List
+    tft.setCursor(50, 30);
+    tft.println("Active");
+    while(tmp < 8) {  //while list not empty
+      centerText(80, 70 + tmp * 18, nam);
+      tmp++;
     }
+    
+    tmp = 0;
+    
+    //Sensor List
+    tft.setCursor(198, 30);
+    tft.println("Sensors");
+    while(tmp < 8) {  //while list not empty
+      centerText(240, 70 + tmp * 18, nam);
+      tmp++;
+    }
+    do{
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+
+      if(p.x > 798) {
+        if(p.y < 318) {  return;  } //Back
+      }
+      else if(p.y > 535) {
+        tmp = (668 - p.x)/52; //Finds Which sensor was pressed
+        sensorEdit(tmp);
+      }
+    }while(p.x > 798 || p.y < 535);
   }while(true);
 }
+/*
 
 void activeList(){
   TSPoint p;
@@ -359,69 +361,78 @@ void activeList(){
     }
   }while(true);
 }
-
+*/
 void sensorEdit(byte sensorNumber){
   //Find correct sensor
   TSPoint p;
-  byte tmp;
+  char nam[13] = "Sensor Name1";
+  int temp = 100;
   tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_BLACK);
-  tft.setTextSize(1);
-  
-  tft.fillRect(xb, yb, wb, hb, ILI9341_WHITE); //Back
-  tft.setCursor(xb, yb);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(2);
+
+  tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+  tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+
+  //Back
+  tft.setCursor(4, 5);
   tft.println("Back");
-  
-  tft.fillRect(xt, yt, wt, ht, ILI9341_WHITE); //Title
-  tft.setCursor(xt, yt);
+
+  //Title
+  tft.setCursor(75, 5);
   tft.println("Sensor Settings");
+
+  tft.setCursor(4, 30);
+  tft.println("Name:");
+  tft.setCursor(76, 30);
+  tft.println(nam); //Grab sensor name
   
-  tft.fillRect(xi, yi, wi, hi, ILI9341_WHITE); //Info Box
-  
-  tft.setCursor(xn, yn);
-  tft.println("Name: " + sensorName);
-  
-  tft.setCursor(xl, yl);
-  tft.println("Latest Temperature: " + sensorTemp);
-  
-  tft.setCursor(xa, ya);
+  tft.setCursor(4, 60);
+  tft.println("Latest Temperature:");
+  unitPos(244,60,temp); //Grab latest Temperature
+ 
+  tft.setCursor(4, 90);
   tft.println("Active:");
-  
-  if(sensorActive) {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } //Box around Yes
-  else {  tft.drawRect(x, y, w, h, ILI9341_BLACK);  } //Box around No
-  
-  tft.setCursor(xy, yy);
+  tft.setCursor(100, 90);
   tft.println("Yes");
-  tft.setCursor(xo, yo);
+  tft.setCursor(160, 90);
   tft.println("No");
-  
-  tft.setCursor(xs, ys);
-  tft.println("Sensor ID: " + sensorID);
-  
-  tft.setCursor(xb, yb);
-  tft.println("Battery Stats: " + sensorBattery);
+  /*if(sensorActive) {  tft.drawRect(95, 85, 46, 26, ILI9341_WHITE);  } //Box around Yes
+  else {  tft.drawRect(155, 85, 34, 26, ILI9341_WHITE);  } //Box around No*/
+  tft.setCursor(4, 120);
+  tft.println("Sensor ID:");
+  tft.setCursor(136, 120);
+  tft.println("1234567890"); //Grab sensor ID
+
+  tft.setCursor(4, 150);
+  tft.println("Battery Stats:");
+  tft.setCursor(184, 150);
+  tft.println("Replace"); //Grab sensor battery status
   
   do{
     do{
-      TSPoint p = ts.getPoint();
+      p = ts.getPoint();
       //Check for Android Connection
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-  
-    if(p.x < wb && p.y < ht) {  return;  } //Back
-    else if(p.y > ht && p.y < yl) {  changeName(0, sensorNumber);  }
-    else if(p.y > ya && p.y < ys) {
-      //go to sensor list and change active value using sensorActive ^ 1
-      if(sensorActive) {
-        tft.drawRect(x, y, w, h, ILI9341_BLACK); //Box around Yes
-        tft.drawRect(x, y, w, h, ILI9341_WHITE); //Clear Box around No
-      } else {
-        tft.drawRect(x, y, w, h, ILI9341_BLACK); //Box around No
-        tft.drawRect(x, y, w, h, ILI9341_WHITE); //Clear Box around Yes
-      }
+    if(p.x > 717) {
+      if(p.y < 318) {  return;  } //Back
+      else {  /*changeName(0, sensorNumber);  */}
+    }
+    else{ //go to sensor list and change active value using sensorActive ^ 1
+      if(p.x > 545 && p.x < 631) {
+        if(p.y > 361 && p.y < 506) {
+          tft.drawRect(95, 85, 46, 26, ILI9341_WHITE);
+          tft.drawRect(155, 85, 34, 26, ILI9341_BLACK);
+        }
+        else if(p.y < 593){
+          tft.drawRect(95, 85, 46, 26, ILI9341_BLACK);
+          tft.drawRect(155, 85, 34, 26, ILI9341_WHITE);
+        }
+      } 
     }
   }while(true);
 }
-
+/*  
 //Change Sensor Name
 void changeName(bool sensorProfile,byte number){ //0 denotes a sensor, 1 denotes a profile
   keyboard();
@@ -522,8 +533,8 @@ void hvacSettingChange(){
   tft.setCursor(216, 70);
   tft.println("Auto");
   /*if(onActive) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //Box around active setting
-  if(offActive) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  }
-  if(autoActive) {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  }*/
+  else if(offActive) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  }
+  else if(autoActive) {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  }*/
   
   //System Area
   tft.setCursor(124, 117);
@@ -535,8 +546,9 @@ void hvacSettingChange(){
   tft.setCursor(204, 152);
   tft.println("Blower");
   /*if(heatActive) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Box around active setting
-  if(coolActive) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  }
-  if(blowerActive) {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  }*/
+  else if(coolActive) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  }
+  else if(blowerActive) {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  }*/
+  
   do{
     do{
       p = ts.getPoint();
@@ -545,7 +557,7 @@ void hvacSettingChange(){
     
     if(p.x > 562) {
       if(p.x > 798 && p.y < 318) {  return;  }
-      else if(p.x < 798) {
+      else if(p.x < 723) {
         tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);
         tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);
         tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);
@@ -563,7 +575,7 @@ void hvacSettingChange(){
         }
       }
     }
-    else {
+    else if(p.x < 487){
       tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);
       tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);
       tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);
@@ -922,11 +934,11 @@ byte cal(char *array){
   return count;
 }
 
-void centerText(byte yCoord, char *array){
+void centerText(int centerPoint, byte yCoord, char *array){
   byte len;
   len = cal(array);
-  if(len == len / 2 *2) {  len = 160 - 12 * len / 2;  } //Even
-  else {  len = 154 - 12 * len / 2;  } //Odd
+  if(len == len / 2 *2) {  len = centerPoint - 12 * len / 2;  } //Even
+  else {  len = centerPoint - 6 - 12 * len / 2;  } //Odd
   tft.setCursor(len, yCoord);
   tft.println(array);
 }
