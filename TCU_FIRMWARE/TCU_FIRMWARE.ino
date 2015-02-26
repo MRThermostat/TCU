@@ -246,15 +246,16 @@ void profileSettings(){
     //Edit
     tft.setCursor(124, 220);
     tft.println("Edit");
-    
     do{
-      p = ts.getPoint();
-      //Check for Android Connection
-    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
     
-    if(p.x > 798 && p.y < 318) {  return;  } //Back
-    else if(p.x > 683 && p.x < 798) {  changeActive();  } //Rules
-    else if(p.x < 252) {  editProfile();  } //Edit Profile
+      if(p.x > 798 && p.y < 318) {  return;  } //Back
+      else if(p.x > 683 && p.x < 798) {  changeActive();  } //Rules
+      else if(p.x < 252) {  editProfile();  } //Edit Profile
+    }while(p.x > 798 && p.y > 318);
   }while(true);
 }
 /*
@@ -437,41 +438,41 @@ void updateWeather(){
 //Change Desired Temperature Screen
 void changeTemp(){
   TSPoint p;
-  do{
-    byte temp = 99; // Must remove '= 100' before final product
-    tft.fillScreen(ILI9341_BLACK);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(2);
-    
-    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
-    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 210, 320, ILI9341_WHITE);
-    tft.fillTriangle(                 // Up Arrow
-                     160, 30,         // peak
-                     100, 60,         // bottom left
-                     220, 60,         // bottom right
-                     ILI9341_WHITE);
-    tft.fillTriangle(                 // DownArrow
-                     160, 200,        // peak
-                     100, 170,        // bottom left
-                     220, 170,        // bottom right
-                     ILI9341_WHITE);
-    
-    //Back
-    tft.setCursor(4, 5);
-    tft.println("Back");
-    //Title
-    tft.setCursor(75, 5);
-    tft.println("Change Temperature");
-    //Accept
-    tft.setCursor(124, 215);
-    tft.println("Accept");
-    //Temperature
-    tft.setTextSize(10);
-    //grab current desired temperature temp = ;
-    tft.setCursor(105, 80);
-    tft.println(temp);
+  byte temp = 99; // Must remove '= 100' before final product
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(2);
+  
+  tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+  tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+  tft.drawFastHLine(0, 210, 320, ILI9341_WHITE);
+  tft.fillTriangle(                 // Up Arrow
+                   160, 30,         // peak
+                   100, 60,         // bottom left
+                   220, 60,         // bottom right
+                   ILI9341_WHITE);
+  tft.fillTriangle(                 // DownArrow
+                   160, 200,        // peak
+                   100, 170,        // bottom left
+                   220, 170,        // bottom right
+                   ILI9341_WHITE);
+  
+  //Back
+  tft.setCursor(4, 5);
+  tft.println("Back");
+  //Title
+  tft.setCursor(75, 5);
+  tft.println("Change Temperature");
+  //Accept
+  tft.setCursor(124, 215);
+  tft.println("Accept");
+  //Temperature
+  tft.setTextSize(10);
+  //grab current desired temperature temp = ;
+  tft.setCursor(105, 80);
+  tft.println(temp);
 
+  do{
     do{
       p = ts.getPoint();
       //Check for Android Connection
@@ -495,50 +496,48 @@ void changeTemp(){
 //HVAC Settings Screen
 void hvacSettingChange(){
   TSPoint p;
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(2);
   
+  tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
+  tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+  tft.drawFastHLine(0, 107, 320, ILI9341_WHITE);
+  
+  //Back
+  tft.setCursor(4, 5);
+  tft.println("Back");
+  
+  //Title
+  tft.setCursor(75, 5);
+  tft.println("HVAC Settings");
+  
+  //Fan Area
+  tft.setCursor(146, 35);
+  tft.println("Fan");
+  tft.setCursor(61, 70);
+  tft.println("On");
+  tft.setCursor(146, 70);
+  tft.println("Off");
+  tft.setCursor(216, 70);
+  tft.println("Auto");
+  /*if(onActive) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //Box around active setting
+  if(offActive) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  }
+  if(autoActive) {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  }*/
+  
+  //System Area
+  tft.setCursor(124, 117);
+  tft.println("System");
+  tft.setCursor(51, 152);
+  tft.println("Heat");
+  tft.setCursor(136, 152);
+  tft.println("Cool");
+  tft.setCursor(204, 152);
+  tft.println("Blower");
+  /*if(heatActive) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Box around active setting
+  if(coolActive) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  }
+  if(blowerActive) {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  }*/
   do{
-    tft.fillScreen(ILI9341_BLACK);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(2);
-    
-    tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
-    tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 107, 320, ILI9341_WHITE);
-    
-    //Back
-    tft.setCursor(4, 5);
-    tft.println("Back");
-    
-    //Title
-    tft.setCursor(75, 5);
-    tft.println("HVAC Settings");
-    
-    //Fan Area
-    tft.setCursor(146, 35);
-    tft.println("Fan");
-    tft.setCursor(61, 70);
-    tft.println("On");
-    tft.setCursor(146, 70);
-    tft.println("Off");
-    tft.setCursor(216, 70);
-    tft.println("Auto");
-    /*if(onActive) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //Box around active setting
-    if(offActive) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  }
-    if(autoActive) {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  }*/
-    
-    //System Area
-    tft.setCursor(124, 117);
-    tft.println("System");
-    tft.setCursor(51, 152);
-    tft.println("Heat");
-    tft.setCursor(136, 152);
-    tft.println("Cool");
-    tft.setCursor(204, 152);
-    tft.println("Blower");
-    /*if(heatActive) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Box around active setting
-    if(coolActive) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  }
-    if(blowerActive) {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  }*/
-  
     do{
       p = ts.getPoint();
       //Check for Android Connection
