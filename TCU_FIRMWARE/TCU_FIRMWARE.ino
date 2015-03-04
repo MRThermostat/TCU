@@ -165,14 +165,13 @@ void profileSettings(){
   TSPoint p;
   char nam[21] = "Active Profile123456";
   do{
-    byte tmp = 0;
+    //byte tmp = 0;
     makeTitle("Profile Settings");
     tft.drawFastHLine(0, 65, 320, ILI9341_WHITE);
     tft.drawFastHLine(0, 215, 320, ILI9341_WHITE);
     
     printText(62, 28, "Currently Active");
     centerText(160, 46, nam);
-    
     //Profile List
     while(tmp < 8) {  //while list not empty
       centerText(160, 70 + tmp * 18, nam);
@@ -206,7 +205,7 @@ void sensorSettings(){
       tmp++;
     }
     
-    tmp = 0;    
+    tmp = 0;
     printText(198, 30, "Sensors");
     while(tmp < 8) {  //while list not empty
       centerText(240, 70 + tmp * 18, nam);
@@ -510,3 +509,11 @@ void doubleLine(int xCoord, byte yCoord, int width, uint16_t color){
   tft.drawFastHLine(xCoord, yCoord, width, color);
   tft.drawFastHLine(xCoord, yCoord + 1, width, color);
 }
+/* Possible Future Use
+void displayList(int xCenter, byte yCoord, char *array){
+  byte tmp = 0;
+  while(tmp < 8) {  //while list not empty
+    centerText(xCenter, yCoord + tmp * 18, array);
+    tmp++;
+  }
+}*/
