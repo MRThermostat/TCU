@@ -1,3 +1,4 @@
+#include <EEPROM.h> //EEPROM.write(addr,val) EEPROM.read(addr)
 #include <TouchScreen.h>
 #include <Adafruit_ILI9341.h>
 #include <Adafruit_GFX.h>
@@ -12,9 +13,12 @@
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
+#define HVAC 0 //HVAC Settings Address Location
+
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RESET);
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
+byte hvac;
 
 //from x = 0, can get 26 characters across
 
@@ -29,6 +33,8 @@ void setup(){
   
   tft.begin();
   tft.setRotation(3);
+  
+  hvac = EEPROM.read(HVAC);
 
   defaults(0); //run the set defaults
 }
@@ -58,40 +64,30 @@ void loop(){ //Main Screen
                    280, 225,        // bottom right
                    ILI9341_WHITE);
 
-  //Weather
   printText(40, 4, "High:");
   unitPos(100, 4, temp);
   printText(52, 20, "Low:");
   unitPos(100, 20, temp);
   printText(4, 36, "Outside:");
   unitPos(100, 36, temp);
-  
-  //Date/Time
   printText(165, 4, "1/20/2014");
   printText(165, 20, "12:00 PM");
-  
   centerText(160, 60, "Active Profile123456");
-  
-  //Current Temp
   printText(4, 100, "Current:");
   unitPos(100, 100, temp);
-  
-  //Desired Temp
   printText(164, 100, "Desired:");
   unitPos(260, 100, temp);
-  
-  //HVAC System
   printText(0, 150, "Fan: On  Off  Auto");
   printText(0, 180, "System: Heat  Cool  Blower");
+  
   //check which settings are active
-  /*if(onActive) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE); } //On
-  else if(offActive) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off
+  if(bitRead(hvac,0)) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE); } //On
+  else if(bitRead(hvac,1)) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off
   else {  tft.drawRect(163, 145, 58, 26, ILI9341_WHITE);  } //Auto
-  if(heatActive) {  tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  } //Heat
-  else if(coolActive) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
-  else {  tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  } //Blower*/
-    
-  //Sensor List
+  if(bitRead(hvac,2)) {  tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  } //Heat
+  else if(bitRead(hvac,3)) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
+  else {  tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  } //Blower
+
   printText(20, 219, "Sensor 1:");
   printText(140, 219, "69F");
   
@@ -113,7 +109,7 @@ void loop(){ //Main Screen
   else if (p.x > 497) {
     if(p.y < 535) {  sensorSettings();  } //Sensor Settings
     else {  changeTemp();  } //Change Temperature
-  } 
+  }
   else if(p.x > 223) {  hvacSettingChange();  } //HVAC System (needs work)
   else if(p.y < 186) {  cycleSensorList(0);  } //Left Arrow for Sensor List
   else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
@@ -165,7 +161,7 @@ void profileSettings(){
   TSPoint p;
   char nam[21] = "Active Profile123456";
   do{
-    //byte tmp = 0;
+    byte tmp = 0;
     makeTitle("Profile Settings");
     tft.drawFastHLine(0, 65, 320, ILI9341_WHITE);
     tft.drawFastHLine(0, 215, 320, ILI9341_WHITE);
@@ -245,7 +241,7 @@ void sensorEdit(byte sensorNumber){
   /*if(sensorActive) {  tft.drawRect(95, 85, 46, 26, ILI9341_WHITE);  } //Box around Yes
   else {  tft.drawRect(155, 85, 34, 26, ILI9341_WHITE);  } //Box around No*/
   printText(4, 120, "Sensor ID:");
-  printText(130, 120, "1234567890");//Grab sensor ID
+  printText(130, 120, "1234567890"); //Grab sensor ID
   
   printText(4, 150, "Battery Status:");
   printText(184, 150, "Replace"); //Grab sensor battery status
@@ -335,18 +331,18 @@ void hvacSettingChange(){
   printText(61, 70, "On");
   printText(146, 70, "Off");
   printText(216, 70, "Auto");
-  /*if(onActive) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //Box around active setting
-  else if(offActive) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  }
-  else if(autoActive) {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  }*/
+  if(bitRead(hvac,0)) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //On
+  else if(bitRead(hvac,1)) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  } //Off
+  else {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  } //Auto
   
   //System Area
   printText(124, 117, "System");
   printText(51, 152, "Heat");
   printText(136, 152, "Cool");
   printText(204, 152, "Blower");
-  /*if(heatActive) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Box around active setting
-  else if(coolActive) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  }
-  else if(blowerActive) {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  }*/
+  if(bitRead(hvac,2)) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Heat
+  else if(bitRead(hvac,3)) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  } //Cool
+  else {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  } //Blower
   
   do{
     do{
@@ -355,23 +351,23 @@ void hvacSettingChange(){
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
     
     if(p.x > 562) {
-      if(p.x > 798 && p.y < 318) {  return;  }
+      if(p.x > 798 && p.y < 318) {
+        //if(hvac != EEPROM.read(HVAC);) {  EEPROM.write(HVAC,hvac);  }
+        return;
+      } //Back
       else if(p.x < 723) {
         tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);
         tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);
         tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);
         if(p.y < 405) {
           tft.drawRect(56, 65, 34, 26, ILI9341_WHITE);
-          //Then Change setting
+          bitWrite(hvac, 0, bitRead(hvac, 0) ^ 1);
         }
         else if(p.y < 660) {
           tft.drawRect(141, 65, 46, 26, ILI9341_WHITE);
-          //Then Change setting
+          bitWrite(hvac, 1, bitRead(hvac, 1) ^ 1);
         }
-        else {
-          tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);
-          //Then Change setting
-        }
+        else {  tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);  }
       }
     }
     else if(p.x < 487){
@@ -380,16 +376,13 @@ void hvacSettingChange(){
       tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);
       if(p.y < 405) {
         tft.drawRect(46, 147, 58, 26, ILI9341_WHITE);
-        //Then Change setting
+        bitWrite(hvac, 2, bitRead(hvac, 2) ^ 1);
       }
       else if(p.y < 660) {
         tft.drawRect(131, 147, 58, 26, ILI9341_WHITE);
-        //Then Change setting
+        bitWrite(hvac, 3, bitRead(hvac, 3) ^ 1);
       }
-      else {
-        tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);
-        //Then Change setting
-      } 
+      else {  tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);  } 
     }
   }while(true);
 }
