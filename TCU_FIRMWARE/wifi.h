@@ -1,10 +1,3 @@
-#ifndef cbi
-#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
-#endif
-#ifndef sbi
-#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
-#endif
-
 #define ESP_INIT_BAUD 9600
 
 ESP8266 wifi(Serial1);
