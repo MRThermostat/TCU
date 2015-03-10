@@ -81,43 +81,9 @@ void makeTitle(char *title){
   centerText(195, 5, title);
 }
 
-//Settings Screen
-void settings(){
-  TSPoint p;
-  
-  do{  
-    makeTitle("Device Settings");    
-    tft.drawFastHLine(0, 78, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 131, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 184, 320, ILI9341_WHITE);
-    
-    centerText(160, 43, "Profile Settings");
-    centerText(160, 96, "Sensor Settings");
-    centerText(160, 149, "WiFi Settings");
-    centerText(160, 202, "Defaults");
-    
-    do{
-      do{
-        p = ts.getPoint();
-        //Check for Android Connection
-      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-    
-      if(p.x > 798) {
-        if(p.y < 318) {  return;  } //Back
-      }
-      else {
-        if(p.x > 645) {  profileSettings();  } //Profile Settings
-        else if(p.x > 493) {  sensorSettings();  } //Sensor Settings
-        else if(p.x > 252) {  wifiSettings();  } //WiFi Settings
-        else {  defaults(2);  } //Default Settings
-      }
-    }while(p.x > 798 && p.y > 318);
-  }while(true);
-}
-
-//Date/Time Setting Screen
-void dateSettings(){
-  Serial.print("Date/Time\n");
+//Change Active Profile Screen
+void changeActive(){
+  Serial.println("Active");
 }
 
 //Profile Settings Screen
@@ -150,40 +116,19 @@ void profileSettings(){
   }while(true);
 }
 
-//Sensor Settings Screen
-void sensorSettings(){
-  TSPoint p;
-  char nam[13] = "Sensor Name1";
-  do{
-    byte tmp = 0;
-    makeTitle("Sensor Settings");
-    tft.drawFastVLine(160, 25, 215, ILI9341_WHITE);
-    
-    printText(50, 30, "Active");
-    while(tmp < 8) {  //while list not empty
-      centerText(80, 70 + tmp * 18, nam);
-      tmp++;
+void unitPos(int xCoord, byte yCoord, int temp) {
+  tft.setCursor(xCoord, yCoord);
+  tft.println(temp); //Replace with actual variable
+  if(temp < 100) {
+    if(temp > 9) {  tft.setCursor(xCoord + 24, yCoord);  }
+    else if(temp < 0) {
+      if(temp > -10) {  tft.setCursor(xCoord + 24, yCoord);  }
+      else {  tft.setCursor(xCoord + 36, yCoord);  } 
     }
-    
-    tmp = 0;
-    printText(198, 30, "Sensors");
-    while(tmp < 8) {  //while list not empty
-      centerText(240, 70 + tmp * 18, nam);
-      tmp++;
-    }
-    do{
-      do{
-        p = ts.getPoint();
-        //Check for Android Connection
-      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-
-      if(p.x > 798 && p.y < 318) {  return;  } //Back
-      else if(p.y > 535) {
-        tmp = (668 - p.x)/52; //Finds which sensor was pressed
-        sensorEdit(tmp);
-      }
-    }while(p.x > 798 || p.y < 535);
-  }while(true);
+    else {  tft.setCursor(xCoord + 12, yCoord);  }
+  }
+  else {  tft.setCursor(xCoord + 36, yCoord);  }
+  tft.println("F"); //Replace with unit
 }
 
 void sensorEdit(byte sensorNumber){
@@ -232,6 +177,124 @@ void sensorEdit(byte sensorNumber){
       } 
     }
   }while(true);
+}
+
+//Sensor Settings Screen
+void sensorSettings(){
+  TSPoint p;
+  char nam[13] = "Sensor Name1";
+  do{
+    byte tmp = 0;
+    makeTitle("Sensor Settings");
+    tft.drawFastVLine(160, 25, 215, ILI9341_WHITE);
+    
+    printText(50, 30, "Active");
+    while(tmp < 8) {  //while list not empty
+      centerText(80, 70 + tmp * 18, nam);
+      tmp++;
+    }
+    
+    tmp = 0;
+    printText(198, 30, "Sensors");
+    while(tmp < 8) {  //while list not empty
+      centerText(240, 70 + tmp * 18, nam);
+      tmp++;
+    }
+    do{
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+
+      if(p.x > 798 && p.y < 318) {  return;  } //Back
+      else if(p.y > 535) {
+        tmp = (668 - p.x)/52; //Finds which sensor was pressed
+        sensorEdit(tmp);
+      }
+    }while(p.x > 798 || p.y < 535);
+  }while(true);
+}
+
+void accessPointSetup() {
+  Serial.println("Access Point Setup");  
+}
+
+//WiFi Settings
+void wifiSettings(){
+  TSPoint p;  
+  makeTitle("WiFi Settings");
+  tft.drawFastHLine(0, 200, 320, ILI9341_WHITE);
+
+  printText(4, 130, "SSID:");
+  printText(76, 130, "SSID1234567890.");
+  printText(4, 180, "Connected:");
+  printText(136, 180, "Yes");
+  printText(52, 215, "Access Point Setup");
+
+    do{
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+
+      if(p.x > 798 && p.y < 318) {  return;  } //Back
+      else if(p.y < 295) {  accessPointSetup();  }
+    }while(true);
+}
+
+// Default actions
+void defaults(byte action){
+  if(action == 0) { //Default
+    Serial.print("Restore Defaults\n");
+    
+  }
+  else if(action == 1) { //Write
+    Serial.print("Write Defaults\n");
+    
+  }
+  else { //Read
+    Serial.print("View Defaults\n");
+    
+  }
+}
+
+//Settings Screen
+void settings(){
+  TSPoint p;
+  
+  do{  
+    makeTitle("Device Settings");    
+    tft.drawFastHLine(0, 78, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 131, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 184, 320, ILI9341_WHITE);
+    
+    centerText(160, 43, "Profile Settings");
+    centerText(160, 96, "Sensor Settings");
+    centerText(160, 149, "WiFi Settings");
+    centerText(160, 202, "Defaults");
+    
+    do{
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    
+      if(p.x > 798) {
+        if(p.y < 318) {  return;  } //Back
+      }
+      else {
+        if(p.x > 645) {  profileSettings();  } //Profile Settings
+        else if(p.x > 493) {  sensorSettings();  } //Sensor Settings
+        else if(p.x > 252) {  wifiSettings();  } //WiFi Settings
+        else {  defaults(2);  } //Default Settings
+      }
+    }while(p.x > 798 && p.y > 318);
+  }while(true);
+}
+
+//Date/Time Setting Screen
+void dateSettings(){
+  Serial.print("Date/Time\n");
 }
 
 //Obtain newest Weather info
@@ -295,19 +358,21 @@ void hvacSettingChange(){
   printText(61, 70, "On");
   printText(146, 70, "Off");
   printText(216, 70, "Auto");
+  /*
   if(bitRead(hvac,0)) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //On
   else if(bitRead(hvac,1)) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  } //Off
   else {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  } //Auto
-  
+  */
   //System Area
   printText(124, 117, "System");
   printText(51, 152, "Heat");
   printText(136, 152, "Cool");
   printText(204, 152, "Blower");
+  /*
   if(bitRead(hvac,2)) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Heat
   else if(bitRead(hvac,3)) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  } //Cool
   else {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  } //Blower
-  
+  */
   do{
     do{
       p = ts.getPoint();
@@ -325,11 +390,11 @@ void hvacSettingChange(){
         tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);
         if(p.y < 405) {
           tft.drawRect(56, 65, 34, 26, ILI9341_WHITE);
-          bitWrite(hvac, 0, bitRead(hvac, 0) ^ 1);
+          //bitWrite(hvac, 0, bitRead(hvac, 0) ^ 1);
         }
         else if(p.y < 660) {
           tft.drawRect(141, 65, 46, 26, ILI9341_WHITE);
-          bitWrite(hvac, 1, bitRead(hvac, 1) ^ 1);
+          //bitWrite(hvac, 1, bitRead(hvac, 1) ^ 1);
         }
         else {  tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);  }
       }
@@ -340,11 +405,11 @@ void hvacSettingChange(){
       tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);
       if(p.y < 405) {
         tft.drawRect(46, 147, 58, 26, ILI9341_WHITE);
-        bitWrite(hvac, 2, bitRead(hvac, 2) ^ 1);
+        //bitWrite(hvac, 2, bitRead(hvac, 2) ^ 1);
       }
       else if(p.y < 660) {
         tft.drawRect(131, 147, 58, 26, ILI9341_WHITE);
-        bitWrite(hvac, 3, bitRead(hvac, 3) ^ 1);
+        //bitWrite(hvac, 3, bitRead(hvac, 3) ^ 1);
       }
       else {  tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);  } 
     }
@@ -361,72 +426,9 @@ void cycleSensorList(boolean directions){
   }
 }
 
-// Default actions
-void defaults(byte action){
-  if(action == 0) { //Default
-    Serial.print("Restore Defaults\n");
-    
-  }
-  else if(action == 1) { //Write
-    Serial.print("Write Defaults\n");
-    
-  }
-  else { //Read
-    Serial.print("View Defaults\n");
-    
-  }
-}
-
 //Profile Edit Screen
 void editProfile(){
   Serial.println("Edit");
-}
-
-//Change Active Profile Screen
-void changeActive(){
-  Serial.println("Active");
-}
-
-//WiFi Settings
-void wifiSettings(){
-  TSPoint p;  
-  makeTitle("WiFi Settings");
-  tft.drawFastHLine(0, 200, 320, ILI9341_WHITE);
-
-  printText(4, 130, "SSID:");
-  printText(76, 130, "SSID1234567890.");
-  printText(4, 180, "Connected:");
-  printText(136, 180, "Yes");
-  printText(52, 215, "Access Point Setup");
-
-    do{
-      do{
-        p = ts.getPoint();
-        //Check for Android Connection
-      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-
-      if(p.x > 798 && p.y < 318) {  return;  } //Back
-      else if(p.y < 295) {  accessPointSetup();  }
-    }while(true);
-}
-
-void unitPos(int xCoord, byte yCoord, int temp) {
-  tft.setCursor(xCoord, yCoord);
-  tft.println(temp); //Replace with actual variable
-  if(temp < 100) {
-    if(temp > 9) {  tft.setCursor(xCoord + 24, yCoord);  }
-    else if(temp < 0) {
-      if(temp > -10) {  tft.setCursor(xCoord + 24, yCoord);  }
-      else {  tft.setCursor(xCoord + 36, yCoord);  } 
-    }
-    else {  tft.setCursor(xCoord + 12, yCoord);  }
-  }
-  else {  tft.setCursor(xCoord + 36, yCoord);  }
-  tft.println("F"); //Replace with unit
-}
-
-void accessPointSetup() {
-  Serial.println("Access Point Setup");  
 }
 
 void doubleLine(int xCoord, byte yCoord, int width, uint16_t color){

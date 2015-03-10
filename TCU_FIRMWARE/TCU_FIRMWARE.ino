@@ -3,7 +3,7 @@
 #include <EEPROM.h> //EEPROM.write(addr,val) EEPROM.read(addr)
 
 #include <TouchScreen.h>
-#include "touch.h"
+TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
 
 #include <SPI.h>
 #include <Adafruit_GFX.h>
@@ -18,6 +18,10 @@
 byte hvac;
 
 //from x = 0, can get 26 characters across
+
+bool restoreUserData(){
+  
+}
 
 void setup(){
   //open up serial comms
@@ -175,32 +179,3 @@ void loop(){ //Main Screen
   else if(p.y < 824) {  cycleSensorList(1);  } //Right Arrow for Sensor List
   else {  settings();  } //Settings
 }
-
-
-
-// Default actions
-void defaults(byte action){
-  if(action == 0) { //Default
-    Serial.print("Restore Defaults\n");
-    
-  }
-  else if(action == 1) { //Write
-    Serial.print("Write Defaults\n");
-    
-  }
-  else { //Read
-    Serial.print("View Defaults\n");
-    
-  }
-}
-
-
-
-/* Possible Future Use
-void displayList(int xCenter, byte yCoord, char *array){
-  byte tmp = 0;
-  while(tmp < 8) {  //while list not empty
-    centerText(xCenter, yCoord + tmp * 18, array);
-    tmp++;
-  }
-}*/
