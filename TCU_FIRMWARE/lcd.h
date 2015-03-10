@@ -435,6 +435,10 @@ void doubleLine(int xCoord, byte yCoord, int width, uint16_t color){
   tft.drawFastHLine(xCoord, yCoord, width, color);
   tft.drawFastHLine(xCoord, yCoord + 1, width, color);
 }
+
+void onScreenPrompt(){
+  
+}
 /* Possible Future Use
 void displayList(int xCenter, byte yCoord, char *array){
   byte tmp = 0;
