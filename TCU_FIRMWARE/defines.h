@@ -11,6 +11,8 @@
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
+#define HVAC 1000 //HVAC Settings Address Location
+
 char ssid[16];
 char password[64];
 //eeprom address space

@@ -65,8 +65,7 @@ void centerText(int centerPoint, byte yCoord, char *array){
   len = cal(array);
   if(len == len / 2 * 2) {  len = centerPoint - 12 * len / 2;  } //Even
   else {  len = centerPoint - 6 - 12 * len / 2;  } //Odd
-  tft.setCursor(len, yCoord);
-  tft.println(array);
+  printText(len, yCoord, array);
 }
 
 void makeTitle(char *title){
@@ -246,15 +245,12 @@ void wifiSettings(){
 void defaults(byte action){
   if(action == 0) { //Default
     Serial.print("Restore Defaults\n");
-    
   }
   else if(action == 1) { //Write
     Serial.print("Write Defaults\n");
-    
   }
   else { //Read
     Serial.print("View Defaults\n");
-    
   }
 }
 
@@ -348,7 +344,7 @@ void changeTemp(){
 }
 
 //HVAC Settings Screen
-void hvacSettingChange(){
+byte hvacSettingChange(byte hvac){
   TSPoint p;  
   makeTitle("HVAC Settings");
   tft.drawFastHLine(0, 107, 320, ILI9341_WHITE);
@@ -358,21 +354,21 @@ void hvacSettingChange(){
   printText(61, 70, "On");
   printText(146, 70, "Off");
   printText(216, 70, "Auto");
-  /*
-  if(bitRead(hvac,0)) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //On
-  else if(bitRead(hvac,1)) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  } //Off
-  else {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  } //Auto
-  */
+
+  if(bitRead(hvac,0)) {  tft.drawRect(56, 65, 34, 26, ILI9341_WHITE);  } //On
+  else if(bitRead(hvac,1)) {  tft.drawRect(141, 65, 46, 26, ILI9341_WHITE);  } //Off
+  else {  tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);  } //Auto
+
   //System Area
   printText(124, 117, "System");
   printText(51, 152, "Heat");
   printText(136, 152, "Cool");
   printText(204, 152, "Blower");
-  /*
-  if(bitRead(hvac,2)) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Heat
-  else if(bitRead(hvac,3)) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  } //Cool
-  else {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  } //Blower
-  */
+
+  if(bitRead(hvac,2)) {  tft.drawRect(46, 147, 58, 26, ILI9341_WHITE);  } //Heat
+  else if(bitRead(hvac,3)) {  tft.drawRect(131, 147, 58, 26, ILI9341_WHITE);  } //Cool
+  else {  tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);  } //Blower
+
   do{
     do{
       p = ts.getPoint();
@@ -382,7 +378,7 @@ void hvacSettingChange(){
     if(p.x > 562) {
       if(p.x > 798 && p.y < 318) {
         //if(hvac != EEPROM.read(HVAC);) {  EEPROM.write(HVAC,hvac);  }
-        return;
+        return hvac;
       } //Back
       else if(p.x < 723) {
         tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);
@@ -390,13 +386,17 @@ void hvacSettingChange(){
         tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);
         if(p.y < 405) {
           tft.drawRect(56, 65, 34, 26, ILI9341_WHITE);
-          //bitWrite(hvac, 0, bitRead(hvac, 0) ^ 1);
+          bitSet(hvac, 0);
+          bitClear(hvac, 1);
         }
         else if(p.y < 660) {
           tft.drawRect(141, 65, 46, 26, ILI9341_WHITE);
-          //bitWrite(hvac, 1, bitRead(hvac, 1) ^ 1);
+          bitSet(hvac, 1);
+          bitClear(hvac, 0);
         }
         else {  tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);  }
+          bitClear(hvac, 0);
+          bitClear(hvac, 1);
       }
     }
     else if(p.x < 487){
@@ -405,13 +405,19 @@ void hvacSettingChange(){
       tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);
       if(p.y < 405) {
         tft.drawRect(46, 147, 58, 26, ILI9341_WHITE);
-        //bitWrite(hvac, 2, bitRead(hvac, 2) ^ 1);
+          bitSet(hvac, 2);
+          bitClear(hvac, 3);
       }
       else if(p.y < 660) {
         tft.drawRect(131, 147, 58, 26, ILI9341_WHITE);
-        //bitWrite(hvac, 3, bitRead(hvac, 3) ^ 1);
+          bitSet(hvac, 3);
+          bitClear(hvac, 2);
       }
-      else {  tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);  } 
+      else {
+          tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);
+          bitClear(hvac, 2);
+          bitClear(hvac, 3);
+      } 
     }
   }while(true);
 }

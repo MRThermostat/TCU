@@ -1,6 +1,7 @@
 #include <EEPROM.h> //EEPROM.write(addr,val) EEPROM.read(addr)
 
 #include "defines.h"
+#include "pin_definitions.h"
 
 #include <TouchScreen.h>
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
@@ -16,10 +17,6 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual res
 #include "wifi.h"
 
 byte hvac;
-
-//from x = 0, can get 26 characters across
-
-
 
 void setup(){
   //open up serial comms
@@ -37,9 +34,7 @@ void setup(){
 #if HAS_LCD==1
   //setup LCD hardware
   Serial.print("initializing LCD hardware...");
-  do{
-    setupLCD();
-  }
+  do{  setupLCD();  }
   while(readDiagnostics());
   Serial.println("done");
 #endif
@@ -56,10 +51,7 @@ void setup(){
 
   //setup esp8266 module
   Serial.print("initializing ESP8266...");
-  do
-  {
-    setupWifi();
-  }
+  do{  setupWifi();  }
   while(!wifi.kick());
   Serial.println("done");
 
@@ -67,12 +59,8 @@ void setup(){
   Serial.print("checking network connection...");
   do
   {
-    if(wifi.joinAP(ssid, password))
-    {
-      if(checkNetwork())
-      {
-        Serial.println("done");
-      }
+    if(wifi.joinAP(ssid, password)) {
+      if(checkNetwork()) {  Serial.println("done");  }
       else
       {
         Serial.println("entering setup");
@@ -80,10 +68,7 @@ void setup(){
         setupNetwork();
       }
     }
-    else
-    {
-      setupNetwork();
-    }
+    else {  setupNetwork();  }
   }
   while(checkNetwork());
   /*
@@ -95,6 +80,8 @@ void setup(){
    }while(testNRF());
    Serial.println("done");  
    */
+  hvac = EEPROM.read(HVAC);
+   
 }
 
 void loop(){ //Main Screen
@@ -111,16 +98,16 @@ void loop(){ //Main Screen
   doubleLine(0, 129, 320, ILI9341_WHITE);
   doubleLine(0, 209, 320, ILI9341_WHITE);
   tft.drawFastVLine(285, 210, 30, ILI9341_WHITE);
-  tft.fillTriangle(                 // Left Arrow
-  15, 215,         // peak
-  5, 225,          // bottom left
-  15, 235,         // bottom right
-  ILI9341_WHITE);
-  tft.fillTriangle(                 // Right Arrow
-  270, 215,        // peak
-  270, 235,        // bottom left
-  280, 225,        // bottom right
-  ILI9341_WHITE);
+  tft.fillTriangle(                  // Left Arrow
+                    15, 215,         // peak
+                    5, 225,          // bottom left
+                    15, 235,         // bottom right
+                    ILI9341_WHITE);
+  tft.fillTriangle(                  // Right Arrow
+                    270, 215,        // peak
+                    270, 235,        // bottom left
+                    280, 225,        // bottom right
+                    ILI9341_WHITE);
 
   printText(40, 4, "High:");
   unitPos(100, 4, temp);
@@ -139,24 +126,12 @@ void loop(){ //Main Screen
   printText(0, 180, "System: Heat  Cool  Blower");
 
   //check which settings are active
-  if(bitRead(hvac,0)) {  
-    tft.drawRect(55, 145, 34, 26, ILI9341_WHITE); 
-  } //On
-  else if(bitRead(hvac,1)) {  
-    tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  
-  } //Off
-  else {  
-    tft.drawRect(163, 145, 58, 26, ILI9341_WHITE);  
-  } //Auto
-  if(bitRead(hvac,2)) {  
-    tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  
-  } //Heat
-  else if(bitRead(hvac,3)) {  
-    tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  
-  } //Cool
-  else {  
-    tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  
-  } //Blower
+  if(bitRead(hvac,0)) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE);  } //On
+  else if(bitRead(hvac,1)) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off
+  else {  tft.drawRect(163, 145, 58, 26, ILI9341_WHITE);  } //Auto
+  if(bitRead(hvac,2)) {  tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  } //Heat
+  else if(bitRead(hvac,3)) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
+  else {  tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  } //Blower
 
   printText(20, 219, "Sensor 1:");
   printText(140, 219, "69F");
@@ -173,38 +148,18 @@ void loop(){ //Main Screen
   while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
 
   if(p.x > 712) {
-    if(p.y < 535) {  
-      updateWeather();  
-    } //Force weather update
-    else {  
-      dateSettings();  
-    } //Time/Date Settings
+    if(p.y < 535) {  updateWeather();  } //Force weather update
+    else {  dateSettings();  } //Time/Date Settings
   }
-  else if(p.x > 640) {  
-    profileSettings();  
-  } //Profile Settings
+  else if(p.x > 640) {  profileSettings();  } //Profile Settings
   else if (p.x > 497) {
-    if(p.y < 535) {  
-      sensorSettings();  
-    } //Sensor Settings
-    else {  
-      changeTemp();  
-    } //Change Temperature
+    if(p.y < 535) {  sensorSettings();  } //Sensor Settings
+    else {  changeTemp();  } //Change Temperature
   }
-  else if(p.x > 223) {  
-    hvacSettingChange();  
-  } //HVAC System (needs work)
-  else if(p.y < 186) {  
-    cycleSensorList(0);  
-  } //Left Arrow for Sensor List
-  else if(p.y < 799) {  
-    sensorSettings();  
-  } //Sensor Settings
-  else if(p.y < 824) {  
-    cycleSensorList(1);  
-  } //Right Arrow for Sensor List
-  else {  
-    settings();  
-  } //Settings
+  else if(p.x > 223) {  hvac = hvacSettingChange(hvac);  } //HVAC System (needs work)
+  else if(p.y < 186) {  cycleSensorList(0);  } //Left Arrow for Sensor List
+  else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
+  else if(p.y < 824) {  cycleSensorList(1);  } //Right Arrow for Sensor List
+  else {  settings();  } //Settings
 }
 
