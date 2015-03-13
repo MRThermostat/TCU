@@ -37,7 +37,7 @@ float getTemp(int unit = 2){
       return (voltage/LM335_COEF)-273.15; //celsius temperature
       break;
     case FAHRENHEIT:
-      return (((voltage/LM335_COEF)-273.15)*(9.0/5.0))-32.0; //fahrenheit temperature
+      return (((voltage/LM335_COEF)-273.15)*(9.0/5.0))+32.0; //fahrenheit temperature
       break;
     case VOLTAGE:
       return voltage;
