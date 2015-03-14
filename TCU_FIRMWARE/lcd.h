@@ -3,6 +3,8 @@
 #define PIXEL_FORMAT 1
 #define IMAGE_FORMAT 1
 #define SELF_DIAGNOSTIC 1
+#define FOREGROUND_COLOR       0x0000      /*   0,   0,   0 */
+#define BACKGROUND_COLOR       0xFFFF      /*   255,   255,   255 */
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RESET);
 
@@ -70,12 +72,12 @@ void centerText(int centerPoint, byte yCoord, char *array){
 }
 
 void makeTitle(char *title){
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_WHITE);
+  tft.fillScreen(BACKGROUND_COLOR);
+  tft.setTextColor(FOREGROUND_COLOR);
   tft.setTextSize(2);
 
-  tft.drawFastVLine(70, 0, 25, ILI9341_WHITE);
-  tft.drawFastHLine(0, 25, 320, ILI9341_WHITE);
+  tft.drawFastVLine(70, 0, 25, FOREGROUND_COLOR);
+  tft.drawFastHLine(0, 25, 320, FOREGROUND_COLOR);
 
   printText(4, 5, "Back");
   centerText(195, 5, title);
@@ -93,8 +95,8 @@ void profileSettings(){
   do{
     byte tmp = 0;
     makeTitle("Profile Settings");
-    tft.drawFastHLine(0, 65, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 215, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 65, 320, FOREGROUND_COLOR);
+    tft.drawFastHLine(0, 215, 320, FOREGROUND_COLOR);
     
     printText(62, 28, "Currently Active");
     centerText(160, 46, nam);
@@ -147,8 +149,8 @@ void sensorEdit(byte sensorNumber){
   printText(4, 90, "Active:");
   printText(100, 90, "Yes");
   printText(160, 90, "No");
-  /*if(sensorActive) {  tft.drawRect(95, 85, 46, 26, ILI9341_WHITE);  } //Box around Yes
-  else {  tft.drawRect(155, 85, 34, 26, ILI9341_WHITE);  } //Box around No*/
+  /*if(sensorActive) {  tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);  } //Box around Yes
+  else {  tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);  } //Box around No*/
   printText(4, 120, "Sensor ID:");
   printText(130, 120, "1234567890"); //Grab sensor ID
   
@@ -167,12 +169,12 @@ void sensorEdit(byte sensorNumber){
     else{ //go to sensor list and change active value using sensorActive ^ 1
       if(p.x > 545 && p.x < 631) {
         if(p.y > 361 && p.y < 506) {
-          tft.drawRect(95, 85, 46, 26, ILI9341_WHITE);
-          tft.drawRect(155, 85, 34, 26, ILI9341_BLACK);
+          tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);
+          tft.drawRect(155, 85, 34, 26, BACKGROUND_COLOR);
         }
         else if(p.y < 593){
-          tft.drawRect(95, 85, 46, 26, ILI9341_BLACK);
-          tft.drawRect(155, 85, 34, 26, ILI9341_WHITE);
+          tft.drawRect(95, 85, 46, 26, BACKGROUND_COLOR);
+          tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);
         }
       } 
     }
@@ -186,7 +188,7 @@ void sensorSettings(){
   do{
     byte tmp = 0;
     makeTitle("Sensor Settings");
-    tft.drawFastVLine(160, 25, 215, ILI9341_WHITE);
+    tft.drawFastVLine(160, 25, 215, FOREGROUND_COLOR);
     
     printText(50, 30, "Active");
     while(tmp < 8) {  //while list not empty
@@ -223,12 +225,18 @@ void accessPointSetup() {
 void wifiSettings(){
   TSPoint p;  
   makeTitle("WiFi Settings");
-  tft.drawFastHLine(0, 200, 320, ILI9341_WHITE);
+  tft.drawFastHLine(0, 200, 320, FOREGROUND_COLOR);
 
   printText(4, 130, "SSID:");
-  printText(76, 130, "SSID1234567890.");
+  printText(136, 130, ssid);
+  printText(4, 155, "Password:");
+  printText(136, 155, password);
   printText(4, 180, "Connected:");
-  printText(136, 180, "Yes");
+  if(is_connected){
+    printText(136, 180, "Yes");
+  }else{
+    printText(136, 180, "No");
+  }
   printText(52, 215, "Access Point Setup");
 
     do{
@@ -264,9 +272,9 @@ void settings(){
   
   do{  
     makeTitle("Device Settings");    
-    tft.drawFastHLine(0, 78, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 131, 320, ILI9341_WHITE);
-    tft.drawFastHLine(0, 184, 320, ILI9341_WHITE);
+    tft.drawFastHLine(0, 78, 320, FOREGROUND_COLOR);
+    tft.drawFastHLine(0, 131, 320, FOREGROUND_COLOR);
+    tft.drawFastHLine(0, 184, 320, FOREGROUND_COLOR);
     
     centerText(160, 43, "Profile Settings");
     centerText(160, 96, "Sensor Settings");
@@ -308,17 +316,17 @@ void changeTemp(){
   TSPoint p;
   byte temp = 99; // Must remove '= 99' before final product  
   makeTitle("Change Temperature");
-  tft.drawFastHLine(0, 210, 320, ILI9341_WHITE);
+  tft.drawFastHLine(0, 210, 320, FOREGROUND_COLOR);
   tft.fillTriangle(                 // Up Arrow
                    160, 30,         // peak
                    100, 60,         // bottom left
                    220, 60,         // bottom right
-                   ILI9341_WHITE);
+                   FOREGROUND_COLOR);
   tft.fillTriangle(                 // DownArrow
                    160, 200,        // peak
                    100, 170,        // bottom left
                    220, 170,        // bottom right
-                   ILI9341_WHITE);
+                   FOREGROUND_COLOR);
 
   printText(124, 215, "Accept");
   tft.setTextSize(10);
@@ -340,7 +348,7 @@ void changeTemp(){
       //change desired temp value
       return;
     }
-    tft.fillRect(70, 80, 170, 70, ILI9341_BLACK);
+    tft.fillRect(70, 80, 170, 70, BACKGROUND_COLOR);
     if(temp > 99) {  tft.setCursor(70, 80);  }
     else {  tft.setCursor(105, 80);  }
     tft.println(temp);
@@ -351,7 +359,7 @@ void changeTemp(){
 void hvacSettingChange(){
   TSPoint p;  
   makeTitle("HVAC Settings");
-  tft.drawFastHLine(0, 107, 320, ILI9341_WHITE);
+  tft.drawFastHLine(0, 107, 320, FOREGROUND_COLOR);
   
   //Fan Area
   printText(146, 35, "Fan");
@@ -359,9 +367,9 @@ void hvacSettingChange(){
   printText(146, 70, "Off");
   printText(216, 70, "Auto");
   /*
-  if(bitRead(hvac,0)) {  tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);  } //On
-  else if(bitRead(hvac,1)) {  tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);  } //Off
-  else {  tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);  } //Auto
+  if(bitRead(hvac,0)) {  tft.drawRect(56, 65, 34, 26, BACKGROUND_COLOR);  } //On
+  else if(bitRead(hvac,1)) {  tft.drawRect(141, 65, 46, 26, BACKGROUND_COLOR);  } //Off
+  else {  tft.drawRect(211, 65, 58, 26, BACKGROUND_COLOR);  } //Auto
   */
   //System Area
   printText(124, 117, "System");
@@ -369,9 +377,9 @@ void hvacSettingChange(){
   printText(136, 152, "Cool");
   printText(204, 152, "Blower");
   /*
-  if(bitRead(hvac,2)) {  tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);  } //Heat
-  else if(bitRead(hvac,3)) {  tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);  } //Cool
-  else {  tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);  } //Blower
+  if(bitRead(hvac,2)) {  tft.drawRect(46, 147, 58, 26, BACKGROUND_COLOR);  } //Heat
+  else if(bitRead(hvac,3)) {  tft.drawRect(131, 147, 58, 26, BACKGROUND_COLOR);  } //Cool
+  else {  tft.drawRect(199, 147, 82, 26, BACKGROUND_COLOR);  } //Blower
   */
   do{
     do{
@@ -385,33 +393,33 @@ void hvacSettingChange(){
         return;
       } //Back
       else if(p.x < 723) {
-        tft.drawRect(56, 65, 34, 26, ILI9341_BLACK);
-        tft.drawRect(141, 65, 46, 26, ILI9341_BLACK);
-        tft.drawRect(211, 65, 58, 26, ILI9341_BLACK);
+        tft.drawRect(56, 65, 34, 26, BACKGROUND_COLOR);
+        tft.drawRect(141, 65, 46, 26, BACKGROUND_COLOR);
+        tft.drawRect(211, 65, 58, 26, BACKGROUND_COLOR);
         if(p.y < 405) {
-          tft.drawRect(56, 65, 34, 26, ILI9341_WHITE);
+          tft.drawRect(56, 65, 34, 26, FOREGROUND_COLOR);
           //bitWrite(hvac, 0, bitRead(hvac, 0) ^ 1);
         }
         else if(p.y < 660) {
-          tft.drawRect(141, 65, 46, 26, ILI9341_WHITE);
+          tft.drawRect(141, 65, 46, 26, FOREGROUND_COLOR);
           //bitWrite(hvac, 1, bitRead(hvac, 1) ^ 1);
         }
-        else {  tft.drawRect(211, 65, 58, 26, ILI9341_WHITE);  }
+        else {  tft.drawRect(211, 65, 58, 26, FOREGROUND_COLOR);  }
       }
     }
     else if(p.x < 487){
-      tft.drawRect(46, 147, 58, 26, ILI9341_BLACK);
-      tft.drawRect(131, 147, 58, 26, ILI9341_BLACK);
-      tft.drawRect(199, 147, 82, 26, ILI9341_BLACK);
+      tft.drawRect(46, 147, 58, 26, BACKGROUND_COLOR);
+      tft.drawRect(131, 147, 58, 26, BACKGROUND_COLOR);
+      tft.drawRect(199, 147, 82, 26, BACKGROUND_COLOR);
       if(p.y < 405) {
-        tft.drawRect(46, 147, 58, 26, ILI9341_WHITE);
+        tft.drawRect(46, 147, 58, 26, FOREGROUND_COLOR);
         //bitWrite(hvac, 2, bitRead(hvac, 2) ^ 1);
       }
       else if(p.y < 660) {
-        tft.drawRect(131, 147, 58, 26, ILI9341_WHITE);
+        tft.drawRect(131, 147, 58, 26, FOREGROUND_COLOR);
         //bitWrite(hvac, 3, bitRead(hvac, 3) ^ 1);
       }
-      else {  tft.drawRect(199, 147, 82, 26, ILI9341_WHITE);  } 
+      else {  tft.drawRect(199, 147, 82, 26, FOREGROUND_COLOR);  } 
     }
   }while(true);
 }

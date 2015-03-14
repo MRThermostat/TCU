@@ -50,10 +50,12 @@ void setup(){
   Serial.println("done");
 
   //get profiles and data from eeprom
-  Serial.print("restoring user data...");
+  Serial.print("restoring user data...");  
   while(restoreUserData());
+  Serial.println(ssid);
+  Serial.println(password);
   Serial.println("done");
-
+/*
   //setup esp8266 module
   Serial.print("initializing ESP8266...");
   do
@@ -72,6 +74,7 @@ void setup(){
       if(checkNetwork())
       {
         Serial.println("done");
+        is_connected = 1;
       }
       else
       {
@@ -82,11 +85,13 @@ void setup(){
     }
     else
     {
+      Serial.println("failed");
+      Serial.println("Entering Setup...");
       setupNetwork();
     }
   }
   while(checkNetwork());
-  /*
+  
    //setup nrf24l01+
    Serial.print("initializing sensors comms...");
    do
@@ -100,27 +105,27 @@ void setup(){
 void loop(){ //Main Screen
   TSPoint p;
   int temp = -10; //temporary for testing
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_WHITE);
+  tft.fillScreen(BACKGROUND_COLOR);
+  tft.setTextColor(FOREGROUND_COLOR);
   tft.setTextSize(2);
 
-  tft.drawFastVLine(160, 0, 54, ILI9341_WHITE);
-  doubleLine(0, 54, 320, ILI9341_WHITE);
-  tft.drawFastHLine(0, 80, 320, ILI9341_WHITE);
-  tft.drawFastVLine(160, 80, 49, ILI9341_WHITE);
-  doubleLine(0, 129, 320, ILI9341_WHITE);
-  doubleLine(0, 209, 320, ILI9341_WHITE);
-  tft.drawFastVLine(285, 210, 30, ILI9341_WHITE);
+  tft.drawFastVLine(160, 0, 54, FOREGROUND_COLOR);
+  doubleLine(0, 54, 320, FOREGROUND_COLOR);
+  tft.drawFastHLine(0, 80, 320, FOREGROUND_COLOR);
+  tft.drawFastVLine(160, 80, 49, FOREGROUND_COLOR);
+  doubleLine(0, 129, 320, FOREGROUND_COLOR);
+  doubleLine(0, 209, 320, FOREGROUND_COLOR);
+  tft.drawFastVLine(285, 210, 30, FOREGROUND_COLOR);
   tft.fillTriangle(                 // Left Arrow
   15, 215,         // peak
   5, 225,          // bottom left
   15, 235,         // bottom right
-  ILI9341_WHITE);
+  FOREGROUND_COLOR);
   tft.fillTriangle(                 // Right Arrow
   270, 215,        // peak
   270, 235,        // bottom left
   280, 225,        // bottom right
-  ILI9341_WHITE);
+  FOREGROUND_COLOR);
 
   printText(40, 4, "High:");
   unitPos(100, 4, temp);
@@ -140,35 +145,43 @@ void loop(){ //Main Screen
 
   //check which settings are active
   if(bitRead(hvac,0)) {  
-    tft.drawRect(55, 145, 34, 26, ILI9341_WHITE); 
+    tft.drawRect(55, 145, 34, 26, FOREGROUND_COLOR); 
   } //On
   else if(bitRead(hvac,1)) {  
-    tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  
+    tft.drawRect(103, 145, 46, 26, FOREGROUND_COLOR);  
   } //Off
   else {  
-    tft.drawRect(163, 145, 58, 26, ILI9341_WHITE);  
+    tft.drawRect(163, 145, 58, 26, FOREGROUND_COLOR);  
   } //Auto
   if(bitRead(hvac,2)) {  
-    tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  
+    tft.drawRect(91, 175, 58, 26, FOREGROUND_COLOR);  
   } //Heat
   else if(bitRead(hvac,3)) {  
-    tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  
+    tft.drawRect(163, 175, 58, 26, FOREGROUND_COLOR);  
   } //Cool
   else {  
-    tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  
+    tft.drawRect(235, 175, 82, 26, FOREGROUND_COLOR);  
   } //Blower
 
   printText(20, 219, "Sensor 1:");
   printText(140, 219, "69F");
 
   //Settings
-  doubleLine(290, 215, 25, ILI9341_WHITE);
-  doubleLine(290, 225, 25, ILI9341_WHITE);
-  doubleLine(290, 234, 25, ILI9341_WHITE);
+  doubleLine(290, 215, 25, FOREGROUND_COLOR);
+  doubleLine(290, 225, 25, FOREGROUND_COLOR);
+  doubleLine(290, 234, 25, FOREGROUND_COLOR);
 
+  int tempdelay = 0;
   do{
     p = ts.getPoint();
     //Check for Android Connection
+    tempdelay++;
+    if(tempdelay == 100){
+      tempdelay = 0;
+      Serial.print("temperature reading:");
+      Serial.println(getTemp(3));
+    }
+    
   }
   while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
 

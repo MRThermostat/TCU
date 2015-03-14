@@ -14,6 +14,7 @@ void setupTemp(){
   //analogReference(DEFAULT);
 }
 
+//todo change everything to integet math for mad space savings bro!
 float getTemp(int unit = 2){
   int number_samples = 5;
   int adc_count = 0;
