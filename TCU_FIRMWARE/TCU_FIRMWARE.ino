@@ -1,12 +1,11 @@
 #include <EEPROM.h> //EEPROM.write(addr,val) EEPROM.read(addr)
+#include <SPI.h>
 
-#include "defines.h"
 #include "pin_definitions.h"
 
 #include <TouchScreen.h>
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
 
-#include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
 #include "lcd.h"
@@ -15,7 +14,6 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual res
 
 #include <ESP8266.h>
 #include "wifi.h"
-
 byte hvac;
 
 void setup(){
@@ -48,11 +46,12 @@ void setup(){
   Serial.print("restoring user data...");
   while(restoreUserData());
   Serial.println("done");
-
+/*
   //setup esp8266 module
   Serial.print("initializing ESP8266...");
-  do{  setupWifi();  }
-  while(!wifi.kick());
+  do{
+    setupWifi();
+  }while(!wifi.kick());
   Serial.println("done");
 
   //checking internet connection
@@ -81,7 +80,6 @@ void setup(){
    Serial.println("done");  
    */
   hvac = EEPROM.read(HVAC);
-   
 }
 
 void loop(){ //Main Screen
@@ -124,7 +122,7 @@ void loop(){ //Main Screen
   unitPos(260, 100, temp);
   printText(0, 150, "Fan: On  Off  Auto");
   printText(0, 180, "System: Heat  Cool  Blower");
-
+  
   //check which settings are active
   if(bitRead(hvac,0)) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE);  } //On
   else if(bitRead(hvac,1)) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off

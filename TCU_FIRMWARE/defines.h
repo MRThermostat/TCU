@@ -1,7 +1,7 @@
 #define CODE_VERSION "0.01"
 #define DEBUG
 #define AREF 3.3
-#define HAS_LCD 0
+#define HAS_LCD 1
 
 #define TS_MINX 180
 #define TS_MINY 150
@@ -15,6 +15,7 @@
 
 char ssid[16];
 char password[64];
+int i;
 //eeprom address space
 //0x00-0x1F 32 byte ssid
 //0x20-0x5F 64 byte password
@@ -25,10 +26,20 @@ char password[64];
 //other goodies
 //1 byte pointer to next rule
 
-int readEEPROMBytes(char *buffer, int start, int length){
-  for(int i=start;i<(start+length);i++){
-    *buffer=EEPROM.read(i);  
+void readEEPROMBytes(char *buffer, int start, int length){
+  for(i=start;i<(start+length);i++){
+    if(EEPROM.read(i) == '\0') {  break;  }
+    buffer[i]=EEPROM.read(i);
   }
+  buffer[i] = '\0';
+}
+
+void writeEEPROMBytes(char *buffer, int start, int length){
+  for(i=start;i<(start+length);i++){
+    if(buffer[i] == '\0') {  break;  }
+    EEPROM.write(i, buffer[i]-0);
+  }
+  EEPROM.write(i, 0);
 }
 
 bool restoreUserData(){
@@ -37,4 +48,5 @@ bool restoreUserData(){
   
   return 0;
 }
+
 

@@ -4,6 +4,8 @@
 #define IMAGE_FORMAT 1
 #define SELF_DIAGNOSTIC 1
 
+#include "defines.h"
+
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RESET);
 
 void setupLCD(){
@@ -161,9 +163,8 @@ void sensorEdit(byte sensorNumber){
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
     if(p.x > 717) {
       if(p.y < 318) {  return;  } //Back
-      else {  /*changeName(0, sensorNumber);  */}
     }
-    else{ //go to sensor list and change active value using sensorActive ^ 1
+    else{ //go to sensor list and change active value
       if(p.x > 545 && p.x < 631) {
         if(p.y > 361 && p.y < 506) {
           tft.drawRect(95, 85, 46, 26, ILI9341_WHITE);
@@ -215,19 +216,20 @@ void sensorSettings(){
 }
 
 void accessPointSetup() {
-  Serial.println("Access Point Setup");  
+  Serial.println("Access Point Setup");
 }
 
 //WiFi Settings
 void wifiSettings(){
+  readEEPROMBytes(ssid,0,16);
   TSPoint p;  
   makeTitle("WiFi Settings");
   tft.drawFastHLine(0, 200, 320, ILI9341_WHITE);
 
-  printText(4, 130, "SSID:");
-  printText(76, 130, "SSID1234567890.");
-  printText(4, 180, "Connected:");
-  printText(136, 180, "Yes");
+  printText(4, 80, "SSID:");
+  printText(76, 80, ssid);
+  printText(4, 160, "Connected:");
+  printText(136, 160, "Yes");
   printText(52, 215, "Access Point Setup");
 
     do{
@@ -244,13 +246,13 @@ void wifiSettings(){
 // Default actions
 void defaults(byte action){
   if(action == 0) { //Default
-    Serial.print("Restore Defaults\n");
+    Serial.println("Restore Defaults");
   }
   else if(action == 1) { //Write
-    Serial.print("Write Defaults\n");
+    Serial.println("Write Defaults");
   }
   else { //Read
-    Serial.print("View Defaults\n");
+    Serial.println("View Defaults");
   }
 }
 
