@@ -1,5 +1,5 @@
 #define CODE_VERSION "0.01"
-#define DEBUG
+#define DEBUG 1
 #define AREF 3.3
 #define HAS_LCD 1
 

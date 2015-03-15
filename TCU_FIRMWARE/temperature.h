@@ -15,7 +15,7 @@ void setupTemp(){
 }
 
 //todo change everything to integet math for mad space savings bro!
-float getTemp(int unit = 2){
+/*float getTemp(int unit = 2){
   int number_samples = 5;
   int adc_count = 0;
   float adc_voltage, voltage;
@@ -47,4 +47,4 @@ float getTemp(int unit = 2){
       return adc_count;
       break;
   }
-}
+}*/

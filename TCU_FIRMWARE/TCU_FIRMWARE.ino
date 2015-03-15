@@ -5,15 +5,15 @@
 #include <TouchScreen.h>
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
 
+#include <ESP8266.h>
+#include "wifi.h"
+
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
 #include "lcd.h"
 
 #include "temperature.h"
-
-#include <ESP8266.h>
-#include "wifi.h"
 
 byte hvac;
 
@@ -25,7 +25,7 @@ void setup(){
   //open up serial comms
   //be careful with this, as this channel also connects to ESP8266
   Serial.begin(115200);
-#ifdef DEBUG
+#if DEBUG==1
   delay(1000);
   while(!Serial){
     //do nothing 
@@ -52,10 +52,8 @@ void setup(){
   //get profiles and data from eeprom
   Serial.print("restoring user data...");  
   while(restoreUserData());
-  Serial.println(ssid);
-  Serial.println(password);
   Serial.println("done");
-/*
+
   //setup esp8266 module
   Serial.print("initializing ESP8266...");
   do
@@ -71,6 +69,7 @@ void setup(){
   {
     if(wifi.joinAP(ssid, password))
     {
+      
       if(checkNetwork())
       {
         Serial.println("done");
@@ -79,9 +78,9 @@ void setup(){
       else
       {
         Serial.println("entering setup");
-        onScreenPrompt();
         setupNetwork();
       }
+      
     }
     else
     {
@@ -91,7 +90,7 @@ void setup(){
     }
   }
   while(checkNetwork());
-  
+  /*
    //setup nrf24l01+
    Serial.print("initializing sensors comms...");
    do
@@ -109,13 +108,13 @@ void loop(){ //Main Screen
   tft.setTextColor(FOREGROUND_COLOR);
   tft.setTextSize(2);
 
-  tft.drawFastVLine(160, 0, 54, FOREGROUND_COLOR);
-  doubleLine(0, 54, 320, FOREGROUND_COLOR);
-  tft.drawFastHLine(0, 80, 320, FOREGROUND_COLOR);
-  tft.drawFastVLine(160, 80, 49, FOREGROUND_COLOR);
-  doubleLine(0, 129, 320, FOREGROUND_COLOR);
-  doubleLine(0, 209, 320, FOREGROUND_COLOR);
-  tft.drawFastVLine(285, 210, 30, FOREGROUND_COLOR);
+  doubleVLine(160, 0, 54, FOREGROUND_COLOR);
+  doubleHLine(0, 54, 320, FOREGROUND_COLOR);
+  doubleHLine(0, 80, 320, FOREGROUND_COLOR);
+  doubleVLine(160, 80, 49, FOREGROUND_COLOR);
+  doubleHLine(0, 129, 320, FOREGROUND_COLOR);
+  doubleHLine(0, 209, 320, FOREGROUND_COLOR);
+  doubleVLine(285, 210, 30, FOREGROUND_COLOR);
   tft.fillTriangle(                 // Left Arrow
   15, 215,         // peak
   5, 225,          // bottom left
@@ -167,21 +166,25 @@ void loop(){ //Main Screen
   printText(140, 219, "69F");
 
   //Settings
-  doubleLine(290, 215, 25, FOREGROUND_COLOR);
-  doubleLine(290, 225, 25, FOREGROUND_COLOR);
-  doubleLine(290, 234, 25, FOREGROUND_COLOR);
+  doubleHLine(290, 215, 25, FOREGROUND_COLOR);
+  doubleHLine(290, 225, 25, FOREGROUND_COLOR);
+  doubleHLine(290, 234, 25, FOREGROUND_COLOR);
 
   int tempdelay = 0;
   do{
     p = ts.getPoint();
     //Check for Android Connection
-    tempdelay++;
+    /*tempdelay++;
     if(tempdelay == 100){
       tempdelay = 0;
       Serial.print("temperature reading:");
       Serial.println(getTemp(3));
     }
-    
+    uint8_t buffer[128] = {0};
+    uint32_t len = wifi.recv(buffer, sizeof(buffer), 100);
+    if (len > 0) {
+      Serial.println("WOOT");
+    }*/
   }
   while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
 

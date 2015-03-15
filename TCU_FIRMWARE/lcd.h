@@ -8,6 +8,16 @@
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RESET);
 
+void doubleHLine(int xCoord, byte yCoord, int width, uint16_t color){
+  tft.drawFastHLine(xCoord, yCoord, width, color);
+  tft.drawFastHLine(xCoord, yCoord + 1, width, color);
+}
+
+void doubleVLine(int xCoord, byte yCoord, int width, uint16_t color){
+  tft.drawFastVLine(xCoord, yCoord, width, color);
+  tft.drawFastVLine(xCoord + 1, yCoord, width, color);
+}
+
 void setupLCD(){
   //setup backlight
   pinMode(TFT_BACKLIGHT, OUTPUT);
@@ -76,8 +86,8 @@ void makeTitle(char *title){
   tft.setTextColor(FOREGROUND_COLOR);
   tft.setTextSize(2);
 
-  tft.drawFastVLine(70, 0, 25, FOREGROUND_COLOR);
-  tft.drawFastHLine(0, 25, 320, FOREGROUND_COLOR);
+  doubleVLine(70, 0, 25, FOREGROUND_COLOR);
+  doubleHLine(0, 25, 320, FOREGROUND_COLOR);
 
   printText(4, 5, "Back");
   centerText(195, 5, title);
@@ -188,7 +198,7 @@ void sensorSettings(){
   do{
     byte tmp = 0;
     makeTitle("Sensor Settings");
-    tft.drawFastVLine(160, 25, 215, FOREGROUND_COLOR);
+    doubleVLine(160, 25, 215, FOREGROUND_COLOR);
     
     printText(50, 30, "Active");
     while(tmp < 8) {  //while list not empty
@@ -221,21 +231,56 @@ void accessPointSetup() {
   Serial.println("Access Point Setup");  
 }
 
+//WiFi Setup
+void setupNetwork(){
+  TSPoint p;  
+  makeTitle("WiFi Setup");
+  
+                  //"12345678901234567890123456"
+  printText(4, 29,  "1.Using your mobile device");
+  printText(4, 54,  "  connect to MR THERMOSTAT");
+  printText(4, 79,  "2.Open your browser then");
+  printText(4, 104, "  navigate to:");
+  char ipaddress[15];
+  String stringobject = wifi.getLocalIP();
+  stringobject.toCharArray(ipaddress,15);
+  printText(50, 129, ipaddress);
+  printText(4, 154, "3.Enter wifi credentials");
+  printText(4, 179, "  then click submit");
+ 
+
+    do{
+      do{
+        p = ts.getPoint();
+        //Check for Android Connection
+      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+
+      if(p.x > 798 && p.y < 318) {  return;  } //Back
+    }while(true);
+}
+
 //WiFi Settings
 void wifiSettings(){
   TSPoint p;  
   makeTitle("WiFi Settings");
-  tft.drawFastHLine(0, 200, 320, FOREGROUND_COLOR);
+  doubleHLine(0, 200, 320, FOREGROUND_COLOR);
 
-  printText(4, 130, "SSID:");
-  printText(136, 130, ssid);
-  printText(4, 155, "Password:");
-  printText(136, 155, password);
-  printText(4, 180, "Connected:");
+  printText(4, 29, "SSID:");
+  printText(136, 29, ssid);
+  printText(4, 54, "Password:");
+  printText(136, 54, password);
+  printText(4, 79, "Connected:");
   if(is_connected){
-    printText(136, 180, "Yes");
+    printText(136, 79, "Yes");
+    printText(4, 104, "IP Address:");
+    char ipaddress[15];
+    String stringobject = wifi.getLocalIP();
+    stringobject.toCharArray(ipaddress,15);
+    printText(136, 104, ipaddress);
+    printText(4, 129, "Mac Address:");
+    printText(136, 129, "");
   }else{
-    printText(136, 180, "No");
+    printText(136, 79, "No");
   }
   printText(52, 215, "Access Point Setup");
 
@@ -246,7 +291,7 @@ void wifiSettings(){
       }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
 
       if(p.x > 798 && p.y < 318) {  return;  } //Back
-      else if(p.y < 295) {  accessPointSetup();  }
+      else if(p.y < 295) {  setupNetwork();  }
     }while(true);
 }
 
@@ -437,11 +482,6 @@ void cycleSensorList(boolean directions){
 //Profile Edit Screen
 void editProfile(){
   Serial.println("Edit");
-}
-
-void doubleLine(int xCoord, byte yCoord, int width, uint16_t color){
-  tft.drawFastHLine(xCoord, yCoord, width, color);
-  tft.drawFastHLine(xCoord, yCoord + 1, width, color);
 }
 
 void onScreenPrompt(){
