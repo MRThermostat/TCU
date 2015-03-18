@@ -1,7 +1,6 @@
 #include <EEPROM.h> //EEPROM.write(addr,val) EEPROM.read(addr)
-#include <SPI.h>
-
 #include "pin_definitions.h"
+#include <SPI.h>
 
 #include <TouchScreen.h>
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
@@ -14,7 +13,6 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual res
 
 #include <ESP8266.h>
 #include "wifi.h"
-byte hvac;
 
 void setup(){
   //open up serial comms
@@ -80,11 +78,17 @@ void setup(){
    Serial.println("done");  
    */
   hvac = EEPROM.read(HVAC);
+  sn = 0;
 }
 
 void loop(){ //Main Screen
   TSPoint p;
-  int temp = -10; //temporary for testing
+  //for(i = 0; i < MAXSENSORS; i++) {  removeSensor(i);  } //Erase all sensors
+  /*addSensor("Sensor 1", "1", 100, 128); //Add a sensor
+  addSensor("Sensor 2", "22", 40, 0); //Add a sensor
+  addSensor("Sensor 3", "333", 76, 128); //Add a sensor
+  */
+  temp = -10; //temporary for testing
   tft.fillScreen(ILI9341_BLACK);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(2);
@@ -124,15 +128,18 @@ void loop(){ //Main Screen
   printText(0, 180, "System: Heat  Cool  Blower");
   
   //check which settings are active
-  if(bitRead(hvac,0)) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE);  } //On
-  else if(bitRead(hvac,1)) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off
+  if(bitRead(hvac, 0)) {  tft.drawRect(55, 145, 34, 26, ILI9341_WHITE);  } //On
+  else if(bitRead(hvac, 1)) {  tft.drawRect(103, 145, 46, 26, ILI9341_WHITE);  } //Off
   else {  tft.drawRect(163, 145, 58, 26, ILI9341_WHITE);  } //Auto
-  if(bitRead(hvac,2)) {  tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  } //Heat
-  else if(bitRead(hvac,3)) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
+  if(bitRead(hvac, 2)) {  tft.drawRect(91, 175, 58, 26, ILI9341_WHITE);  } //Heat
+  else if(bitRead(hvac, 3)) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
   else {  tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  } //Blower
-
-  printText(20, 219, "Sensor 1:");
-  printText(140, 219, "69F");
+  
+  readEEPROMBytes(nam, SENSORS, 13); //Read Sensor name from EEPROM
+  i = cal(nam);
+  printText(20, 219, nam);
+  printText(20 + i * 12, 219, ":");
+  unitPos(32 + i * 12, 219, EEPROM.read(SENSORS + SENSORBLOCK - 2));
 
   //Settings
   doubleLine(290, 215, 25, ILI9341_WHITE);
@@ -142,8 +149,7 @@ void loop(){ //Main Screen
   do{
     p = ts.getPoint();
     //Check for Android Connection
-  }
-  while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+  }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
 
   if(p.x > 712) {
     if(p.y < 535) {  updateWeather();  } //Force weather update
@@ -155,9 +161,9 @@ void loop(){ //Main Screen
     else {  changeTemp();  } //Change Temperature
   }
   else if(p.x > 223) {  hvac = hvacSettingChange(hvac);  } //HVAC System (needs work)
-  else if(p.y < 186) {  cycleSensorList(0);  } //Left Arrow for Sensor List
+  else if(p.y < 186) {  cycleSensorList(0, sn);  } //Left Arrow for Sensor List
   else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
-  else if(p.y < 824) {  cycleSensorList(1);  } //Right Arrow for Sensor List
+  else if(p.y < 824) {  cycleSensorList(1, sn);  } //Right Arrow for Sensor List
   else {  settings();  } //Settings
 }
 
