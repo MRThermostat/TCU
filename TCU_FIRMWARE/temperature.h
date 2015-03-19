@@ -14,6 +14,7 @@ void setupTemp(){
   //analogReference(DEFAULT);
 }
 
+//todo change everything to integet math for mad space savings bro!
 float getTemp(int unit = 2){
   int number_samples = 5;
   int adc_count = 0;
@@ -48,3 +49,17 @@ float getTemp(int unit = 2){
   }
 }
 
+void tempDelay() {
+  int tempdelay = 0;
+  tempdelay++;
+  if(tempdelay == 100){
+    tempdelay = 0;
+    Serial.print("temperature reading:");
+    Serial.println(getTemp(3));
+  }
+  uint8_t buffer[128] = {0};
+  uint32_t len = wifi.recv(buffer, sizeof(buffer), 100);
+  if (len > 0) {
+    Serial.println("WOOT");
+  }
+}
