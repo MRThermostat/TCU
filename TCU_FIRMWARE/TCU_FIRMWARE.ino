@@ -1,5 +1,4 @@
 #include <EEPROM.h> //EEPROM.write(addr,val) EEPROM.read(addr)
-#include "pin_definitions.h"
 #include <SPI.h>
 
 #include <TouchScreen.h>
@@ -83,8 +82,12 @@ void setup(){
 
 void loop(){ //Main Screen
   TSPoint p;
+  int average, temp;
+  byte count, i, wait;
   //for(i = 0; i < MAXSENSORS; i++) {  removeSensor(i);  } //Erase all sensors
-  /*addSensor("Sensor 1", "1", 100, 128); //Add a sensor
+  /*
+  addSensor("Thermostat", "THERMOSTAT", 90, 128); //Add a sensor
+  addSensor("Sensor 1", "1", 100, 128); //Add a sensor
   addSensor("Sensor 2", "22", 40, 0); //Add a sensor
   addSensor("Sensor 3", "333", 76, 128); //Add a sensor
   */
@@ -121,9 +124,18 @@ void loop(){ //Main Screen
   printText(165, 20, "12:00 PM");
   centerText(160, 60, "Active Profile123456");
   printText(4, 100, "Current:");
-  unitPos(100, 100, temp);
+  count = average = i = 0;
+  while(i < MAXSENSORS) {
+    if(bitRead(EEPROM.read(SENSORS + i * SENSORBLOCK + 26), 7) == 1 && EEPROM.read(SENSORS + i * SENSORBLOCK) != '\0') {
+      average = average + EEPROM.read(SENSORS + i * SENSORBLOCK + 25);
+      count++;
+    }
+    i++;
+  }
+  average = average / count;
+  unitPos(100, 100, average);
   printText(164, 100, "Desired:");
-  unitPos(260, 100, temp);
+  unitPos(260, 100, EEPROM.read(HVAC + 1));
   printText(0, 150, "Fan: On  Off  Auto");
   printText(0, 180, "System: Heat  Cool  Blower");
   
@@ -135,35 +147,58 @@ void loop(){ //Main Screen
   else if(bitRead(hvac, 3)) {  tft.drawRect(163, 175, 58, 26, ILI9341_WHITE);  } //Cool
   else {  tft.drawRect(235, 175, 82, 26, ILI9341_WHITE);  } //Blower
   
-  readEEPROMBytes(nam, SENSORS, 13); //Read Sensor name from EEPROM
-  i = cal(nam);
-  printText(20, 219, nam);
-  printText(20 + i * 12, 219, ":");
-  unitPos(32 + i * 12, 219, EEPROM.read(SENSORS + SENSORBLOCK - 2));
 
+  cycleSensorList(sn);
+  
   //Settings
   doubleLine(290, 215, 25, ILI9341_WHITE);
   doubleLine(290, 225, 25, ILI9341_WHITE);
   doubleLine(290, 234, 25, ILI9341_WHITE);
-
   do{
-    p = ts.getPoint();
-    //Check for Android Connection
-  }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-
-  if(p.x > 712) {
-    if(p.y < 535) {  updateWeather();  } //Force weather update
-    else {  dateSettings();  } //Time/Date Settings
-  }
-  else if(p.x > 640) {  profileSettings();  } //Profile Settings
-  else if (p.x > 497) {
-    if(p.y < 535) {  sensorSettings();  } //Sensor Settings
-    else {  changeTemp();  } //Change Temperature
-  }
-  else if(p.x > 223) {  hvac = hvacSettingChange(hvac);  } //HVAC System (needs work)
-  else if(p.y < 186) {  cycleSensorList(0, sn);  } //Left Arrow for Sensor List
-  else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
-  else if(p.y < 824) {  cycleSensorList(1, sn);  } //Right Arrow for Sensor List
-  else {  settings();  } //Settings
+    average = i = count = 0;
+    temp = sensorBytes();
+    while(i < MAXSENSORS) { //Finds total sensors and current sensor
+      if(bitRead(temp, i) != 0) {  count++;  }
+      if(i < sn + 1 && bitRead(temp,i)) { average++;  }
+      i++;
+    }
+    
+    wait = 0;
+    do{
+      p = ts.getPoint();
+      //Check for Android Connection
+    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    
+    if(p.x > 712) {
+      if(p.y < 535) {  updateWeather();  } //Force weather update
+      else {  dateSettings();  } //Time/Date Settings
+    }
+    else if(p.x > 640) {  profileSettings();  } //Profile Settings
+    else if (p.x > 497) {
+      if(p.y < 535) {  sensorSettings();  } //Sensor Settings
+      else {  changeTemp();  } //Change Temperature
+    }
+    else if(p.x > 265) {  hvac = hvacSettingChange(hvac);  }
+    else if(p.y < 186) {
+      if(sn > 0 && average > 1) {
+        sn--;
+        while(EEPROM.read(SENSORS + SENSORBLOCK * sn) == 0) {  sn--;  };
+        cycleSensorList(sn);
+      }
+      else {  delay(100);  }
+      wait = 1;
+    } //Left Arrow for Sensor List
+    else if(p.y < 799) {  sensorSettings();  } //Sensor Settings
+    else if(p.y < 835) {
+      if(sn < MAXSENSORS && average < count) {
+        sn++;
+        while(EEPROM.read(SENSORS + SENSORBLOCK * sn) == 0) {  sn++;  };
+        cycleSensorList(sn);
+      }
+      else {  delay(100);  }
+      wait = 2;
+    } //Right Arrow for Sensor List
+    else {  settings();  } //Settings
+  }while(wait);
 }
 

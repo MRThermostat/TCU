@@ -14,6 +14,7 @@
 #define MAXTEMP 99 //Maximum temperature thermostat can set
 #define MINTEMP 50 //Minimum temperature thermostat can set
 #define HVAC 200 //HVAC Settings Address Location
+                 //HVAC + 1 will be Desired Temperature
 #define SENSORS 500 //Sensor List Address Location
 #define MAXSENSORS 9 //Maximum number of sensors allowed
 #define SENSORBLOCK 27 //Bytes required to save 1 sensors info
@@ -21,7 +22,7 @@
 TSPoint p;
 char ssid[16];
 char password[64];
-int i, temp, hvac, sn;
+int hvac, sn;
 char nam[13];
 //eeprom address space
 //0x00-0x1F 32 byte ssid
@@ -34,6 +35,7 @@ char nam[13];
 //1 byte pointer to next rule
 
 void readEEPROMBytes(char *buffer, int start, int length){
+  int i;
   for(i=0;i<length;i++){
     if(EEPROM.read(i+start) == '\0') {  break;  }
     buffer[i]=EEPROM.read(i+start);
@@ -42,6 +44,7 @@ void readEEPROMBytes(char *buffer, int start, int length){
 }
 
 void writeEEPROMBytes(char *buffer, int start, int length){
+  int i;
   for(i=start;i<(start+length);i++){
     if(buffer[i-start] == '\0') {  break;  }
     EEPROM.write(i, buffer[i-start]-0);

@@ -1,7 +1,7 @@
-#define DISPLAY_POWER_MODE 1
+/*#define DISPLAY_POWER_MODE 1
 #define MADCTL_MODE 1
 #define PIXEL_FORMAT 1
-#define IMAGE_FORMAT 1
+#define IMAGE_FORMAT 1*/
 #define SELF_DIAGNOSTIC 1
 
 #include "defines.h"
@@ -22,7 +22,7 @@ bool readDiagnostics() {
   // read diagnostics (optional but can help debug problems)
   uint8_t x = tft.readcommand8(ILI9341_RDMODE);
   //Serial.print("Display Power Mode: 0x"); Serial.println(x, HEX);
-  if (x == DISPLAY_POWER_MODE)
+ /* if (x == DISPLAY_POWER_MODE)
   {
     x = tft.readcommand8(ILI9341_RDMADCTL);
     //Serial.print("MADCTL Mode: 0x"); Serial.println(x, HEX);
@@ -35,17 +35,17 @@ bool readDiagnostics() {
         x = tft.readcommand8(ILI9341_RDIMGFMT);
         //Serial.print("Image Format: 0x"); Serial.println(x, HEX);
         if (x == IMAGE_FORMAT)
-        {
+        {*/
           x = tft.readcommand8(ILI9341_RDSELFDIAG);
           //Serial.print("Self Diagnostic: 0x"); Serial.println(x, HEX);
           if (x == SELF_DIAGNOSTIC)
           {
             return (1);
-          }
+          }/*
         }
       }
     }
-  }
+  }*/
 
   return (0);
 }
@@ -86,11 +86,11 @@ void makeTitle(char *title) {
   centerText(195, 5, title);
 }
 
-byte sensorByte() {
-  byte sensor, i;
+int sensorBytes() {
+  byte i;
+  int sensor = 0;
   for(i = 0; i < MAXSENSORS; i++) {
     if(EEPROM.read(SENSORS + i * SENSORBLOCK) != 0){  bitSet(sensor,i);  }
-    else {  bitClear(sensor,i);  }
   }
   return sensor;
 }
@@ -153,7 +153,7 @@ void sensorEdit(byte sensorNumber) {
 //1 sensor number
 //1 latest temperature
 //1 status & active
-
+  byte temp;
   makeTitle("Sensor Settings");
 
   readEEPROMBytes(nam, SENSORS + sensorNumber * SENSORBLOCK, 13); //Read Sensor name from EEPROM
@@ -184,7 +184,7 @@ void sensorEdit(byte sensorNumber) {
     } while (p.z < MINPRESSURE || p.z > MAXPRESSURE);
     if (p.x > 717) {
       if (p.y < 318) {
-        /*if(bitRead(temp, 7) != bitRead(EEPROM.read(SENSORS + sensorNumber * 24 + 23),7) {  EEPROM.write(SENSORS + sensorNumber * 24 + 23,temp);  }*/
+        if(bitRead(temp, 7) != bitRead(EEPROM.read(SENSORS + sensorNumber * SENSORBLOCK + 26),7)) {  EEPROM.write(SENSORS + sensorNumber * SENSORBLOCK + 26,temp);  }
         return;   //Back
       }
     }
@@ -210,8 +210,9 @@ void sensorEdit(byte sensorNumber) {
 void sensorSettings() {
   TSPoint p;
   byte i, count, tmp;
+  int temp = 0;
   do {
-    i = temp = 0;
+    i = tmp = 0;
     makeTitle("Sensor Settings");
     tft.drawFastVLine(160, 25, 215, ILI9341_WHITE);
 
@@ -219,19 +220,19 @@ void sensorSettings() {
     while (i < MAXSENSORS) { //while list not empty
       if(bitRead(EEPROM.read(SENSORS + i * SENSORBLOCK + 26), 7) == 1 && EEPROM.read(SENSORS + i * SENSORBLOCK) != '\0') {
         readEEPROMBytes(nam, SENSORS + i * SENSORBLOCK, 12);
-        centerText(80, 60 + temp * 18, nam);
-        temp++;
+        centerText(80, 60 + tmp * 18, nam);
+        tmp++;
       }
       i++;
     }
 
-    i = temp = 0;
+    i = tmp = 0;
     printText(198, 30, "Sensors");
     while(i < MAXSENSORS) { //while list not empty
       if(EEPROM.read(SENSORS + i * SENSORBLOCK) != 0) {
         readEEPROMBytes(nam, SENSORS + i * SENSORBLOCK, 12);
-        centerText(240, 60 + temp * 18, nam);
-        temp++;
+        centerText(240, 60 + tmp * 18, nam);
+        tmp++;
       }
       i++;
     }
@@ -244,9 +245,9 @@ void sensorSettings() {
       if (p.x > 798 && p.y < 318) {  return;  } //Back
       else if (p.y > 535) {
         i = (697 - p.x) / 52; //Finds which sensor was pressed
-        if(i < temp) {
+        if(i < tmp) {
           count = tmp = 0;
-          temp = sensorByte();
+          temp = sensorBytes();
           while(tmp < MAXSENSORS) {
             if(bitRead(temp,tmp) != 0){
               count++;
@@ -254,7 +255,7 @@ void sensorSettings() {
                 Serial.print("Sensor #");
                 Serial.println(i);
                 sensorEdit(tmp);
-                break;
+                tmp = MAXSENSORS;
               }
             }
             tmp++;
@@ -344,9 +345,7 @@ void settings() {
         else if (p.x > 252) {
           wifiSettings();   //WiFi Settings
         }
-        else {
-          defaults(2);   //Default Settings
-        }
+        else {  defaults(2);  }//Default Settings
       }
     } while (p.x > 798 && p.y > 318);
   } while (1);
@@ -365,7 +364,7 @@ void updateWeather() {
 
 //Change Desired Temperature Screen
 void changeTemp() {
-  temp = 60; // Must remove '= 60' before final product
+  byte temp = EEPROM.read(HVAC + 1);
   makeTitle("Change Temperature");
   tft.drawFastHLine(0, 210, 320, ILI9341_WHITE);
   tft.fillTriangle(                 // Up Arrow
@@ -405,7 +404,7 @@ void changeTemp() {
       }
     }
     else if (p.x < 266) {
-      //change desired temp value
+      EEPROM.write(HVAC + 1, temp);
       return;
     }
   }while(1);
@@ -444,7 +443,7 @@ byte hvacSettingChange(byte hvac) {
 
     if (p.x > 562) {
       if (p.x > 798 && p.y < 318) {
-        //if(hvac != EEPROM.read(HVAC);) {  EEPROM.write(HVAC,hvac);  }
+        if(hvac != EEPROM.read(HVAC)) {  EEPROM.write(HVAC,hvac);  }
         return hvac;
       } //Back
       else if (p.x < 723) {
@@ -491,18 +490,15 @@ byte hvacSettingChange(byte hvac) {
 }
 
 //Rotates Sensor List
-byte cycleSensorList(bool directions, byte sensorNumber) {
-  if (directions) { //Right
-    Serial.print("Right\n");
-  }
-  else { //Left
-    Serial.print("Left\n");
-  }
-}
-
-//Profile Edit Screen
-void editProfile() {
-  Serial.println("Edit");
+void cycleSensorList(byte sn) {
+  byte i;
+  tft.fillRect(16, 215, 253, 20, ILI9341_BLACK);
+  readEEPROMBytes(nam, SENSORS + SENSORBLOCK * sn, 13); //Read Sensor name from EEPROM
+  i = cal(nam);
+  printText(30, 219, nam);
+  printText(30 + i * 12, 219, ":");
+  unitPos(42 + i * 12, 219, EEPROM.read(SENSORS + SENSORBLOCK * sn + 25));
+  delay(100);
 }
 
 void doubleLine(int xCoord, byte yCoord, int width, uint16_t color) {
