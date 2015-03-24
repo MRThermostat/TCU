@@ -6,20 +6,21 @@
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual resistance
 
 #include <ESP8266.h>
+#include <MemoryFree.h>
 #include "wifi.h"
 
 #include <SPI.h>
+#if HAS_LCD==1
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
 #include "lcd.h"
+#endif
 
 #include "temperature.h"
 
 byte hvac;
 
 //from x = 0, can get 26 characters across
-
-
 
 void setup(){
   //open up serial comms
@@ -64,7 +65,7 @@ void setup(){
   Serial.println("done");
 
   //checking internet connection
-  Serial.print("checking network connection...");
+  Serial.print("connecting to network...");
   do
   {
     if(wifi.joinAP(ssid, password))
@@ -104,75 +105,13 @@ void setup(){
 void loop(){ //Main Screen
   TSPoint p;
   int temp = -10; //temporary for testing
-  tft.fillScreen(BACKGROUND_COLOR);
-  tft.setTextColor(FOREGROUND_COLOR);
-  tft.setTextSize(2);
-
-  doubleVLine(160, 0, 54, FOREGROUND_COLOR);
-  doubleHLine(0, 54, 320, FOREGROUND_COLOR);
-  doubleHLine(0, 80, 320, FOREGROUND_COLOR);
-  doubleVLine(160, 80, 49, FOREGROUND_COLOR);
-  doubleHLine(0, 129, 320, FOREGROUND_COLOR);
-  doubleHLine(0, 209, 320, FOREGROUND_COLOR);
-  doubleVLine(285, 210, 30, FOREGROUND_COLOR);
-  tft.fillTriangle(                 // Left Arrow
-  15, 215,         // peak
-  5, 225,          // bottom left
-  15, 235,         // bottom right
-  FOREGROUND_COLOR);
-  tft.fillTriangle(                 // Right Arrow
-  270, 215,        // peak
-  270, 235,        // bottom left
-  280, 225,        // bottom right
-  FOREGROUND_COLOR);
-
-  printText(40, 4, "High:");
-  unitPos(100, 4, temp);
-  printText(52, 20, "Low:");
-  unitPos(100, 20, temp);
-  printText(4, 36, "Outside:");
-  unitPos(100, 36, temp);
-  printText(165, 4, "1/20/2014");
-  printText(165, 20, "12:00 PM");
-  centerText(160, 60, "Active Profile123456");
-  printText(4, 100, "Current:");
-  unitPos(100, 100, temp);
-  printText(164, 100, "Desired:");
-  unitPos(260, 100, temp);
-  printText(0, 150, "Fan: On  Off  Auto");
-  printText(0, 180, "System: Heat  Cool  Blower");
-
-  //check which settings are active
-  if(bitRead(hvac,0)) {  
-    tft.drawRect(55, 145, 34, 26, FOREGROUND_COLOR); 
-  } //On
-  else if(bitRead(hvac,1)) {  
-    tft.drawRect(103, 145, 46, 26, FOREGROUND_COLOR);  
-  } //Off
-  else {  
-    tft.drawRect(163, 145, 58, 26, FOREGROUND_COLOR);  
-  } //Auto
-  if(bitRead(hvac,2)) {  
-    tft.drawRect(91, 175, 58, 26, FOREGROUND_COLOR);  
-  } //Heat
-  else if(bitRead(hvac,3)) {  
-    tft.drawRect(163, 175, 58, 26, FOREGROUND_COLOR);  
-  } //Cool
-  else {  
-    tft.drawRect(235, 175, 82, 26, FOREGROUND_COLOR);  
-  } //Blower
-
-  printText(20, 219, "Sensor 1:");
-  printText(140, 219, "69F");
-
-  //Settings
-  doubleHLine(290, 215, 25, FOREGROUND_COLOR);
-  doubleHLine(290, 225, 25, FOREGROUND_COLOR);
-  doubleHLine(290, 234, 25, FOREGROUND_COLOR);
-
+  #if HAS_LCD==1 
+  mainMenu();
+  #endif
   int tempdelay = 0;
   do{
     p = ts.getPoint();
+    Serial.println("main loop");
     //Check for Android Connection
     /*tempdelay++;
     if(tempdelay == 100){
@@ -187,7 +126,7 @@ void loop(){ //Main Screen
     }*/
   }
   while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
-
+  #if HAS_LCD==1
   if(p.x > 712) {
     if(p.y < 535) {  
       updateWeather();  
@@ -222,5 +161,6 @@ void loop(){ //Main Screen
   else {  
     settings();  
   } //Settings
+  #endif
 }
 

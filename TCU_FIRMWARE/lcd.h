@@ -159,8 +159,8 @@ void sensorEdit(byte sensorNumber){
   printText(4, 90, "Active:");
   printText(100, 90, "Yes");
   printText(160, 90, "No");
-  /*if(sensorActive) {  tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);  } //Box around Yes
-  else {  tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);  } //Box around No*/
+  //if(sensorActive) {  tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);  } //Box around Yes
+  //else {  tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);  } //Box around No
   printText(4, 120, "Sensor ID:");
   printText(130, 120, "1234567890"); //Grab sensor ID
   
@@ -174,7 +174,7 @@ void sensorEdit(byte sensorNumber){
     }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
     if(p.x > 717) {
       if(p.y < 318) {  return;  } //Back
-      else {  /*changeName(0, sensorNumber);  */}
+      else {  //changeName(0, sensorNumber);  }
     }
     else{ //go to sensor list and change active value using sensorActive ^ 1
       if(p.x > 545 && p.x < 631) {
@@ -227,13 +227,10 @@ void sensorSettings(){
   }while(true);
 }
 
-void accessPointSetup() {
-  Serial.println("Access Point Setup");  
-}
-
 //WiFi Setup
 void setupNetwork(){
-  TSPoint p;  
+  TSPoint p;
+    
   makeTitle("WiFi Setup");
   
                   //"12345678901234567890123456"
@@ -495,3 +492,70 @@ void displayList(int xCenter, byte yCoord, char *array){
     tmp++;
   }
 }*/
+void mainMenu(){
+  tft.fillScreen(BACKGROUND_COLOR);
+  tft.setTextColor(FOREGROUND_COLOR);
+  tft.setTextSize(2);
+
+  doubleVLine(160, 0, 54, FOREGROUND_COLOR);
+  doubleHLine(0, 54, 320, FOREGROUND_COLOR);
+  doubleHLine(0, 80, 320, FOREGROUND_COLOR);
+  doubleVLine(160, 80, 49, FOREGROUND_COLOR);
+  doubleHLine(0, 129, 320, FOREGROUND_COLOR);
+  doubleHLine(0, 209, 320, FOREGROUND_COLOR);
+  doubleVLine(285, 210, 30, FOREGROUND_COLOR);
+  tft.fillTriangle(                 // Left Arrow
+  15, 215,         // peak
+  5, 225,          // bottom left
+  15, 235,         // bottom right
+  FOREGROUND_COLOR);
+  tft.fillTriangle(                 // Right Arrow
+  270, 215,        // peak
+  270, 235,        // bottom left
+  280, 225,        // bottom right
+  FOREGROUND_COLOR);
+
+  printText(40, 4, "High:");
+  unitPos(100, 4, temp);
+  printText(52, 20, "Low:");
+  unitPos(100, 20, temp);
+  printText(4, 36, "Outside:");
+  unitPos(100, 36, temp);
+  printText(165, 4, "1/20/2014");
+  printText(165, 20, "12:00 PM");
+  centerText(160, 60, "Active Profile123456");
+  printText(4, 100, "Current:");
+  unitPos(100, 100, temp);
+  printText(164, 100, "Desired:");
+  unitPos(260, 100, temp);
+  printText(0, 150, "Fan: On  Off  Auto");
+  printText(0, 180, "System: Heat  Cool  Blower");
+
+  //check which settings are active
+  if(bitRead(hvac,0)) {  
+    tft.drawRect(55, 145, 34, 26, FOREGROUND_COLOR); 
+  } //On
+  else if(bitRead(hvac,1)) {  
+    tft.drawRect(103, 145, 46, 26, FOREGROUND_COLOR);  
+  } //Off
+  else {  
+    tft.drawRect(163, 145, 58, 26, FOREGROUND_COLOR);  
+  } //Auto
+  if(bitRead(hvac,2)) {  
+    tft.drawRect(91, 175, 58, 26, FOREGROUND_COLOR);  
+  } //Heat
+  else if(bitRead(hvac,3)) {  
+    tft.drawRect(163, 175, 58, 26, FOREGROUND_COLOR);  
+  } //Cool
+  else {  
+    tft.drawRect(235, 175, 82, 26, FOREGROUND_COLOR);  
+  } //Blower
+
+  printText(20, 219, "Sensor 1:");
+  printText(140, 219, "69F");
+
+  //Settings
+  doubleHLine(290, 215, 25, FOREGROUND_COLOR);
+  doubleHLine(290, 225, 25, FOREGROUND_COLOR);
+  doubleHLine(290, 234, 25, FOREGROUND_COLOR);
+}
