@@ -83,38 +83,50 @@ int generateResponse(uint8_t* buffer, char* ssidlist) {
   const uint8_t one[] = "<option value=\"";
   const uint8_t two[] = "</option>";
   int pos = 0;
+  int ssidpos = 0;
+  
   for (int i = 0; i < 79; i++) {
     buffer[pos + i] = firstHalf[i];
   }
   pos += 77;
+  
   //<option value="volvo">Volvo</option>
-  
-  for (int i = 0; i < 15; i++) {
+  while(ssidlist[ssidpos] != '\r'){
+    
+    for (int i = 0; i < 15; i++) {
     buffer[pos + i] = one[i];
-  }
-  pos += 15;
-  
-  for (int i = 0; ((i < 32)&&(ssidlist[i] != '\n')); pos++) {
-    buffer[pos] = ssidlist[i];
-    i++;
-  }
-  
-  buffer[pos] = '\"';
-  pos++;
-  buffer[pos] = '>';
-  pos++;
-  
-  for (int i = 0; ((i < 32)&&(ssidlist[i] != '\n')); pos++) {
-    buffer[pos] = ssidlist[i];
-    i++;
-  }
-  
+    }
+    pos += 15;
+    
+    for (int i = 0; ssidlist[ssidpos + i] != '\n'; pos++) {
+      buffer[pos] = ssidlist[ssidpos + i];
+      i++;
+    }
+    
+    buffer[pos] = '\"';
+    pos++;
+    buffer[pos] = '>';
+    pos++;
+
+    for (ssidpos; ssidlist[ssidpos] != '\n'; pos++) {
+      buffer[pos] = ssidlist[ssidpos];
+      ssidpos++;
+    }
+    
+    for (int i = 0; i < 9; i++) {
+    buffer[pos + i] = two[i];
+    }
+    pos += 9;
+    
+    ssidpos++;
+  } 
+
   for (int i = 0; i < 120; i++) {
     buffer[pos + i] = secondHalf[i];
   }
   pos += 113;
 
-  return pos-2;
+  return pos;
 }
 
 void setupNetwork() {
@@ -125,7 +137,7 @@ void setupNetwork() {
     Serial.print("error1\r\n");
   }
 
-  char ssidlist[SSIDLIST_LENGTH];
+  char ssidlist[SSIDLIST_LENGTH] = {0};
   parseSSIDs(ssidlist);
   Serial.println(ssidlist);
 
@@ -138,44 +150,58 @@ void setupNetwork() {
   
   Serial.println("GO AHEAD");
   while (1) {
-    Serial.print("freeMemory()=");
-    Serial.println(freeMemory());
+    
+    pinMode(ESP_GPIO0,OUTPUT);
+  pinMode(ESP_GPIO2,OUTPUT);
+  pinMode(ESP_RESET,OUTPUT);
+  pinMode(ESP_CH_PD,OUTPUT);
+
+  digitalWrite(ESP_GPIO0,HIGH);
+  digitalWrite(ESP_GPIO2,HIGH);
+  digitalWrite(ESP_RESET,HIGH);
+  digitalWrite(ESP_CH_PD,HIGH);
+    
     uint8_t buffer[200] = {0};
     uint8_t mux_id;
     uint32_t len = wifi.recv(&mux_id, buffer, sizeof(buffer), 200);
+    Serial.print("freeMemory()=");
+    Serial.println(freeMemory());
     //Serial.println("created vars");
     if (len > 0) {
-      Serial.print("Received from :");
-      Serial.print(mux_id);
-      Serial.print("[");
-      for (uint32_t i = 0; i < len; i++) {
-        Serial.print((char)buffer[i]);
-      }
-      Serial.print("]\r\n");
-      len = generateResponse(buffer, ssidlist);
-      if (wifi.send(mux_id, buffer, len)) {
-        Serial.print("send back ok\r\n");
-      }
-      else {
-        Serial.print("send back err\r\n");
-      }
+    Serial.print("Status:[");
+    Serial.print(wifi.getIPStatus().c_str());
+    Serial.println("]");
 
-      if (wifi.releaseTCP(mux_id)) {
-        Serial.print("release tcp ");
-        Serial.print(mux_id);
-        Serial.println(" ok");
-      }
-      else {
-        Serial.print("release tcp");
-        Serial.print(mux_id);
-        Serial.println(" err");
-      }
-
-      Serial.print("Status:[");
-      Serial.print(wifi.getIPStatus().c_str());
-      Serial.println("]");
-
+    Serial.print("Received from :");
+    Serial.print(mux_id);
+    Serial.print("[");
+    for(uint32_t i = 0; i < len; i++) {
+      Serial.print((char)buffer[i]);
     }
+    Serial.print("]\r\n");
+    //len = generateResponse(buffer,ssidlist);
+    if(wifi.send(mux_id, buffer, len)) {
+      Serial.print("send back ok\r\n");
+    } 
+    else {
+      Serial.print("send back err\r\n");
+    }
+
+    if (wifi.releaseTCP(mux_id)) {
+      Serial.print("release tcp ");
+      Serial.print(mux_id);
+      Serial.println(" ok");
+    } 
+    else {
+      Serial.print("release tcp");
+      Serial.print(mux_id);
+      Serial.println(" err");
+    }
+
+    Serial.print("Status:[");
+    Serial.print(wifi.getIPStatus().c_str());
+    Serial.println("]");
+  }
   }
 }
 
