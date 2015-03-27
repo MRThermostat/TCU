@@ -46,9 +46,52 @@ bool readDiagnostics(){
   return(0);
 }
 
-//Change Active Profile Screen
-void changeActive() {
-  Serial.println("Active");
+void profileEdit(byte pn) {
+  byte temp;
+  makeTitle("Profile Settings");
+
+  readEEPROMBytes(nam, PROFILES + pn * PROFILEBLOCK, 13); //Read Profile name from EEPROM
+  printText(4, 30, "Name:");
+  printText(62, 30, nam); //Grab sensor name
+  
+  readEEPROMBytes(nam, PROFILES + sn * PROFILEBLOCK + 13, 11); //Read Profile id from EEPROM
+  printText(4, 120, "Profile ID:");
+  printText(130, 120, nam); //Grab sensor ID
+
+  temp = EEPROM.read(PROFILES + sn * PROFILEBLOCK + 26); //Read Profile status and active from EEPROM
+  printText(4, 90, "Active:");
+  printText(100, 90, "Yes");
+  printText(160, 90, "No");
+  if(bitRead(temp, 7)) {  tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);  } //Box around Yes
+  else {  tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);  } //Box around No
+
+  do {
+    do {
+      p = ts.getPoint();
+      //Check for Android Connection
+    } while (p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    if (p.x > 717) {
+      if (p.y < 318) {
+        //if(bitRead(temp, 7) != bitRead(EEPROM.read(PROFILES + sn * PROFILEBLOCK + 26),7)) {  EEPROM.write(PROFILES + sn * PROFILEBLOCK + 26,temp);  }
+        return;   //Back
+      }
+    }
+    else { //go to sensor list and change active value
+      if (p.x > 545 && p.x < 631) {
+          tft.drawRect(155, 85, 34, 26, BACKGROUND_COLOR);
+          tft.drawRect(95, 85, 46, 26, BACKGROUND_COLOR);
+        if (p.y > 361 && p.y < 506) {
+          tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);
+          bitSet(temp, 7);
+        }
+        else if (p.y < 593) {
+          tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);
+          temp = EEPROM.read(PROFILES + sn * PROFILEBLOCK + 26); //Read Profile status and active from EEPROM
+          bitClear(temp, 7);
+        }
+      }
+    }
+  } while (1);
 }
 
 //Profile Settings Screen
@@ -75,39 +118,32 @@ void profileSettings(){
       }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
     
       if(p.x > 798 && p.y < 318) {  return;  } //Back
-      else if(p.x > 683 && p.x < 798) {  changeActive();  } //Rules
       else if (p.x < 684) {
         tmp = (668 - p.x) / 52; //Finds which profile was pressed
         Serial.print("Profile #");
         Serial.println(tmp);
+        profileEdit(tmp);
       }
-      //else if(p.x < 252) {  editProfile();  } //Edit Profile
     }while(p.x > 798);
   }while(true);
 }
 
-void sensorEdit(byte sensorNumber) {
-//Required bytes: 27
-//13 name
-//11 sensor id
-//1 sensor number
-//1 latest temperature
-//1 status & active
+void sensorEdit(byte sn) {
   byte temp;
   makeTitle("Sensor Settings");
 
-  readEEPROMBytes(nam, SENSORS + sensorNumber * SENSORBLOCK, 13); //Read Sensor name from EEPROM
+  readEEPROMBytes(nam, SENSORS + sn * SENSORBLOCK, 13); //Read Sensor name from EEPROM
   printText(4, 30, "Name:");
   printText(62, 30, nam); //Grab sensor name
-  temp = EEPROM.read(SENSORS + sensorNumber * SENSORBLOCK + 25); //Read Sensor temp from EEPROM
+  temp = EEPROM.read(SENSORS + sn * SENSORBLOCK + 25); //Read Sensor temp from EEPROM
   printText(4, 60, "Latest Temperature:");
   unitPos(244 , 60, temp); //Grab latest Temperature
   
-  readEEPROMBytes(nam, SENSORS + sensorNumber * SENSORBLOCK + 13, 11); //Read Sensor id from EEPROM
+  readEEPROMBytes(nam, SENSORS + sn * SENSORBLOCK + 13, 11); //Read Sensor id from EEPROM
   printText(4, 120, "Sensor ID:");
   printText(130, 120, nam); //Grab sensor ID
 
-  temp = EEPROM.read(SENSORS + sensorNumber * SENSORBLOCK + 26); //Read Sensor status and active from EEPROM
+  temp = EEPROM.read(SENSORS + sn * SENSORBLOCK + 26); //Read Sensor status and active from EEPROM
   printText(4, 90, "Active:");
   printText(100, 90, "Yes");
   printText(160, 90, "No");
@@ -124,7 +160,7 @@ void sensorEdit(byte sensorNumber) {
     } while (p.z < MINPRESSURE || p.z > MAXPRESSURE);
     if (p.x > 717) {
       if (p.y < 318) {
-        if(bitRead(temp, 7) != bitRead(EEPROM.read(SENSORS + sensorNumber * SENSORBLOCK + 26),7)) {  EEPROM.write(SENSORS + sensorNumber * SENSORBLOCK + 26,temp);  }
+        if(bitRead(temp, 7) != bitRead(EEPROM.read(SENSORS + sn * SENSORBLOCK + 26),7)) {  EEPROM.write(SENSORS + sn * SENSORBLOCK + 26,temp);  }
         return;   //Back
       }
     }
@@ -138,7 +174,7 @@ void sensorEdit(byte sensorNumber) {
         }
         else if (p.y < 593) {
           tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);
-          temp = EEPROM.read(SENSORS + sensorNumber * SENSORBLOCK + 26); //Read Sensor status and active from EEPROM
+          temp = EEPROM.read(SENSORS + sn * SENSORBLOCK + 26); //Read Sensor status and active from EEPROM
           bitClear(temp, 7);
         }
       }
@@ -241,38 +277,39 @@ void setupNetwork(){
 
 //WiFi Settings
 void wifiSettings(){
-  TSPoint p;  
-  makeTitle("WiFi Settings");
-  doubleHLine(0, 200, 320, FOREGROUND_COLOR);
-
-  printText(4, 29, "SSID:");
-  printText(136, 29, ssid);
-  printText(4, 54, "Password:");
-  printText(136, 54, password);
-  printText(4, 79, "Connected:");
-  if(is_connected){
-    printText(136, 79, "Yes");
-    printText(4, 104, "IP Address:");
-    char ipaddress[15];
-    String stringobject = wifi.getLocalIP();
-    stringobject.toCharArray(ipaddress,15);
-    printText(136, 104, ipaddress);
-    printText(4, 129, "Mac Address:");
-    printText(136, 129, "");
-  }else{
-    printText(136, 79, "No");
-  }
-  printText(52, 215, "Access Point Setup");
-
+  do{
+    TSPoint p;  
+    makeTitle("WiFi Settings");
+    doubleHLine(0, 200, 320, FOREGROUND_COLOR);
+  
+    printText(4, 29, "SSID:");
+    printText(136, 29, ssid);
+    printText(4, 54, "Password:");
+    printText(136, 54, password);
+    printText(4, 79, "Connected:");
+    if(is_connected){
+      printText(136, 79, "Yes");
+      printText(4, 104, "IP Address:");
+      char ipaddress[15];
+      String stringobject = wifi.getLocalIP();
+      stringobject.toCharArray(ipaddress,15);
+      printText(136, 104, ipaddress);
+      printText(4, 129, "Mac Address:");
+      printText(136, 129, "");
+    }else{
+      printText(136, 79, "No");
+    }
+    printText(52, 215, "Access Point Setup");
+  
+      
     do{
-      do{
-        p = ts.getPoint();
-        //Check for Android Connection
-      }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+      p = ts.getPoint();
+      //Check for Android Connection
+    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
 
-      if(p.x > 798 && p.y < 318) {  return;  } //Back
-      else if(p.y < 295) {  setupNetwork();  }
-    }while(true);
+    if(p.x > 798 && p.y < 318) {  return;  } //Back
+    else if(p.x < 295) {  setupNetwork();  }
+  }while(true);
 }
 
 // Default actions
@@ -344,12 +381,12 @@ void changeTemp() {
   byte temp = EEPROM.read(HVAC + 1);
   makeTitle("Change Temperature");
   tft.drawFastHLine(0, 210, 320, FOREGROUND_COLOR);
-  tft.fillTriangle(                 // Up Arrow
+  tft.drawTriangle(                 // Up Arrow
     160, 30,         // peak
     100, 60,         // bottom left
     220, 60,         // bottom right
     FOREGROUND_COLOR);
-  tft.fillTriangle(                 // DownArrow
+  tft.drawTriangle(                 // DownArrow
     160, 200,        // peak
     100, 170,        // bottom left
     220, 170,        // bottom right

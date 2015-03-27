@@ -22,7 +22,7 @@ void setup(){
   //be careful with this, as this channel also connects to ESP8266
   Serial.begin(115200);
 #if DEBUG == 1
-  delay(1000);
+  delay(2000);
   while(!Serial){
     //do nothing 
   }
@@ -32,6 +32,7 @@ void setup(){
 
 #if HAS_LCD==1
   //setup LCD hardware
+  delay (1000);
   Serial.print("initializing LCD hardware...");
   do{
     setupLCD();
@@ -49,7 +50,8 @@ void setup(){
   Serial.print("restoring user data...");  
   while(restoreUserData());
   Serial.println("done");
-/*
+
+#if RUN_WIFI
   //setup esp8266 module
   Serial.print("initializing ESP8266...");
   do
@@ -95,6 +97,8 @@ void setup(){
    }while(testNRF());
    Serial.println("done");  
    */
+#endif
+
   sn = 0;
 }
 
@@ -122,12 +126,12 @@ void loop(){ //Main Screen
   doubleHLine(0, 129, 320, FOREGROUND_COLOR);
   doubleHLine(0, 209, 320, FOREGROUND_COLOR);
   doubleVLine(285, 210, 30, FOREGROUND_COLOR);
-  tft.fillTriangle(                 // Left Arrow
+  tft.drawTriangle(                 // Left Arrow
   15, 215,         // peak
   5, 225,          // bottom left
   15, 235,         // bottom right
   FOREGROUND_COLOR);
-  tft.fillTriangle(                 // Right Arrow
+  tft.drawTriangle(                 // Right Arrow
   270, 215,        // peak
   270, 235,        // bottom left
   280, 225,        // bottom right
@@ -186,7 +190,7 @@ void loop(){ //Main Screen
     do{
       p = ts.getPoint();
       androidConnect();
-    }while(p.z < MINPRESSURE || p.z > MAXPRESSURE);
+    }while(p.z < MINPRESSURE);
     if(p.x > 712) {
       if(p.y < 535) {  updateWeather();  } //Force weather update
       else {  dateSettings();  } //Time/Date Settings

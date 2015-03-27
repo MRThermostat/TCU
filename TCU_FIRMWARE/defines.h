@@ -2,6 +2,7 @@
 #define DEBUG 1
 #define AREF 3.3
 #define HAS_LCD 1
+#define RUN_WIFI 0
 
 #define TS_MINX 180
 #define TS_MINY 150
@@ -19,6 +20,11 @@
 #define MAXSENSORS 9 //Maximum number of sensors allowed
 #define SENSORBLOCK 27 //Bytes required to save 1 sensors info
 
+#define PROFILES 750 //Profile List Address Location
+#define MAXPROFILES 5 //Maximum number of profiles allowed
+#define MAXRULES 4 //Maximum number of rules allowed per profile
+#define PROFILEBLOCK 30 //Unknown at the moment
+
 #define FOREGROUND_COLOR 0x0000      /*   0,   0,   0 */
 #define BACKGROUND_COLOR 0xFFFF      /*   255,   255,   255 */
 
@@ -34,10 +40,7 @@ bool is_connected = 0;
 //0x60 number of profiles
 //0x61 active profile
 //PROFILE STRUCTURE
-//16 byte name
-//number of rules
-//time proximity weather
-//1 byte pointer to next rule
+
 
 void readEEPROMBytes(char *buffer, int start, int length){
   int i;
