@@ -7,15 +7,10 @@
 #define GAIN 10.0
 #define MIN_VOLTAGE 2.77
 
-void setupTemp(){
-  //setup temperature hardware
-  pinMode(TEMP_PIN,INPUT);
-  digitalWrite(TEMP_PIN,LOW);
-  //analogReference(DEFAULT);
-}
+
 
 //todo change everything to integet math for mad space savings bro!
-/*float getTemp(int unit = 2){
+float getTemp(int unit = 2){
   int number_samples = 5;
   int adc_count = 0;
   float adc_voltage, voltage;
@@ -47,4 +42,18 @@ void setupTemp(){
       return adc_count;
       break;
   }
-}*/
+}
+
+void setupTemp(){
+  //setup temperature hardware
+  pinMode(TEMP_PIN,INPUT);
+  digitalWrite(TEMP_PIN,LOW);
+  //analogReference(DEFAULT);
+  
+  while(1){
+    int temp = getTemp(4);
+    Serial.println(temp); 
+   delay(100);
+    
+  }
+}
