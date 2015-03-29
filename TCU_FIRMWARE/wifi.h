@@ -17,20 +17,15 @@ void setupWifi() {
   delay(100);
   digitalWrite(ESP_RESET, HIGH);
 
+  delay(1000);
   wifi.restart();
+  delay(1000);
 
-  if (wifi.setOprToStation()) {
-    Serial.print("to station ok\r\n");
-  }
-  else {
-    Serial.print("to station err\r\n");
-  }
-  if (wifi.enableMUX()) {
-    Serial.print("multiple ok\r\n");
-  }
-  else {
-    Serial.print("multiple err\r\n");
-  }
+  wifi.setOprToStationSoftAP();
+  wifi.setSoftAPParam("MR THERMOSTAT", "", 7, 0);
+  wifi.enableMUX();
+  wifi.startTCPServer(80);
+  wifi.setTCPServerTimeout(10);
 }
 
 bool checkWeather() {
@@ -77,32 +72,31 @@ void parseSSIDs(char* ssidlist) {
   //Serial.println("FOUND IT");
 }
 
-int generateResponse(uint8_t* buffer, char* ssidlist) {
-  const uint8_t firstHalf[79] = "<html><h1>Mr Thermostat Setup</h1><form>Choose Network:<br><select name=\"nw\">";
-  const uint8_t secondHalf[120] = "</select><br>Password:<br><input type=\"text\" name=\"pw\"><br><br><input type=\"submit\" value=\"Submit\"></form></html>";
+int generateSetupResponse(uint8_t* buffer, char* ssidlist) {
+  const uint8_t firstHalf[78] = "<html><h1>Mr Thermostat Setup</h1><form>Choose Network:<br><select name=\"nw\">";
+  const uint8_t secondHalf[114] = "</select><br>Password:<br><input type=\"text\" name=\"pw\"><br><br><input type=\"submit\" value=\"Submit\"></form></html>";
   const uint8_t one[] = "<option value=\"";
   const uint8_t two[] = "</option>";
   int pos = 0;
   int ssidpos = 0;
-  
-  for (int i = 0; i < 79; i++) {
+
+  for (int i = 0; i < 77; i++) {
     buffer[pos + i] = firstHalf[i];
   }
   pos += 77;
-  
-  //<option value="volvo">Volvo</option>
-  while(ssidlist[ssidpos] != '\r'){
-    
+/*
+  while (ssidlist[ssidpos] != '\r') {
+
     for (int i = 0; i < 15; i++) {
-    buffer[pos + i] = one[i];
+      buffer[pos + i] = one[i];
     }
     pos += 15;
-    
+
     for (int i = 0; ssidlist[ssidpos + i] != '\n'; pos++) {
       buffer[pos] = ssidlist[ssidpos + i];
       i++;
     }
-    
+
     buffer[pos] = '\"';
     pos++;
     buffer[pos] = '>';
@@ -112,96 +106,116 @@ int generateResponse(uint8_t* buffer, char* ssidlist) {
       buffer[pos] = ssidlist[ssidpos];
       ssidpos++;
     }
-    
+
     for (int i = 0; i < 9; i++) {
-    buffer[pos + i] = two[i];
+      buffer[pos + i] = two[i];
     }
     pos += 9;
-    
-    ssidpos++;
-  } 
 
-  for (int i = 0; i < 120; i++) {
+    ssidpos++;
+  }
+*/
+  for (int i = 0; i < 113; i++) {
     buffer[pos + i] = secondHalf[i];
   }
   pos += 113;
+  buffer[pos]='\0';
 
-  return pos;
+  return pos-10;
+}
+
+int generateSensorData() {
+
+}
+
+int generateRuleData() {
+
 }
 
 void setupNetwork() {
-  if (wifi.setOprToStationSoftAP()) {
-    Serial.print("to station + soft ap\r\n");
-  }
-  else {
-    Serial.print("error1\r\n");
-  }
-
-  char ssidlist[SSIDLIST_LENGTH] = {0};
-  parseSSIDs(ssidlist);
-  Serial.println(ssidlist);
-
+  wifi.setOprToStationSoftAP();
   wifi.setSoftAPParam("MR THERMOSTAT", "", 7, 0);
   wifi.enableMUX();
   wifi.startTCPServer(80);
   wifi.setTCPServerTimeout(10);
   Serial.print("IP: ");
   Serial.println(wifi.getLocalIP().c_str());
-  
+
+  char ssidlist[SSIDLIST_LENGTH] = {0};
+  parseSSIDs(ssidlist);
+  Serial.println(ssidlist);
+
   Serial.println("GO AHEAD");
   while (1) {
-    
-    pinMode(ESP_GPIO0,OUTPUT);
-  pinMode(ESP_GPIO2,OUTPUT);
-  pinMode(ESP_RESET,OUTPUT);
-  pinMode(ESP_CH_PD,OUTPUT);
 
-  digitalWrite(ESP_GPIO0,HIGH);
-  digitalWrite(ESP_GPIO2,HIGH);
-  digitalWrite(ESP_RESET,HIGH);
-  digitalWrite(ESP_CH_PD,HIGH);
-    
+    pinMode(ESP_GPIO0, OUTPUT);
+    pinMode(ESP_GPIO2, OUTPUT);
+    pinMode(ESP_RESET, OUTPUT);
+    pinMode(ESP_CH_PD, OUTPUT);
+
+    digitalWrite(ESP_GPIO0, HIGH);
+    digitalWrite(ESP_GPIO2, HIGH);
+    digitalWrite(ESP_RESET, HIGH);
+    digitalWrite(ESP_CH_PD, HIGH);
+
+
     uint8_t buffer[200] = {0};
+    char buffer2[50] = {0};
     uint8_t mux_id;
     uint32_t len = wifi.recv(&mux_id, buffer, sizeof(buffer), 200);
-    Serial.print("freeMemory()=");
-    Serial.println(freeMemory());
-    //Serial.println("created vars");
+
+    sprintf (buffer2, "buffer points to: %p", buffer);
+    Serial.println(buffer2);
+
     if (len > 0) {
-    Serial.print("Status:[");
-    Serial.print(wifi.getIPStatus().c_str());
-    Serial.println("]");
-
-    Serial.print("Received from :");
-    Serial.print(mux_id);
-    Serial.print("[");
-    for(uint32_t i = 0; i < len; i++) {
-      Serial.print((char)buffer[i]);
-    }
-    Serial.print("]\r\n");
-    //len = generateResponse(buffer,ssidlist);
-    if(wifi.send(mux_id, buffer, len)) {
-      Serial.print("send back ok\r\n");
-    } 
-    else {
-      Serial.print("send back err\r\n");
-    }
-
-    if (wifi.releaseTCP(mux_id)) {
-      Serial.print("release tcp ");
+      Serial.print("Status:[");
+      Serial.print(wifi.getIPStatus().c_str());
+      Serial.println("]");
+      
+      sprintf (buffer2, "buffer points to: %p", buffer);
+      Serial.println(buffer2);
+      
+      Serial.print("Received from :");
       Serial.print(mux_id);
-      Serial.println(" ok");
-    } 
-    else {
-      Serial.print("release tcp");
-      Serial.print(mux_id);
-      Serial.println(" err");
-    }
+      
+      sprintf (buffer2, "buffer points to: %p", buffer);
+      Serial.println(buffer2);
+      
+      Serial.print("[");
+      for (uint32_t i = 0; i < len; i++) {
+        Serial.print((char)buffer[i]);
+      }
+      Serial.print("]\r\n");
+      
+      sprintf (buffer2, "buffer points to: %p", buffer);
+      Serial.println(buffer2);
+      
+      //len = generateSetupResponse(buffer,ssidlist);
+      if (wifi.send(mux_id, buffer, len)) {
+        Serial.print("send back ok\r\n");
+      }
+      else {
+        Serial.print("send back err\r\n");
+      }
+      
+      sprintf (buffer2, "buffer points to: %p", buffer);
+      Serial.println(buffer2);
 
-    Serial.print("Status:[");
-    Serial.print(wifi.getIPStatus().c_str());
-    Serial.println("]");
-  }
+      if (wifi.releaseTCP(mux_id)) {
+        Serial.print("release tcp ");
+        Serial.print(mux_id);
+        Serial.println(" ok");
+      }
+      else {
+        Serial.print("release tcp");
+        Serial.print(mux_id);
+        Serial.println(" err");
+      }
+
+      Serial.print("Status:[");
+      Serial.print(wifi.getIPStatus().c_str());
+      Serial.println("]");
+    }
   }
 }
 

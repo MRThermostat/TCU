@@ -20,7 +20,7 @@ float getTemp(int unit = 2){
   }
   adc_count = adc_count/number_samples;
   
-  adc_voltage = adc_count*(AREF/1024.0);
+  adc_voltage = (float)adc_count*(AREF/1024.0);
   //adc_voltage=GAIN(pregain_voltage-TEMPERATURE_VOLTAGE_REFERENCE)
   voltage = (adc_voltage/GAIN)+MIN_VOLTAGE; 
   //voltage = MIN_VOLTAGE+(adc_count*(AREF/1024));
@@ -48,12 +48,6 @@ void setupTemp(){
   //setup temperature hardware
   pinMode(TEMP_PIN,INPUT);
   digitalWrite(TEMP_PIN,LOW);
-  //analogReference(DEFAULT);
-  
-  while(1){
-    int temp = getTemp(4);
-    Serial.println(temp); 
-   delay(100);
-    
+  //analogReference(DEFAULT);    
   }
 }
