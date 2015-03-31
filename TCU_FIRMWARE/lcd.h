@@ -47,24 +47,70 @@ bool readDiagnostics(){
 }
 
 void profileEdit(byte pn) {
-  byte temp;
+  byte temp, i, j;
   makeTitle("Profile Settings");
+  
+  doubleHLine(0, 100, 320, FOREGROUND_COLOR);
 
-  readEEPROMBytes(nam, PROFILES + pn * PROFILEBLOCK, 13); //Read Profile name from EEPROM
+  readEEPROMBytes(nam, PROFILES + pn * PROFILEBLOCK, 20); //Read Profile name from EEPROM
   printText(4, 30, "Name:");
   printText(62, 30, nam); //Grab sensor name
   
-  readEEPROMBytes(nam, PROFILES + sn * PROFILEBLOCK + 13, 11); //Read Profile id from EEPROM
-  printText(4, 120, "Profile ID:");
-  printText(130, 120, nam); //Grab sensor ID
+  readEEPROMBytes(nam, PROFILES + pn * PROFILEBLOCK + 21, 11); //Read Profile id from EEPROM
+  printText(4, 50, "Profile ID:");
+  printText(142, 50, nam); //Grab sensor ID
 
-  temp = EEPROM.read(PROFILES + sn * PROFILEBLOCK + 26); //Read Profile status and active from EEPROM
-  printText(4, 90, "Active:");
-  printText(100, 90, "Yes");
-  printText(160, 90, "No");
-  if(bitRead(temp, 7)) {  tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);  } //Box around Yes
-  else {  tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);  } //Box around No
+  temp = findActiveProfile();
+  printText(4, 75, "Active:");
+  printText(100, 75, "Yes");
+  printText(160, 75, "No");
+  if(temp == pn) {  tft.drawRect(95, 70, 46, 26, FOREGROUND_COLOR);  } //Box around Yes
+  else {  tft.drawRect(155, 70, 34, 26, FOREGROUND_COLOR);  } //Box around No
 
+  temp = 0;
+  centerText(160, 103, "Rules");
+  for(i = 0; i < MAXRULES; i++) {
+    Serial.print("Rule #");
+    Serial.print(i);
+    if(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 1) == 1) {
+      printText(4, 125 + 18 * temp, "Time|");
+      unitPos(65, 125 + 18 * temp, EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK));
+      tft.setCursor(124, 125 + 18 * temp);
+      tft.print(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 2));
+      tft.print(":");
+      tft.print(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 3));
+      tft.print(" To ");
+      tft.print(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 4));
+      tft.print(":");
+      tft.print(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 5));
+      temp++;
+      Serial.println(" Time");
+    }
+    else if(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 1) == 2) {
+      printText(4, 125 + 18 * temp, "Temp|");
+      unitPos(65, 125 + 18 * temp, EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK));
+      tft.setCursor(124, 125 + 18 * temp);
+      tft.print("If ");
+      if(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 3) == 0) {  tft.print("<");  }
+      else {  tft.print(">");  }
+      unitPos(184, 125 + 18 * temp, EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 5));
+      temp++;
+      Serial.println(" Temp");
+    }
+    else if(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 1) == 3) {
+      printText(4, 125 + 18 * temp, "Prox|");
+      unitPos(65, 125 + 18 * temp, EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK));
+      tft.setCursor(124, 125 + 18 * temp);
+      for(j = 0; j < 4; j++) {
+        tft.print(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 34 + i * RULEBLOCK + 2 + j)); //IP to check for
+        if(j < 3) {  tft.print(".");  }
+      }
+      temp++;
+      Serial.println(" Prox");
+    }
+    else {  Serial.println(" Does not exist");  }
+  }
+  temp = EEPROM.read(PROFILES + pn * PROFILEBLOCK + 32); //Read Profile status and active from EEPROM
   do {
     do {
       p = ts.getPoint();
@@ -72,21 +118,23 @@ void profileEdit(byte pn) {
     } while (p.z < MINPRESSURE || p.z > MAXPRESSURE);
     if (p.x > 717) {
       if (p.y < 318) {
-        //if(bitRead(temp, 7) != bitRead(EEPROM.read(PROFILES + sn * PROFILEBLOCK + 26),7)) {  EEPROM.write(PROFILES + sn * PROFILEBLOCK + 26,temp);  }
+        if(bitRead(temp, 7) != bitRead(EEPROM.read(PROFILES + pn * PROFILEBLOCK + 33),7)) {
+          for(i = 0; i < MAXPROFILES; i++) {  EEPROM.write(PROFILES + i * PROFILEBLOCK + 32, EEPROM.read(PROFILES + i * PROFILEBLOCK + 32) & 01111111);  }
+          EEPROM.write(PROFILES + pn * PROFILEBLOCK + 32, temp);
+        }
         return;   //Back
       }
     }
-    else { //go to sensor list and change active value
+    else {
       if (p.x > 545 && p.x < 631) {
-          tft.drawRect(155, 85, 34, 26, BACKGROUND_COLOR);
-          tft.drawRect(95, 85, 46, 26, BACKGROUND_COLOR);
+          tft.drawRect(155, 70, 34, 26, BACKGROUND_COLOR);
+          tft.drawRect(95, 70, 46, 26, BACKGROUND_COLOR);
         if (p.y > 361 && p.y < 506) {
-          tft.drawRect(95, 85, 46, 26, FOREGROUND_COLOR);
+          tft.drawRect(95, 70, 46, 26, FOREGROUND_COLOR);
           bitSet(temp, 7);
         }
         else if (p.y < 593) {
-          tft.drawRect(155, 85, 34, 26, FOREGROUND_COLOR);
-          temp = EEPROM.read(PROFILES + sn * PROFILEBLOCK + 26); //Read Profile status and active from EEPROM
+          tft.drawRect(155, 70, 34, 26, FOREGROUND_COLOR);
           bitClear(temp, 7);
         }
       }
@@ -97,19 +145,29 @@ void profileEdit(byte pn) {
 //Profile Settings Screen
 void profileSettings(){
   TSPoint p;
-  char nam[21] = "Active Profile123456";
+  byte tmp, i, count;
+  int temp = 0;
   do{
-    byte tmp = 0;
+    tmp = 0;
     makeTitle("Profile Settings");
-    tft.drawFastHLine(0, 65, 320, FOREGROUND_COLOR);
-    tft.drawFastHLine(0, 215, 320, FOREGROUND_COLOR);
+    doubleHLine(0, 65, 320, FOREGROUND_COLOR);
     
-    printText(62, 28, "Currently Active");
-    centerText(160, 46, nam);
+    centerText(160, 28, "Currently Active");
+    i = findActiveProfile();
+    if(i != MAXPROFILES) {
+      readEEPROMBytes(nam, PROFILES + i * PROFILEBLOCK, 20);
+      centerText(160, 46, nam);
+    }
+    else {  centerText(160, 46, "No Profiles Active");  }
+    i = 0;
     //Profile List
-    while(tmp < 8) {  //while list not empty
-      centerText(160, 70 + tmp * 18, nam);
-      tmp++;
+    while (i < MAXPROFILES) { //while list not empty
+      if(EEPROM.read(PROFILES + i * PROFILEBLOCK) != 0) {
+        readEEPROMBytes(nam, PROFILES + i * PROFILEBLOCK, 20);
+        centerText(160, 70 + tmp * 18, nam);
+        tmp++;
+      }
+      i++;
     }
     do{
       do{
@@ -119,11 +177,26 @@ void profileSettings(){
     
       if(p.x > 798 && p.y < 318) {  return;  } //Back
       else if (p.x < 684) {
-        tmp = (668 - p.x) / 52; //Finds which profile was pressed
-        Serial.print("Profile #");
-        Serial.println(tmp);
-        profileEdit(tmp);
+        i = (668 - p.x) / 52; //Finds which profile was pressed
+          if(i < tmp) {
+          count = tmp = 0;
+          temp = profileBytes();
+          while(tmp < MAXPROFILES) {
+            if(bitRead(temp,tmp) != 0){
+              count++;
+              if(i == count - 1) {  
+                Serial.print("Profile #");
+                Serial.println(i);
+                profileEdit(tmp);
+                tmp = MAXPROFILES;
+              }
+            }
+            tmp++;
+          }
+        }
+        else {  p.x = 800;  }
       }
+      else if(p.x > 684) {  p.x = 800;  }
     }while(p.x > 798);
   }while(true);
 }
@@ -239,6 +312,7 @@ void sensorSettings() {
         }
         else {  p.x = 800;  }
       }
+      else if (p.y < 535) {  p.x = 800;  }
     } while (p.x > 798);
   } while (1);
 }

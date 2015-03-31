@@ -13,6 +13,7 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300); //Replace 300 with actual res
 #include <Adafruit_ILI9341.h>
 #include "draw.h"
 #include "sensors.h"
+#include "profiles.h"
 #include "lcd.h"
 
 #include "temperature.h"
@@ -29,7 +30,7 @@ void setup(){
 #endif
   Serial.print("Mr Thermostat code version ");
   Serial.println(CODE_VERSION);
-
+setupLCD();
 #if HAS_LCD==1
   //setup LCD hardware
   delay (1000);
@@ -114,6 +115,20 @@ void loop(){ //Main Screen
   addSensor("Sensor 2", "22", 40, 0); //Add a sensor
   addSensor("Sensor 3", "333", 76, 128); //Add a sensor
   */
+  
+  //for(i = 0; i < MAXPROFILES; i++) {  removeProfile(i);  } //Erase all profiles
+  
+  //addProfile("Long ass name of ass", "1");
+  //addProfile("Profile 2", "22");
+  //addProfile("Profile 3", "333", 2, 6000, 7000);
+  //addProfile("Profile 4", "4444", 3, 7000, 8000);
+  //addProfile("Profile 5", "55555", 4, 8000, 9000);
+  
+  
+  //addRule(0, 50, 1, 2560, 3102); //Time
+  //addRule(0, 50, 2, 0, 80); //Weather
+  //addRule(0, 50, 3, 49320, 51330); // Proximity
+  //editRule(0, 0, 100, 1, 2560, 3102);
   temp = -10; //temporary for testing
   tft.fillScreen(BACKGROUND_COLOR);
   tft.setTextColor(FOREGROUND_COLOR);
@@ -145,23 +160,29 @@ void loop(){ //Main Screen
   unitPos(100, 36, temp);
   printText(165, 4, "1/20/2014");
   printText(165, 20, "12:00 PM");
-  centerText(160, 60, "Active Profile123456");
+  i = findActiveProfile();
+  if(i != MAXPROFILES) {
+    readEEPROMBytes(nam, PROFILES + i * PROFILEBLOCK, 20);
+    centerText(160, 60, nam);
+  }
+  else {  centerText(160, 60, "No Profiles Active");  }
   printText(4, 100, "Current:");
   count = average = i = 0;
   while(i < MAXSENSORS) {
     if(bitRead(EEPROM.read(SENSORS + i * SENSORBLOCK + 26), 7) == 1 && EEPROM.read(SENSORS + i * SENSORBLOCK) != '\0') {
-      average = average + EEPROM.read(SENSORS + i * SENSORBLOCK + 25);
+      average += EEPROM.read(SENSORS + i * SENSORBLOCK + 25);
       count++;
     }
     i++;
   }
-  average = average / count;
+  if(count) {  average = average / count;  } //If a sensor is active
+  else { average = EEPROM.read(SENSORS + 25);  } //If no sensors are active, use THERMOSTATS
   unitPos(100, 100, average);
   printText(164, 100, "Desired:");
   unitPos(260, 100, EEPROM.read(HVAC + 1));
   printText(4, 150, "Fan: On  Off  Auto");
   printText(4, 180, "System: Heat  Cool  Blower");
-  
+
   //check which settings are active
   if(bitRead(hvac, 0)) {  tft.drawRect(59, 145, 34, 26, FOREGROUND_COLOR);  } //On
   else if(bitRead(hvac, 1)) {  tft.drawRect(107, 145, 46, 26, FOREGROUND_COLOR);  } //Off
@@ -169,14 +190,14 @@ void loop(){ //Main Screen
   if(bitRead(hvac, 2)) {  tft.drawRect(95, 175, 58, 26, FOREGROUND_COLOR);  } //Heat
   else if(bitRead(hvac, 3)) {  tft.drawRect(167, 175, 58, 26, FOREGROUND_COLOR);  } //Cool
   else {  tft.drawRect(239, 175, 80, 26, FOREGROUND_COLOR);  } //Blower
-  
 
   cycleSensorList(sn);
-  
+
   //Settings
   doubleHLine(290, 215, 25, FOREGROUND_COLOR);
   doubleHLine(290, 225, 25, FOREGROUND_COLOR);
   doubleHLine(290, 234, 25, FOREGROUND_COLOR);
+  
   do{
     average = i = count = 0;
     temp = sensorBytes();

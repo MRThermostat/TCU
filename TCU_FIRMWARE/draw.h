@@ -26,10 +26,10 @@ void centerText(int centerPoint, byte yCoord, char *array) {
   byte len;
   len = cal(array);
   if (len == len / 2 * 2) {
-    len = centerPoint - 12 * len / 2;   //Even
+    len = centerPoint - 12 * len / 2; //Even
   }
   else {
-    len = centerPoint - 6 - 12 * len / 2;   //Odd
+    len = centerPoint - 6 - 12 * len / 2; //Odd
   }
   printText(len, yCoord, array);
 }
